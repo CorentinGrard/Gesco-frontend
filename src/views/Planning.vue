@@ -1,5 +1,6 @@
 <template>
   <v-row class="fill-height">
+    {{editFormOpen}}
     <v-col>
       <v-sheet height="64">
         <v-toolbar
@@ -8,7 +9,7 @@
           <v-btn
             outlined
             class="mr-4"
-            color="grey darken-2"
+            
             @click="setToday"
           >
             Aujourd'hui
@@ -17,7 +18,7 @@
             fab
             text
             small
-            color="grey darken-2"
+            
             @click="prev"
           >
             <v-icon small>
@@ -28,7 +29,7 @@
             fab
             text
             small
-            color="grey darken-2"
+            
             @click="next"
           >
             <v-icon small>
@@ -46,7 +47,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 outlined
-                color="grey darken-2"
+               
                 v-bind="attrs"
                 v-on="on"
               >
@@ -70,14 +71,13 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet >
         <v-calendar
           ref="calendar"
           day-body
           v-model="focus"
           color="primary"
           :events="sessions"
-          :event-color="grey"
           :type="type"
           @click:event="showEvent"
           @click:more="viewDay"
@@ -102,15 +102,12 @@
               color="grey lighten-4"
             >
               <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
+                <v-icon  @click="editFormOpen = true">mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
+                <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-toolbar>
             <v-card-text>
@@ -122,21 +119,27 @@
                 color="secondary"
                 @click="selectedOpen = false"
               >
-                Cancel
+                Fermer
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
       </v-sheet>
     </v-col>
+      <EditSessionFormModal 
+      :session = "selectedEvent"
+      :opened = "editFormOpen"
+      />
   </v-row>
 </template>
 <script>
 import { mapGetters } from "vuex";
+import EditSessionFormModal from "../components/EditSessionFormModal"
   export default {
     
     data: () => ({
       events: [],
+      editFormOpen:false,
       focus: '',
       weekdays:[1, 2, 3, 4, 5],
       type: 'week',
@@ -157,6 +160,9 @@ import { mapGetters } from "vuex";
     },
     mounted () {
       this.$refs.calendar.checkChange()
+    },
+    components: {
+      EditSessionFormModal
     },
     methods: {
       viewDay ({ date }) {
@@ -196,3 +202,7 @@ import { mapGetters } from "vuex";
     },
   }
 </script>
+<style>
+  html { overflow-y: auto }
+</style>
+
