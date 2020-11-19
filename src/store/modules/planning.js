@@ -13,7 +13,6 @@ const getters = {
             session.start = session.dateDebut
             session.end = session.dateFin
             session.timed = true
-            console.log(typeof(session.start))
             return session
         })
     }

@@ -5,9 +5,9 @@
       day-body
       :weekdays="[1, 2, 3, 4, 5]"
       :events="sessions"
-      :first-interval= 7
-      :interval-minutes= 60 
-      :interval-count= 13 
+      :first-interval="7"
+      :interval-minutes="60"
+      :interval-count="13"
     ></v-calendar>
   </v-container>
 </template>
