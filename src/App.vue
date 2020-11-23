@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer permanent expand-on-hover app>
+    <v-navigation-drawer permanent expand-on-hover app dark color="primary">
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -32,9 +32,17 @@
         </v-list-item>
       </v-list>
       <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block> Logout </v-btn>
-        </div>
+        <v-list nav dense>
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-close-circle</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-btn text> Logout </v-btn>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
       </template>
     </v-navigation-drawer>
     <v-main>
@@ -50,6 +58,7 @@ export default {
   data: () => ({
     items: [
       { title: "Planning", icon: "mdi-calendar-check" },
+      { title: "Notes", icon: "mdi-file-table" },
       { title: "Création de cours", icon: "mdi-school" },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
