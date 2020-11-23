@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import planning from './modules/planning'
 import promotions from './modules/promotions'
+import matieres from './modules/matieres'
+import eleves from './modules/eleves'
 
 Vue.use(Vuex)
 
@@ -11,6 +13,8 @@ export default new Vuex.Store({
   modules: {
     planning,
     promotions,
+    matieres,
+    eleves,
   },
   strict: debug,
 })

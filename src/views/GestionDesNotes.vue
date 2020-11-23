@@ -3,8 +3,10 @@
     <v-stepper v-model="etape">
       <v-stepper-header>
         <v-stepper-step :complete="etape > 1" step="1">
-          <span v-if="typeof(selectedPromotion.id) === 'undefined'">Selectionner la promotion</span>
-          <span v-else>{{selectedPromotion.name}}</span>
+          <span v-if="typeof selectedPromotion.id === 'undefined'"
+            >Selectionner la promotion</span
+          >
+          <span v-else>{{ selectedPromotion.name }}</span>
         </v-stepper-step>
 
         <v-divider></v-divider>
@@ -31,15 +33,19 @@
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-          <v-btn color="primary" @click="etape = 3"> Continue </v-btn>
-
-          <v-btn text> Cancel </v-btn>
+          <ListMatieres
+            @change-matiere="
+              (matiere) => {
+                selectedMatiere = matiere;
+                etape++;
+              }
+            "
+          />
+          <v-btn text> Retour </v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+          <ListElevesNotes />
 
           <v-btn color="primary" @click="etape = 1"> Continue </v-btn>
 
@@ -52,6 +58,8 @@
 
 <script>
 import ListPromotions from "../components/ListPromotions";
+import ListMatieres from "../components/ListMatieres";
+import ListElevesNotes from "../components/ListElevesNotes";
 
 export default {
   data: () => ({
@@ -60,6 +68,8 @@ export default {
   }),
   components: {
     ListPromotions,
+    ListMatieres,
+    ListElevesNotes,
   },
 };
 </script>
