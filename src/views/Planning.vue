@@ -1,6 +1,5 @@
 <template>
   <v-row class="fill-height">
-    {{editFormOpen}}
     <v-col>
       <v-sheet height="64">
         <v-toolbar
@@ -128,7 +127,8 @@
     </v-col>
       <EditSessionFormModal 
       :session = "selectedEvent"
-      :opened = "editFormOpen"
+      :editFormOpen = "editFormOpen"
+      @closeFormMessage="closeForm"
       />
   </v-row>
 </template>
@@ -165,6 +165,9 @@ import EditSessionFormModal from "../components/EditSessionFormModal"
       EditSessionFormModal
     },
     methods: {
+      closeForm(){
+        this.editFormOpen = false
+      },
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
