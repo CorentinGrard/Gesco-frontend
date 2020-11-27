@@ -1,43 +1,107 @@
-import sessions from '../../api/sessions'
+import sessions from "../../api/sessions";
 
 // initial state
 const state = () => ({
-    sessions: []
-})
+  sessions: [],
+  selectedSession: {},
+});
 
 // getters
 const getters = {
-    getSessionForPlanning: state => {
-        return state.sessions.map(session => {
-            session.name = session.matiere
-            session.start = session.dateDebut
-            session.end = session.dateFin
-            session.timed = true
-            return session
-        })
-    }
-}
+  getEventsForPlanning: (state) => {
+    return state.sessions.map((session) => {
+      let newSession = {};
+      newSession.id = session.id;
+      newSession.matiere = session.matiere;
+      newSession.detail = session.detail;
+      newSession.type = session.type;
+      newSession.obligatoire = session.obligatoire;
+      newSession.dateDebut = session.dateDebut;
+      newSession.dateFin = session.dateFin;
+      newSession.name = session.matiere;
+      newSession.start = session.dateDebut;
+      newSession.end = session.dateFin;
+      newSession.timed = true;
+      return newSession;
+    });
+  },
+  getSessionById: (state) => (id) => {
+    let temp = state.sessions.find((session) => session.id === id);
+    return temp;
+  },
+};
 
 // actions
 const actions = {
-    getAllSessions({ commit }) {
-        sessions.getSessions(sessions => {
-            commit('setSessions', sessions)
-        })
-    }
-}
+  getAllSessions({ commit }) {
+    sessions.getSessions((sessions) => {
+      commit("setSessions", sessions);
+    });
+  },
+  updateSessionBySelectedSession({ commit }){
+    commit("updateSessionBySelectedSession");
+    //TODO Appel api
+  },
+  deleteSessionBySelectedSession({ commit }){
+    commit("deleteSessionBySelectedSession");
+  }
+};
 
 // mutations
 const mutations = {
-    setSessions(state, sessions) {
-        state.sessions = sessions
-    },
-}
+  setSessions(state, sessions) {
+    state.sessions = sessions;
+  },
+  deleteSessionBySelectedSession(state){
+    let indexSession = state.sessions.findIndex((sessionT) => sessionT.id === state.selectedSession.id)
+    state.sessions.splice(indexSession,1)
+    //TODO API Call
+  },
+  updateSessionBySelectedSession(state){
+    const session = state.sessions.find((sessionT) => sessionT.id === state.selectedSession.id)
+    session.id = state.selectedSession.id;
+    session.matiere = state.selectedSession.matiere;
+    session.detail = state.selectedSession.detail;
+    session.type = state.selectedSession.type;
+    session.obligatoire = state.selectedSession.obligatoire;
+    session.dateDebut = state.selectedSession.dateDebut;
+    session.dateFin = state.selectedSession.dateFin;
+  },
+  setSelectedSession(state, session) {
+    let temp = JSON.stringify(session);
+    let newObj = JSON.parse(temp, function(key, value) {
+      if (key === "dateFin" || key === "dateDebut") {
+        return new Date(value);
+      } else {
+        return value;
+      }
+    });
+    state.selectedSession = newObj;
+  },
+  updateSelectedSessionMatiere(state, matiere) {
+    state.selectedSession.matiere = matiere;
+  },
+  updateSelectedSessionType(state, type) {
+    state.selectedSession.type = type;
+  },
+  updateSelectedSessionObligatoire(state, obligatoire) {
+    state.selectedSession.obligatoire = obligatoire;
+  },
+  updateSelectedSessionDetail(state, detail) {
+    state.selectedSession.detail = detail;
+  },
+  updateSelectedSessionDateFin(state, dateFin) {
+    state.selectedSession.dateFin = dateFin;
+  },
+  updateSelectedSessionDateDebut(state, dateDebut) {
+    state.selectedSession.dateDebut = dateDebut;
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
-}
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
+};
