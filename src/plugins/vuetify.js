@@ -5,4 +5,11 @@ import DatetimePicker from 'vuetify-datetime-picker'
 Vue.use(Vuetify).use(DatetimePicker);
 
 export default new Vuetify({
+    theme: {
+        themes: {
+            light: {
+                primary: '#006c68'
+            }
+        }
+    }
 });
