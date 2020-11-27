@@ -75,7 +75,7 @@
               ></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>mdi-delete</v-icon>
+                <v-icon @click="deleteSession()">mdi-delete</v-icon>
               </v-btn>
             </v-toolbar>
             <v-card-text>
@@ -134,6 +134,10 @@ export default {
     EditSessionFormModal,
   },
   methods: {
+    deleteSession(){
+      this.$store.dispatch('planning/deleteSessionBySelectedSession');
+      this.selectedOpen = false;
+    },
     closeForm() {
       this.editFormOpen = false;
     },

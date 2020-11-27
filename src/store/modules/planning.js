@@ -41,6 +41,9 @@ const actions = {
   updateSessionBySelectedSession({ commit }){
     commit("updateSessionBySelectedSession");
     //TODO Appel api
+  },
+  deleteSessionBySelectedSession({ commit }){
+    commit("deleteSessionBySelectedSession");
   }
 };
 
@@ -48,6 +51,11 @@ const actions = {
 const mutations = {
   setSessions(state, sessions) {
     state.sessions = sessions;
+  },
+  deleteSessionBySelectedSession(state){
+    let indexSession = state.sessions.findIndex((sessionT) => sessionT.id === state.selectedSession.id)
+    state.sessions.splice(indexSession,1)
+    //TODO API Call
   },
   updateSessionBySelectedSession(state){
     const session = state.sessions.find((sessionT) => sessionT.id === state.selectedSession.id)
