@@ -71,6 +71,7 @@ export default {
       { title: "Création de cours", icon: "mdi-school" },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
+      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" }  },
     ],
   }),
 };
