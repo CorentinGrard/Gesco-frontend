@@ -21,7 +21,12 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item v-for="item in items" :key="item.title" link>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+          :to="item.link"
+        >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -57,8 +62,12 @@ export default {
 
   data: () => ({
     items: [
-      { title: "Planning", icon: "mdi-calendar-check" },
-      { title: "Notes", icon: "mdi-file-table" },
+      {
+        title: "Planning",
+        icon: "mdi-calendar-check",
+        link: { name: "Planning" },
+      },
+      { title: "Notes", icon: "mdi-file-table", link: { name: "Planning" } },
       { title: "Création de cours", icon: "mdi-school" },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
