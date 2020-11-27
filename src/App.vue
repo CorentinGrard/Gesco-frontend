@@ -5,6 +5,7 @@
       
       <v-btn text>Planning</v-btn>
       <v-btn text>Gestion des groupes</v-btn>
+      <v-btn text>Visualisation des notes</v-btn>
     </v-app-bar>
     <v-main>
       <router-view></router-view>
