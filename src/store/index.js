@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 import planning from './modules/planning'
 import notes from './modules/notes'
 
@@ -13,4 +14,5 @@ export default new Vuex.Store({
     notes
   },
   strict: debug,
+  plugins: [createPersistedState()],
 })
