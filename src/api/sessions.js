@@ -1,6 +1,8 @@
 /**
  * Mocking client-server processing
  */
+const axios = require('axios');
+const endpoint = "http://127.0.0.1:8000"
 const sessions = [
   {
     id: 1,
@@ -23,7 +25,9 @@ const sessions = [
 ]
 
 export default {
-  getSessions(cb) {
-    setTimeout(() => cb(sessions), 100)
+  getSessions (cb) {
+    return axios.get(endpoint + "/sessions")
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
   },
 }

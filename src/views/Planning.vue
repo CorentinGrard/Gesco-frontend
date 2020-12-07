@@ -71,13 +71,18 @@
                 <v-icon @click="editFormOpen = true">mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title
-                v-html="selectedSession.matiere"
+                v-html="selectedSession.matiere.nom"
               ></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
                 <v-icon @click="deleteSession()">mdi-delete</v-icon>
               </v-btn>
             </v-toolbar>
+            <v-card-text>
+              <span
+                v-html="selectedSession.type"
+              ></span>
+            </v-card-text>
             <v-card-text>
               <span
                 v-html="selectedSession.detail"
