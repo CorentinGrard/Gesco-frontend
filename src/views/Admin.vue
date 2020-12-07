@@ -28,7 +28,7 @@
   export default {
     data: () => ({
       items: [
-        { title: "Création et modification d'une matière", icon: "mdi-book-open-variant" },
+        { title: "Création et modification des UE et des matières", icon: "mdi-book-open-variant",link: "/admin/UeMatieres" },
         { title: "Création et modification d'une formation", icon: "mdi-ballot-outline" },
         { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus" },
         { title: "Aller sur Darwin", icon: "mdi-account-group" },
