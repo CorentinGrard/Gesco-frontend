@@ -11,7 +11,7 @@
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
                   label="Matière"
-                  v-model="matiere"
+                  v-model="matiere.nom"
                   hint="Matière de la session"
                   required
                 ></v-text-field>
