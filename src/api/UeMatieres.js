@@ -1,83 +1,39 @@
 /**
  * Mocking client-server processing
  */
-const data_notes = [
-    {
-      id: 1,
-      name: "S6",
-      UE: [{
-        id: 1,
-        name: "UE 1",
-        matieres: [{
-          id: 1,
-          name: "math",
-          note: 12,
-          coeff: 0.5
-        }, {
-          id: 2,
-          name: "physique",
-          note: 12,
-          coeff: 1
-        }]
-      }]
-    },
+const dataMatiere = [
   {
-    id: 2,
-    name: "S7",
-    UE: [{
-      id: 1,
-      name: "UE 1",
-      matieres: [{
-        id: 1,
-        name: "math",
-        note: 12,
-        coeff: 0.5
-      }, {
-        id: 2,
-        name: "physique",
-        note: 12,
-        coeff: 1
-      }]
-    },
-      {
-        id: 2,
-        name: "UE 2",
-        matieres: [{
-          id: 1,
-          name: "math",
-          note: 12,
-          coeff: 0.5
-        }, {
-          id: 2,
-          name: "physique",
-          note: 12,
-          coeff: 1
-        }]
-      }]
+    id : 1,
+    nom : "Maths",
+    module : "INFRES DIM",
+    coefficient : 2,
+    intervenant : "M.Machin"
   },
   {
-    id: 3,
-    name: "S8",
-    UE: [{
-      id: 1,
-      name: "UE 1",
-      matieres: [{
-        id: 1,
-        name: "math",
-        note: 12,
-        coeff: 0.5
-      }, {
-        id: 2,
-        name: "physique",
-        note: 12,
-        coeff: 1
-      }]
-    }]
+    id : 2,
+    nom : "DPPA",
+    module : "INFRES MACHIN",
+    coefficient : 1,
+    intervenant : "M.Truc"
+  },
+  {
+    id : 3,
+    nom : "Anglais",
+    module : "INFRES MACHIN",
+    coefficient : 3,
+    intervenant : "Erika Sensei"
+  },
+  {
+    id : 4,
+    nom : "PHP",
+    module : "INFRES CHOSE",
+    coefficient : 2,
+    intervenant : "M.Truc"
   }
 ]
 
 export default {
-  getDataUe(cb) {
-    setTimeout(() => cb(data_notes), 100)
+  getDataMatiere(cb) {
+    setTimeout(() => cb(dataMatiere), 100)
   },
 }
