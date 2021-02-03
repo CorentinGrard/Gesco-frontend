@@ -2,18 +2,21 @@ import APIPromotions from '../../api/promotions'
 
 // initial state
 const state = () => ({
-  promotions: null
+  promotions: [],
+  selectedPromotion: {}
 })
 
 // actions
 const actions = {
   fetchPromotions({ state, commit }) {
-    if (state.promotions === null) {
+    if (state.promotions.length === 0) {
       APIPromotions.getPromotions(promotions => {
-        console.log(promotions)
         commit('setPromotions', promotions)
       })
     }
+  },
+  setSelectedPromotion({ commit }, selectedPromotion) {
+    commit('setSelectedPromotion', selectedPromotion)
   }
 }
 
@@ -21,6 +24,9 @@ const actions = {
 const mutations = {
   setPromotions(state, promotions) {
     state.promotions = promotions
+  },
+  setSelectedPromotion(state, selectedPromotion) {
+    state.selectedPromotion = selectedPromotion
   },
 }
 
