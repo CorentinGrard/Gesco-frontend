@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="matieres"
+    :items="ue"
     class="elevation-1"
     hide-default-footer
     disable-pagination
@@ -10,7 +10,7 @@
       <v-toolbar
         flat
       > 
-        <v-toolbar-title>Matières</v-toolbar-title>
+        <v-toolbar-title>UE</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -29,7 +29,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              Nouvelle matière
+              Nouvelle UE
             </v-btn>
           </template>
           <v-card>
@@ -56,8 +56,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.module"
-                      label="Module"
+                      v-model="editedItem.semestre"
+                      label="Semestre"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -66,8 +66,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.coefficient"
-                      label="Coefficient"
+                      v-model="editedItem.ects"
+                      label="ECTS"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -75,10 +75,6 @@
                     sm="6"
                     md="4"
                   >
-                    <v-text-field
-                      v-model="editedItem.intervenant"
-                      label="Intervenant"
-                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -105,7 +101,7 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="headline">Etes vous sur de vouloir supprimer cette matière ?</v-card-title>
+            <v-card-title class="headline">Etes vous sur de vouloir supprimer cette UE ?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="closeDelete">Annuler</v-btn>
@@ -115,6 +111,8 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
+
+      
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
@@ -141,6 +139,7 @@
     </template>
   </v-data-table>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
   export default {
@@ -149,40 +148,37 @@ import { mapGetters } from "vuex";
       dialogDelete: false,
       headers: [
         {
-          text: 'Nom matière',
+          text: 'Nom UE',
           align: 'start',
           sortable: false,
           value: 'nom',
         },
-        { text: 'Module', value: 'module' },
-        { text: 'Coefficient', value: 'coefficient' },
-        { text: 'Intervenant', value: 'intervenant' },
+        { text: 'Semestre', value: 'semestre' },
+        { text: 'ECTS', value: 'ects' },
         { text: 'Actions', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
-        name: "",
-        module: '',
-        coefficient: 1,
-        intervenant: "",
+        nom : "",
+        semestre : "",
+        ects : 0
       },
       defaultItem: {
-        name: "",
-        module: '',
-        coefficient: 1,
-        intervenant: "",
+        nom : "",
+        semestre : "",
+        ects : 0
       },
     }),
     computed: {
     ...mapGetters({
-        matieres: "UeMatieres/getMatieresForDisplaying",
+        ue: "UeMatieres/getUeForDisplaying",
       }),
       formTitle(){
-        return this.editedIndex === -1 ? 'Nouvelle matière' : 'Edition matière'
+        return this.editedIndex === -1 ? 'Nouvelle UE' : 'Edition UE'
       },
     },
     created() {
-      this.$store.dispatch("UeMatieres/getAllMatieres");
+      this.$store.dispatch("UeMatieres/getAllUe");
     },
     watch: {
       dialog (val) {
@@ -194,19 +190,19 @@ import { mapGetters } from "vuex";
     },
     methods: {
       editItem (item) {
-        this.editedIndex = this.matieres.indexOf(item)
+        this.editedIndex = this.ue.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
 
       deleteItem (item) {
-        this.editedIndex = this.matieres.indexOf(item)
+        this.editedIndex = this.ue.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialogDelete = true
       },
 
       deleteItemConfirm () {
-        this.matieres.splice(this.editedIndex, 1)
+        this.ue.splice(this.editedIndex, 1)
         this.closeDelete()
       },
 
@@ -228,9 +224,9 @@ import { mapGetters } from "vuex";
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.matieres[this.editedIndex], this.editedItem)
+          Object.assign(this.ue[this.editedIndex], this.editedItem)
         } else {
-          this.matieres.push(this.editedItem)
+          this.ue.push(this.editedItem)
         }
         this.close()
       },
