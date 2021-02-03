@@ -13,9 +13,22 @@
 import { mapState } from "vuex";
 
 export default {
-  computed: mapState({
-    promotions: (state) => state.promotions.promotions,
-  }),
+  computed: {
+    selectedPromotion: {
+      get() {
+        return this.$store.state.promotions.selectedPromotion;
+      },
+      set(selectedPromotion) {
+        this.$store.dispatch(
+          "promotions/setSelectedPromotion",
+          selectedPromotion
+        );
+      },
+    },
+    ...mapState({
+      promotions: (state) => state.promotions.promotions,
+    }),
+  },
   created() {
     this.$store.dispatch("promotions/fetchPromotions");
   },
