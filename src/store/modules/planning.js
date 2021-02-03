@@ -3,7 +3,7 @@ import APIsessions from "../../api/sessions";
 // initial state
 const state = () => ({
   sessions: [],
-  selectedSession: {matiere : {}},
+  selectedSession: { matiere: {} },
 });
 
 // getters
@@ -18,7 +18,7 @@ const getters = {
       newSession.obligatoire = session.obligatoire;
       newSession.dateDebut = session.dateDebut;
       newSession.dateFin = session.dateFin;
-      newSession.name = session.matiere.nom;
+      newSession.name = session.matiere;
       newSession.start = session.dateDebut;
       newSession.end = session.dateFin;
       newSession.timed = true;
@@ -34,28 +34,28 @@ const getters = {
 // actions
 const actions = {
   getAllSessions({ commit }) {
-      APIsessions.getSessions((sessions) => {
-        sessions.forEach(session => {
-          session.dateDebut = new Date(session.dateDebut),
+    APIsessions.getSessions((sessions) => {
+      sessions.forEach(session => {
+        session.dateDebut = new Date(session.dateDebut),
           session.dateFin = new Date(session.dateFin)
-        });
+      });
       commit("setSessions", sessions);
     });
   },
-  updateSessionBySelectedSession({ commit }){
+  updateSessionBySelectedSession({ commit }) {
     commit("updateSessionBySelectedSession");
     //TODO Appel api
   },
-  deleteSessionBySelectedSession({ commit }){
+  deleteSessionBySelectedSession({ commit }) {
     commit("deleteSessionBySelectedSession");
   },
-  addSession({commit}, session){
+  addSession({ commit }, session) {
     commit("addSession", session)
   },
-  updateSessionByEvent({commit}, event){
+  updateSessionByEvent({ commit }, event) {
     commit("updateSessionByEvent", event)
   },
-  deleteSession({commit}, session){
+  deleteSession({ commit }, session) {
     commit("deleteSession", session)
   },
 };
@@ -65,12 +65,12 @@ const mutations = {
   setSessions(state, sessions) {
     state.sessions = sessions;
   },
-  deleteSessionBySelectedSession(state){
+  deleteSessionBySelectedSession(state) {
     let indexSession = state.sessions.findIndex((sessionT) => sessionT.id === state.selectedSession.id)
-    state.sessions.splice(indexSession,1)
+    state.sessions.splice(indexSession, 1)
     //TODO API Call
   },
-  updateSessionBySelectedSession(state){
+  updateSessionBySelectedSession(state) {
     const session = state.sessions.find((sessionT) => sessionT.id === state.selectedSession.id)
     session.id = state.selectedSession.id;
     session.matiere = state.selectedSession.matiere;
@@ -82,7 +82,7 @@ const mutations = {
   },
   setSelectedSession(state, session) {
     let temp = JSON.stringify(session);
-    let newObj = JSON.parse(temp, function(key, value) {
+    let newObj = JSON.parse(temp, function (key, value) {
       if (key === "dateFin" || key === "dateDebut") {
         return new Date(value);
       } else {
@@ -109,16 +109,16 @@ const mutations = {
   updateSelectedSessionDateDebut(state, dateDebut) {
     state.selectedSession.dateDebut = dateDebut;
   },
-  addSession(state, session){
+  addSession(state, session) {
     state.sessions.push(session)
   },
-  deleteSession(state, session){
+  deleteSession(state, session) {
     const i = state.sessions.indexOf(session);
     if (i !== -1) {
       state.sessions.splice(i, 1);
     }
   },
-  updateSessionByEvent(state, event){
+  updateSessionByEvent(state, event) {
     const session = state.sessions.find((session) => session.id === event.id);
     session.matiere = event.matiere;
     session.detail = event.detail;
