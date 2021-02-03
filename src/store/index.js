@@ -4,6 +4,7 @@ import planning from './modules/planning'
 import promotions from './modules/promotions'
 import matieres from './modules/matieres'
 import eleves from './modules/eleves'
+import semestres from './modules/semestres'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     promotions,
     matieres,
     eleves,
+    semestres,
   },
   strict: debug,
 })

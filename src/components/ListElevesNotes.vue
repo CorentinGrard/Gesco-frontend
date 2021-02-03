@@ -15,7 +15,7 @@
             <td>{{ eleve.prenom }}</td>
             <td>
               <v-text-field
-                label="Note non rentré"
+                label="Note non rentrée"
                 solo
                 :value="eleve.note"
               ></v-text-field>
