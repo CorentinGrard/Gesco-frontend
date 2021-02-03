@@ -107,6 +107,7 @@
 import { mapGetters, mapState } from "vuex";
 import EditSessionFormModal from "../components/EditSessionFormModal";
 export default {
+  props: ['selectedMatiere'],
   data: () => ({
     editFormOpen: false,
     focus: "",
@@ -205,12 +206,10 @@ export default {
       } else {
         this.createStart = this.roundTime(mouse);
         this.createEvent = {
-          id: Math.random(),
-          matiere: "Maths",
-          detail: "fesf",
+          matiereId: this.selectedMatiere,
+          detail: "TODO",
           type: "TD",
           obligatoire: true,
-          name: "Maths",
           dateDebut: new Date(this.createStart),
           dateFin: new Date(this.createStart),
         };

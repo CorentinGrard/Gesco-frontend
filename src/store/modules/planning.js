@@ -50,7 +50,10 @@ const actions = {
     commit("deleteSessionBySelectedSession");
   },
   addSession({ commit }, session) {
-    commit("addSession", session)
+    // API save
+    APIsessions.addSession(session, (session) => {
+      commit("addSession", session)
+    })
   },
   updateSessionByEvent({ commit }, event) {
     commit("updateSessionByEvent", event)

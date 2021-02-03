@@ -2,19 +2,20 @@
   <v-container fluid>
     <v-row>
       <v-col cols="3">
-        <SelectPromo/>
+        <SelectPromo />
         <v-divider></v-divider>
-        <v-expansion-panels v-model="selectedSemester">
+        <v-expansion-panels>
           <v-expansion-panel v-for="semestre in semestres" :key="semestre.id">
             <v-expansion-panel-header>
               {{ semestre.name }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-list dense>
-                <v-list-item-group v-model="semestre.select">
+              <v-list rounded>
+                <v-list-item-group>
                   <v-list-item
                     v-for="matiere in semestre.matieres"
                     :key="matiere.id"
+                    @click="selectMatiere(matiere.id)"
                   >
                     <v-list-item-content>
                       <v-list-item-title
@@ -47,7 +48,7 @@
         <v-autocomplete :items="salles" label="Salle" outlined></v-autocomplete>
       </v-col>
       <v-col>
-        <Planning />
+        <Planning :selectedMatiere="selectedMatiere" />
       </v-col>
     </v-row>
   </v-container>
@@ -59,7 +60,7 @@ import SelectPromo from "../components/SelectPromo";
 
 export default {
   data: () => ({
-    selectedPromotion: null,
+    selectedMatiere: null,
     semestres: [
       {
         id: 1,
@@ -114,7 +115,7 @@ export default {
   }),
   components: {
     Planning,
-    SelectPromo
+    SelectPromo,
   },
   methods: {
     pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
@@ -124,6 +125,9 @@ export default {
       } else if (pourcentageNbHeures == 1) {
         return "green";
       } else return "orange";
+    },
+    selectMatiere: function (matiere) {
+      this.selectedMatiere = matiere;
     },
   },
 };
