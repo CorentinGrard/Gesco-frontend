@@ -19,8 +19,8 @@ const getters = {
       newSession.dateDebut = session.dateDebut;
       newSession.dateFin = session.dateFin;
       newSession.name = session.matiere;
-      newSession.start = session.dateDebut;
-      newSession.end = session.dateFin;
+      newSession.start = Date.parse(session.dateDebut);
+      newSession.end = Date.parse(session.dateFin);
       newSession.timed = true;
       return newSession;
     });
@@ -44,7 +44,16 @@ const actions = {
   },
   deleteSessionBySelectedSession({ commit }){
     commit("deleteSessionBySelectedSession");
-  }
+  },
+  addSession({commit}, session){
+    commit("addSession", session)
+  },
+  updateSessionByEvent({commit}, event){
+    commit("updateSessionByEvent", event)
+  },
+  deleteSession({commit}, session){
+    commit("deleteSession", session)
+  },
 };
 
 // mutations
@@ -96,6 +105,24 @@ const mutations = {
   updateSelectedSessionDateDebut(state, dateDebut) {
     state.selectedSession.dateDebut = dateDebut;
   },
+  addSession(state, session){
+    state.sessions.push(session)
+  },
+  deleteSession(state, session){
+    const i = state.sessions.indexOf(session);
+    if (i !== -1) {
+      state.sessions.splice(i, 1);
+    }
+  },
+  updateSessionByEvent(state, event){
+    const session = state.sessions.find((session) => session.id === event.id);
+    session.matiere = event.matiere;
+    session.detail = event.detail;
+    session.type = event.type;
+    session.obligatoire = event.obligatoire;
+    session.dateDebut = new Date(event.start);
+    session.dateFin = new Date(event.end);
+  }
 };
 
 export default {

@@ -1,23 +1,31 @@
 <template>
   <v-container fluid>
+    promo : {{ selectedPromotion}}
+    semestre : {{ selectedSemester}}
+    ue : 
+    matiere: 
     <v-row>
       <v-col cols="3">
         <v-autocomplete
           :items="promotions"
+          item-text="name"
+          item-value="id"
           label="Promotion"
+          v-model="selectedPromotion"
           outlined
         ></v-autocomplete>
-        <v-expansion-panels>
-          <v-expansion-panel v-for="semestre in semestres" :key="semestre.name">
+        <v-divider></v-divider>
+        <v-expansion-panels v-model="selectedSemester">
+          <v-expansion-panel v-for="semestre in semestres" :key="semestre.id">
             <v-expansion-panel-header>
               {{ semestre.name }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-list dense>
-                <v-list-item-group>
+                <v-list-item-group v-model="semestre.select">
                   <v-list-item
                     v-for="matiere in semestre.matieres"
-                    :key="matiere.name"
+                    :key="matiere.id"
                   >
                     <v-list-item-content>
                       <v-list-item-title
@@ -25,8 +33,20 @@
                       ></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                      {{ matiere.nombreHeuresPlace }} /
-                      {{ matiere.nombreHeuresTotal }}
+                      <v-chip
+                        class="ma-2"
+                        :color="
+                          pickColor(
+                            matiere.nombreHeuresPlace,
+                            matiere.nombreHeuresTotal
+                          )
+                        "
+                        text-color="white"
+                      >
+                        {{ matiere.nombreHeuresPlace }}/{{
+                          matiere.nombreHeuresTotal
+                        }}h</v-chip
+                      >
                     </v-list-item-action>
                   </v-list-item>
                 </v-list-item-group>
@@ -35,11 +55,7 @@
           </v-expansion-panel>
         </v-expansion-panels>
         <v-divider></v-divider>
-        <v-autocomplete
-          :items="salles"
-          label="Salle"
-          outlined
-        ></v-autocomplete>
+        <v-autocomplete :items="salles" label="Salle" outlined></v-autocomplete>
       </v-col>
       <v-col>
         <Planning />
@@ -53,22 +69,33 @@ import Planning from "../components/Planning";
 
 export default {
   data: () => ({
-    promotions: ["INFRES11", "INFRES12", "MKX20", "MKX21"],
+    promotions: [
+      { id: 1, name: "INFRES11" },
+      { id: 2, name: "INFRES12" },
+      { id: 3, name: "MKX20" },
+      { id: 4, name: "MKX21" },
+    ],
+    selectedSemester: null,
+    selectedPromotion: null,
     semestres: [
       {
+        id: 1,
         name: "S1",
         matieres: [
           {
+            id: 1,
             name: "Maths",
             nombreHeuresTotal: 150,
-            nombreHeuresPlace: 50,
+            nombreHeuresPlace: 150,
           },
           {
+            id: 2,
             name: "IA",
             nombreHeuresTotal: 30,
             nombreHeuresPlace: 10,
           },
           {
+            id: 3,
             name: "Projet",
             nombreHeuresTotal: 40,
             nombreHeuresPlace: 0,
@@ -76,19 +103,23 @@ export default {
         ],
       },
       {
+        id: 2,
         name: "S2",
         matieres: [
           {
+            id: 4,
             name: "Maths",
             nombreHeuresTotal: 10,
             nombreHeuresPlace: 0,
           },
           {
+            id: 5,
             name: "Informatique",
             nombreHeuresTotal: 60,
             nombreHeuresPlace: 10,
           },
           {
+            id: 6,
             name: "Big Data",
             nombreHeuresTotal: 12,
             nombreHeuresPlace: 5,
@@ -96,10 +127,20 @@ export default {
         ],
       },
     ],
-    salles: ["M105","M107","M165","M102","M145",]
+    salles: ["M105", "M107", "M165", "M102", "M145"],
   }),
   components: {
     Planning,
+  },
+  methods: {
+    pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
+      let pourcentageNbHeures = nombreHeuresPlace / nombreHeuresTotal;
+      if (pourcentageNbHeures == 0) {
+        return "red";
+      } else if (pourcentageNbHeures == 1) {
+        return "green";
+      } else return "orange";
+    },
   },
 };
 </script>
