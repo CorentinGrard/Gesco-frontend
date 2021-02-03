@@ -1,19 +1,8 @@
 <template>
   <v-container fluid>
-    promo : {{ selectedPromotion}}
-    semestre : {{ selectedSemester}}
-    ue : 
-    matiere: 
     <v-row>
       <v-col cols="3">
-        <v-autocomplete
-          :items="promotions"
-          item-text="name"
-          item-value="id"
-          label="Promotion"
-          v-model="selectedPromotion"
-          outlined
-        ></v-autocomplete>
+        <SelectPromo/>
         <v-divider></v-divider>
         <v-expansion-panels v-model="selectedSemester">
           <v-expansion-panel v-for="semestre in semestres" :key="semestre.id">
@@ -66,16 +55,10 @@
 
 <script>
 import Planning from "../components/Planning";
+import SelectPromo from "../components/SelectPromo";
 
 export default {
   data: () => ({
-    promotions: [
-      { id: 1, name: "INFRES11" },
-      { id: 2, name: "INFRES12" },
-      { id: 3, name: "MKX20" },
-      { id: 4, name: "MKX21" },
-    ],
-    selectedSemester: null,
     selectedPromotion: null,
     semestres: [
       {
@@ -131,6 +114,7 @@ export default {
   }),
   components: {
     Planning,
+    SelectPromo
   },
   methods: {
     pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
