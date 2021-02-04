@@ -18,7 +18,6 @@ export default new Vuex.Store({
     promotions,
     matieres,
     UeMatieres,
-    promotions,
     snackbar
   },
   strict: debug,

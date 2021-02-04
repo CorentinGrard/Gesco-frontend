@@ -215,8 +215,11 @@ export default {
             dateFin: new Date(this.createStart),
           };
           this.$store.dispatch("planning/addSession", this.createEvent);
-        }else {
-          
+        } else {
+          this.$store.dispatch("snackbar/error", {
+            text:
+              "Erreur : Selectionner une matière pour pouvoir créer un cour",
+          });
         }
       }
     },
