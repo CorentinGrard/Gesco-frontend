@@ -14,7 +14,7 @@ export default new Vuex.Store({
   modules: {
     planning,
     notes,
-    UeMatieres
+    UeMatieres,
     promotions,
     snackbar
   },
