@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Planning from '../views/Planning.vue'
 import Notes from '../views/Notes.vue'
 import Admin from '../views/Admin.vue'
-
+import AdminMatieres from '../views/Admin/Matieres.vue'
+import AdminUe from '../views/Admin/Ue.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -22,6 +23,17 @@ const routes = [
     name: 'Admin',
     component: Admin
   },
+  {
+    path: '/admin/Matieres',
+    name: 'Matieres',
+    component: AdminMatieres
+  },
+  {
+    path: '/admin/Ue',
+    name: 'Ue',
+    component: AdminUe
+  },
+
 ]
 
 const router = new VueRouter({

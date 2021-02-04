@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-card>
       <v-card-title>
         Admin
@@ -28,7 +28,8 @@
   export default {
     data: () => ({
       items: [
-        { title: "Création et modification d'une matière", icon: "mdi-book-open-variant" },
+        { title: "Création et modification des matières", icon: "mdi-book-open-variant",link: "/admin/Matieres" },
+        { title: "Création et modification des UE", icon: "mdi-book-open-variant",link: "/admin/Ue" },
         { title: "Création et modification d'une formation", icon: "mdi-ballot-outline" },
         { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus" },
         { title: "Aller sur Darwin", icon: "mdi-account-group" },
