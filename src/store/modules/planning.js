@@ -1,9 +1,9 @@
-import sessions from "../../api/sessions";
+import APIsessions from "../../api/sessions";
 
 // initial state
 const state = () => ({
   sessions: [],
-  selectedSession: {},
+  selectedSession: {matiere : {}},
 });
 
 // getters
@@ -18,7 +18,7 @@ const getters = {
       newSession.obligatoire = session.obligatoire;
       newSession.dateDebut = session.dateDebut;
       newSession.dateFin = session.dateFin;
-      newSession.name = session.matiere;
+      newSession.name = session.matiere.nom;
       newSession.start = session.dateDebut;
       newSession.end = session.dateFin;
       newSession.timed = true;
@@ -34,7 +34,11 @@ const getters = {
 // actions
 const actions = {
   getAllSessions({ commit }) {
-    sessions.getSessions((sessions) => {
+      APIsessions.getSessions((sessions) => {
+        sessions.forEach(session => {
+          session.dateDebut = new Date(session.dateDebut),
+          session.dateFin = new Date(session.dateFin)
+        });
       commit("setSessions", sessions);
     });
   },

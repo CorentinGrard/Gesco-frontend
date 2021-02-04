@@ -3,18 +3,12 @@
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat>
-          <v-btn outlined class="mr-4" @click="setToday">
-            Aujourd'hui
-          </v-btn>
+          <v-btn outlined class="mr-4" @click="setToday"> Aujourd'hui </v-btn>
           <v-btn fab text small @click="prev">
-            <v-icon small>
-              mdi-chevron-left
-            </v-icon>
+            <v-icon small> mdi-chevron-left </v-icon>
           </v-btn>
           <v-btn fab text small @click="next">
-            <v-icon small>
-              mdi-chevron-right
-            </v-icon>
+            <v-icon small> mdi-chevron-right </v-icon>
           </v-btn>
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
@@ -24,9 +18,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn outlined v-bind="attrs" v-on="on">
                 <span>{{ typeToLabel[type] }}</span>
-                <v-icon right>
-                  mdi-menu-down
-                </v-icon>
+                <v-icon right> mdi-menu-down </v-icon>
               </v-btn>
             </template>
             <v-list>
@@ -71,7 +63,7 @@
                 <v-icon @click="editFormOpen = true">mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title
-                v-html="selectedSession.matiere"
+                v-html="selectedSession.matiere.nom"
               ></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
@@ -79,9 +71,10 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span
-                v-html="selectedSession.detail"
-              ></span>
+              <span v-html="selectedSession.type"></span>
+            </v-card-text>
+            <v-card-text>
+              <span v-html="selectedSession.detail"></span>
             </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
@@ -101,6 +94,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import EditSessionFormModal from "../components/EditSessionFormModal";
+
 export default {
   data: () => ({
     editFormOpen: false,
@@ -121,7 +115,7 @@ export default {
       getSessionById: "planning/getSessionById",
     }),
     ...mapState({
-      selectedSession: state => state.planning.selectedSession
+      selectedSession: (state) => state.planning.selectedSession,
     }),
   },
   created() {
@@ -134,8 +128,8 @@ export default {
     EditSessionFormModal,
   },
   methods: {
-    deleteSession(){
-      this.$store.dispatch('planning/deleteSessionBySelectedSession');
+    deleteSession() {
+      this.$store.dispatch("planning/deleteSessionBySelectedSession");
       this.selectedOpen = false;
     },
     closeForm() {
