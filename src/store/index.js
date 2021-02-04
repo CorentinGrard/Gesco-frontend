@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import planning from './modules/planning'
 import notes from './modules/notes'
-import promotions from './modules/admin/promotion'
+import eleves from './modules/admin/eleves'
+import promotions from './modules/admin/promotions'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   modules: {
     planning,
     notes,
+    eleves,
     promotions
   },
   strict: debug,

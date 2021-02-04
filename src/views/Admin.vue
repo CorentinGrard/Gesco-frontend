@@ -30,7 +30,7 @@
       items: [
         { title: "Création et modification d'une matière", icon: "mdi-book-open-variant" },
         { title: "Création et modification d'une formation", icon: "mdi-ballot-outline" },
-        { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus", link: { name: "AdminPromo" }  },
+        { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus", link: { name: "Eleves" }  },
         { title: "Aller sur Darwin", icon: "mdi-account-group" },
       ],
     }),

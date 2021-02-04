@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Planning from '../views/Planning.vue'
 import Notes from '../views/Notes.vue'
 import Admin from '../views/Admin.vue'
-import AdminPromo from '../views/admin/AdminPromo.vue'
+import Eleves from '../views/admin/Eleves.vue'
+import Promotions from '../views/admin/Promotions.vue'
 
 Vue.use(VueRouter)
 
@@ -24,9 +25,14 @@ const routes = [
     component: Admin
   },
   {
-    path: '/admin/promo',
-    name: 'AdminPromo',
-    component: AdminPromo
+    path: '/admin/eleves',
+    name: 'Eleves',
+    component: Eleves
+  },
+  {
+    path: '/admin/promotions',
+    name: 'Promotions',
+    component: Promotions
   },
 ]
 

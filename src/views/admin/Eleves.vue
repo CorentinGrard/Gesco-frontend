@@ -74,8 +74,10 @@
                               md="4"
                       >
                         <v-select
-                                v-model="editedItem.promotion"
+                                v-model="editedItem.promotion_id"
                                 :items="promotions"
+                                item-text="name"
+                                item-value="id"
                                 label="Promotion"
                         ></v-select>
                       </v-col>
@@ -117,6 +119,8 @@
           <v-select
                   v-model="search"
                   :items="promotions"
+                  item-text="name"
+                  item-value="name"
                   label="Promotion"
                   clearable
           ></v-select>
@@ -138,6 +142,24 @@
         </template>
       </v-data-table>
     </v-card>
+    <br>
+    <v-card>
+      <v-list nav dense>
+        <v-list-item
+                :key="promotionLink.title"
+                link
+                :to="promotionLink.link"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ promotionLink.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ promotionLink.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-card>
   </v-container>
 </template>
 
@@ -158,21 +180,26 @@
       events: [],
       editedIndex: -1,
       editedItem: {
+        eleve_id: 'test',
+        promotion_id: 'test',
         eleve_firstname: 'test',
         eleve_lastname: 'test',
         promotion: 'test',
       },
       defaultItem: {
+        eleve_id: 'test',
+        promotion_id: 'test',
         eleve_firstname: 'test',
         eleve_lastname: 'test',
         promotion: 'test',
       },
+      promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick", link: { name: "Promotions" }  }
     }),
 
 
     computed: {
       ...mapGetters({
-                   eleves: "promotions/getElevesByPromotionForDisplaying",
+                   eleves: "eleves/getElevesByPromotionForDisplaying",
                    promotions: "promotions/getPromotions",
                  }),
       formTitle () {
@@ -181,7 +208,8 @@
     },
 
     created() {
-      this.$store.dispatch("promotions/getAllPromotions");
+      this.$store.dispatch("eleves/initEleves");
+      this.$store.dispatch("promotions/initPromotions");
     },
 
     methods: {
@@ -198,7 +226,7 @@
       },
 
       deleteItemConfirm () {
-        this.eleves.splice(this.editedIndex, 1)
+        this.$store.dispatch("eleves/removeEleve", this.editedIndex);
         this.closeDelete()
       },
 
@@ -220,9 +248,10 @@
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.eleves[this.editedIndex], this.editedItem)
+          this.$store.dispatch("eleves/editEleve", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         } else {
-          this.eleves.push(this.editedItem)
+          this.editedItem.promotion = this.promotions.find(promo => promo.id == this.editedItem.promotion_id).name
+          this.$store.dispatch("eleves/addEleve", this.editedItem);
         }
         this.close()
       },
