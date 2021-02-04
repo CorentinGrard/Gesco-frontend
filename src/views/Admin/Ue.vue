@@ -202,7 +202,7 @@ import { mapGetters } from "vuex";
       },
 
       deleteItemConfirm () {
-        this.ue.splice(this.editedIndex, 1)
+        this.$store.dispatch("UeMatieres/deleteUe",this.editedIndex);
         this.closeDelete()
       },
 
@@ -224,7 +224,7 @@ import { mapGetters } from "vuex";
 
       save () {
         if (this.editedIndex > -1) {
-          this.$store.dispatch("UeMatieres/editUe",this.editedItem);
+          this.$store.dispatch("UeMatieres/editUe",{ ueIndex : this.editedIndex, ue : this.editedItem });
         } else {
           this.$store.dispatch("UeMatieres/addUe",this.editedItem);
         }

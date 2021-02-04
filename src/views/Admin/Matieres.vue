@@ -217,7 +217,7 @@ import { mapGetters } from "vuex";
       },
 
       deleteItemConfirm () {
-        this.matieres.splice(this.editedIndex, 1)
+        this.$store.dispatch("UeMatieres/deleteMatiere",this.editedIndex);
         this.closeDelete()
       },
 
@@ -238,7 +238,11 @@ import { mapGetters } from "vuex";
       },
 
       save () {
-        this.$store.dispatch("UeMatieres/addMatiere",this.editedItem);
+        if (this.editedIndex > -1) {
+          this.$store.dispatch("UeMatieres/editMatiere",{ matiereIndex : this.editedIndex, matiere : this.editedItem });
+        } else {
+          this.$store.dispatch("UeMatieres/addMatiere",this.editedItem);
+        }
         this.close()
       },
     },

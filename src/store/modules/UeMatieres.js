@@ -36,11 +36,20 @@ const actions = {
     addMatiere({ commit }, matiere) {
             commit('addMatiere', matiere)
     },
+    editMatiere({ commit }, {matiereIndex, matiere}) {
+            commit('editMatiere', {matiereIndex, matiere})
+    },
+    deleteMatiere({ commit }, matiere) {
+        commit('deleteMatiere', matiere)
+    },
     addUe({ commit }, ue) {
             commit('addUe', ue)
     },
-    editUe({ commit }, ue) {
-            commit('editUe', ue)
+    editUe({ commit },{ueIndex, ue}) {
+            commit('editUe', { ueIndex, ue})
+    },
+    deleteUe({ commit }, ue) {
+        commit('deleteUe', ue)
     }
 }
 
@@ -55,11 +64,20 @@ const mutations = {
     addMatiere(state, matiere){
         state.dataMatiere.push(matiere)
     },
+    editMatiere(state,{matiereIndex,matiere}){
+        Object.assign(state.dataMatiere[matiereIndex],matiere)
+    },
+    deleteMatiere(state,matiereIndex){
+        state.dataMatiere.splice(matiereIndex,1)
+    },
     addUe(state, ue){
         state.dataUe.push(ue)
     },
-    editUe(state,ue){
-        Object.assign(state.dataUe.find(Uee => Uee.id = ue.id),ue)
+    editUe(state,{ueIndex,ue}){
+        Object.assign(state.dataUe[ueIndex],ue)
+    },
+    deleteUe(state,ueIndex){
+        state.dataUe.splice(ueIndex,1)
     }
 }
 
