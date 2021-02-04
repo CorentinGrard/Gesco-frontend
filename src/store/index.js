@@ -4,6 +4,8 @@ import planning from './modules/planning'
 import promotions from './modules/promotions'
 import notes from './modules/notes'
 import matieres from './modules/matieres'
+import UeMatieres from './modules/UeMatieres'
+import snackbar from './modules/snackbar'
 
 Vue.use(Vuex)
 
@@ -14,7 +16,10 @@ export default new Vuex.Store({
     planning,
     notes,
     promotions,
-    matieres
+    matieres,
+    UeMatieres,
+    promotions,
+    snackbar
   },
   strict: debug,
 })

@@ -54,11 +54,30 @@
     </v-navigation-drawer>
     <v-main>
       <router-view></router-view>
+      <v-snackbar
+        v-model="display"
+        :timeout="snackbarTimeout"
+        :color="snackbarColor"
+      >
+        {{ snackbarText }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="black"
+            text
+            v-bind="attrs"
+            @click="$store.dispatch('snackbar/close')"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
 
@@ -73,8 +92,23 @@ export default {
       { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
-      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" }  },
+      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),
+  computed: {
+    display: {
+      get() {
+        return this.$store.state.snackbar.display;
+      },
+      set(display) {
+        this.$store.dispatch("snackbar/setDisplay", display);
+      },
+    },
+    ...mapState({
+      snackbarText: (state) => state.snackbar.text,
+      snackbarTimeout: (state) => state.snackbar.timeout,
+      snackbarColor: (state) => state.snackbar.color,
+    }),
+  },
 };
 </script>

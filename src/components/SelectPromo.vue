@@ -1,7 +1,7 @@
 <template>
   <v-autocomplete
     :items="promotions"
-    item-text="name"
+    item-text="nomPromotion"
     item-value="id"
     label="Promotion"
     v-model="selectedPromotion"

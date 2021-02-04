@@ -4,6 +4,8 @@ import Planning from '../views/Planning.vue'
 import Notes from '../views/Notes.vue'
 import Admin from '../views/Admin.vue'
 import CreationCours from '../views/CreationCours.vue'
+import AdminMatieres from '../views/Admin/Matieres.vue'
+import AdminUe from '../views/Admin/Ue.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,17 @@ const routes = [
     name: 'CreationCours',
     component: CreationCours
   },
+  {
+    path: '/admin/Matieres',
+    name: 'Matieres',
+    component: AdminMatieres
+  },
+  {
+    path: '/admin/Ue',
+    name: 'Ue',
+    component: AdminUe
+  },
+
 ]
 
 const router = new VueRouter({
