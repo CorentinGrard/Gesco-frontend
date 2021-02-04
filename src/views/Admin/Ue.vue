@@ -224,9 +224,9 @@ import { mapGetters } from "vuex";
 
       save () {
         if (this.editedIndex > -1) {
-          Object.assign(this.ue[this.editedIndex], this.editedItem)
+          this.$store.dispatch("UeMatieres/editUe",this.editedItem);
         } else {
-          this.ue.push(this.editedItem)
+          this.$store.dispatch("UeMatieres/addUe",this.editedItem);
         }
         this.close()
       },

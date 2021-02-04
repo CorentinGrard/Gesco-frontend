@@ -238,11 +238,7 @@ import { mapGetters } from "vuex";
       },
 
       save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.matieres[this.editedIndex], this.editedItem)
-        } else {
-          this.matieres.push(this.editedItem)
-        }
+        this.$store.dispatch("UeMatieres/addMatiere",this.editedItem);
         this.close()
       },
     },
