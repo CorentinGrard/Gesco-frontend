@@ -13,6 +13,14 @@ const state = () => ({
 
 // actions
 const actions = {
+  error({ commit }, snackbar) {
+    snackbar.color = "red"
+    commit("OPEN", snackbar)
+  },
+  success({ commit }, snackbar) {
+    snackbar.color = "green"
+    commit("OPEN", snackbar)
+  },
   open({ commit }, snackbar) {
     commit("OPEN", snackbar)
   },
