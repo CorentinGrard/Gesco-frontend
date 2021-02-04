@@ -16,6 +16,7 @@ export default {
   computed: {
     selectedPromotion: {
       get() {
+        this.$emit("updateSelectedPromotion", this.$store.state.promotions.selectedPromotion)
         return this.$store.state.promotions.selectedPromotion;
       },
       set(selectedPromotion) {

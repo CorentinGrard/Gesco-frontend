@@ -2,24 +2,27 @@
   <v-container fluid>
     <v-row>
       <v-col cols="3">
-        <SelectPromo />
+        <SelectPromo @updateSelectedPromotion="fetchMatieres" />
         <v-divider></v-divider>
         <v-expansion-panels>
-          <v-expansion-panel v-for="semestre in semestres" :key="semestre.id">
+          <v-expansion-panel
+            v-for="semestre in semestres"
+            :key="semestre.idSemestre"
+          >
             <v-expansion-panel-header>
-              {{ semestre.name }}
+              {{ semestre.nomSemestre }}
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-list rounded>
                 <v-list-item-group>
                   <v-list-item
                     v-for="matiere in semestre.matieres"
-                    :key="matiere.id"
-                    @click="selectMatiere(matiere.id)"
+                    :key="matiere.idMatiere"
+                    @click="selectMatiere(matiere.idMatiere)"
                   >
                     <v-list-item-content>
                       <v-list-item-title
-                        v-text="matiere.name"
+                        v-text="matiere.nomMatiere"
                       ></v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
@@ -55,67 +58,23 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import Planning from "../components/Planning";
 import SelectPromo from "../components/SelectPromo";
 
 export default {
   data: () => ({
     selectedMatiere: null,
-    semestres: [
-      {
-        id: 1,
-        name: "S1",
-        matieres: [
-          {
-            id: 1,
-            name: "Maths",
-            nombreHeuresTotal: 150,
-            nombreHeuresPlace: 150,
-          },
-          {
-            id: 2,
-            name: "IA",
-            nombreHeuresTotal: 30,
-            nombreHeuresPlace: 10,
-          },
-          {
-            id: 3,
-            name: "Projet",
-            nombreHeuresTotal: 40,
-            nombreHeuresPlace: 0,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "S2",
-        matieres: [
-          {
-            id: 4,
-            name: "Maths",
-            nombreHeuresTotal: 10,
-            nombreHeuresPlace: 0,
-          },
-          {
-            id: 5,
-            name: "Informatique",
-            nombreHeuresTotal: 60,
-            nombreHeuresPlace: 10,
-          },
-          {
-            id: 6,
-            name: "Big Data",
-            nombreHeuresTotal: 12,
-            nombreHeuresPlace: 5,
-          },
-        ],
-      },
-    ],
     salles: ["M105", "M107", "M165", "M102", "M145"],
   }),
   components: {
     Planning,
     SelectPromo,
+  },
+  computed: {
+    ...mapGetters({
+      semestres: "matieres/getForCreationCours",
+    }),
   },
   methods: {
     pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
@@ -128,6 +87,11 @@ export default {
     },
     selectMatiere: function (matiere) {
       this.selectedMatiere = matiere;
+    },
+    fetchMatieres: function (selectedPromotion) {
+      if (Number.isInteger(selectedPromotion)) {
+        this.$store.dispatch("matieres/fetch", selectedPromotion);
+      }
     },
   },
 };
