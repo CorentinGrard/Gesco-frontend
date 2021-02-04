@@ -18,7 +18,7 @@ const getters = {
       newSession.obligatoire = session.obligatoire;
       newSession.dateDebut = session.dateDebut;
       newSession.dateFin = session.dateFin;
-      newSession.name = session.matiere;
+      newSession.name = session.matiere.nom;
       newSession.start = session.dateDebut;
       newSession.end = session.dateFin;
       newSession.timed = true;
@@ -36,8 +36,9 @@ const actions = {
   getAllSessions({ commit }) {
     APIsessions.getSessions((sessions) => {
       sessions.forEach(session => {
-        session.dateDebut = new Date(session.dateDebut),
-          session.dateFin = new Date(session.dateFin)
+        session.dateDebut = new Date(session.dateDebut)
+        session.dateFin = new Date(session.dateFin)
+        session.detail = "TODO"
       });
       commit("setSessions", sessions);
     });

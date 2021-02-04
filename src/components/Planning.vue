@@ -78,7 +78,7 @@
                 >
               </v-btn>
               <v-toolbar-title
-                v-html="selectedSession.matiere"
+                v-html="selectedSession.matiere.nom"
               ></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
@@ -107,7 +107,7 @@
 import { mapGetters, mapState } from "vuex";
 import EditSessionFormModal from "../components/EditSessionFormModal";
 export default {
-  props: ['selectedMatiere'],
+  props: ["selectedMatiere"],
   data: () => ({
     editFormOpen: false,
     focus: "",
@@ -204,16 +204,20 @@ export default {
 
         this.dragTime = mouse - start;
       } else {
-        this.createStart = this.roundTime(mouse);
-        this.createEvent = {
-          matiereId: this.selectedMatiere,
-          detail: "TODO",
-          type: "TD",
-          obligatoire: true,
-          dateDebut: new Date(this.createStart),
-          dateFin: new Date(this.createStart),
-        };
-        this.$store.dispatch("planning/addSession", this.createEvent);
+        if (this.selectedMatiere !== null) {
+          this.createStart = this.roundTime(mouse);
+          this.createEvent = {
+            matiere: this.selectedMatiere,
+            detail: "TODO",
+            type: "TD",
+            obligatoire: true,
+            dateDebut: new Date(this.createStart),
+            dateFin: new Date(this.createStart),
+          };
+          this.$store.dispatch("planning/addSession", this.createEvent);
+        }else {
+          
+        }
       }
     },
     extendBottom(event) {
@@ -299,7 +303,7 @@ html {
   padding-left: 6px;
 }
 
-.v-event-timed .v-event-draggable{
+.v-event-timed .v-event-draggable {
   user-select: none;
   -webkit-user-select: none;
 }
@@ -311,7 +315,5 @@ html {
   bottom: 4px;
   height: 4px;
   cursor: ns-resize;
-
-
 }
 </style>
