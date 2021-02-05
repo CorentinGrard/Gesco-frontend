@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from "vuex-persistedstate";
 import planning from './modules/planning'
 import promotions from './modules/promotions'
 import notes from './modules/notes'
@@ -20,5 +19,4 @@ export default new Vuex.Store({
     snackbar
   },
   strict: debug,
-  plugins: [createPersistedState()],
 })

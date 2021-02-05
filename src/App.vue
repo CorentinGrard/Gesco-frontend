@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer permanent expand-on-hover app dark color="primary">
+    <v-navigation-drawer permanent app dark color="primary">
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>

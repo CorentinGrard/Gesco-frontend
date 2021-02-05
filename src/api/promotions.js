@@ -20,11 +20,11 @@
 //   }
 // ]
 
-import axios from '../plugins/axios';
+import { backend } from '../plugins/axios';
 
 export default {
   getPromotions(cb) {
-    axios.backend.get("/promotions")
+    backend.get("/promotions")
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error))
   },
