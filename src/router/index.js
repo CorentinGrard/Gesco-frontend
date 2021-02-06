@@ -5,6 +5,7 @@ import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
 import AdminMatieres from '@/views/Admin/Matieres.vue'
 import AdminUe from '@/views/Admin/Ue.vue'
+import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 
 Vue.use(VueRouter)

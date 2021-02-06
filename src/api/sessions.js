@@ -32,7 +32,7 @@ export default {
   },
   addSession(session, cb) {
     console.log(session)
-    axios.backend.post("/sessions",session)
+    backend.post("/sessions",session)
       .then((response) => {
         console.log(response)
         cb(response.data)
