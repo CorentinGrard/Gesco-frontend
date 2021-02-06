@@ -1,4 +1,4 @@
-import ApiUeMatieres from '../../api/UeMatieres'
+import ApiUeMatieres from '@/api/UeMatieres'
 
 // initial state
 const state = () => ({

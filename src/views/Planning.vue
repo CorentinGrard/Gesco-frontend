@@ -93,7 +93,7 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
-import EditSessionFormModal from "../components/EditSessionFormModal";
+import EditSessionFormModal from "@/components/EditSessionFormModal";
 
 export default {
   data: () => ({

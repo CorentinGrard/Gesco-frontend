@@ -20,7 +20,7 @@
 //   }
 // ]
 
-import { backend } from '../plugins/axios';
+import backend from '@/plugins/axios';
 
 export default {
   getPromotions(cb) {

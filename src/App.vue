@@ -12,8 +12,10 @@
 
         <v-list-item link>
           <v-list-item-content>
-            <v-list-item-title class="title"> Sandra Adams </v-list-item-title>
-            <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
+            <v-list-item-title class="title">
+              {{ profile.firstName }} {{ profile.lastName }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{ profile.email }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -40,7 +42,7 @@
       </v-list>
       <template v-slot:append>
         <v-list nav dense>
-          <v-list-item link>
+          <v-list-item @click="$keycloak.logout()" link>
             <v-list-item-icon>
               <v-icon>mdi-close-circle</v-icon>
             </v-list-item-icon>
@@ -77,6 +79,7 @@
 
 <script>
 import { mapState } from "vuex";
+import updateToken from "@/middlewares/update-token";
 
 export default {
   name: "App",
@@ -95,6 +98,9 @@ export default {
       { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),
+  created() {
+    this.$store.dispatch("user/fetch", this.$keycloak.loadUserProfile());
+  },
   computed: {
     display: {
       get() {
@@ -108,7 +114,13 @@ export default {
       snackbarText: (state) => state.snackbar.text,
       snackbarTimeout: (state) => state.snackbar.timeout,
       snackbarColor: (state) => state.snackbar.color,
+      profile: (state) => state.user.profile,
     }),
+  },
+  watch: {
+    $route() {
+      updateToken();
+    },
   },
 };
 </script>

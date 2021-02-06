@@ -1,7 +1,7 @@
 /**
  * Mocking client-server processing
  */
-import { backend } from '../plugins/axios';
+import backend from '@/plugins/axios';
 
 export default {
   getSessions(cb) {
