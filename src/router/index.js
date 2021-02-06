@@ -21,6 +21,11 @@ const routes = [
     name: 'Notes',
     component: Notes,
     meta: { student: true }
+  }, {
+    path: '/creationcours',
+    name: 'CreationCours',
+    component: CreationCours,
+    meta: { ad: true },
   },
   {
     path: '/admin',
