@@ -45,24 +45,6 @@ const routes = [
     component: AdminUe,
     meta: { admin: true },
   },
-  // {
-  //   path: '/',
-  //   redirect: to => {
-  //     let redirect = to.query.redirect
-  //     console.log(redirect)
-  //     if (typeof (redirect) !== 'undefined') {
-  //       console.log("redirection")
-  //       return redirect
-  //     }
-  //     // else if (Vue.$keycloak.hasRealmRole("admin")) {
-  //     //   return { name: "Admin" }
-  //     // } else if (Vue.$keycloak.hasRealmRole("student")) {
-  //     //   return { name: "Planning" }
-  //     // } else {
-  //     //   return { name: "NotFound" }
-  //     // }
-  //   }
-  // },
   {
     path: '*',
     name: 'NotFound',
