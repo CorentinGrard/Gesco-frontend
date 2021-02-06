@@ -1,4 +1,4 @@
-import APIPromotions from '../../api/promotions'
+import APIPromotions from '@/api/promotions'
 
 // initial state
 const state = () => ({

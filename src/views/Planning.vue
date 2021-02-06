@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import Planning from "../components/Planning";
+import { mapGetters, mapState } from "vuex";
+import EditSessionFormModal from "@/components/EditSessionFormModal";
 
 export default {
   components: {

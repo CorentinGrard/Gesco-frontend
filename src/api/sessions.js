@@ -1,4 +1,7 @@
-import axios from '../plugins/axios';
+/**
+ * Mocking client-server processing
+ */
+import backend from '@/plugins/axios';
 
 // let sessions = [
 //   {
@@ -23,7 +26,7 @@ import axios from '../plugins/axios';
 
 export default {
   getSessions(cb) {
-    axios.backend.get("/sessions")
+    return backend.get("/sessions")
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error))
   },
