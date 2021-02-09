@@ -25,7 +25,7 @@
       <v-list nav dense>
         <v-list-item-group>
           <v-list-item
-            v-for="item in items"
+            v-for="item in pagesWithRoles"
             :key="item.title"
             link
             :to="item.link"
@@ -85,23 +85,52 @@ export default {
   name: "App",
 
   data: () => ({
-    items: [
+    pages: [
       {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
+        roles: ["student"],
       },
-      { title: "Notes", icon: "mdi-file-table", link: { name: "Notes" } },
-      { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
-      { title: "Gestion des absences", icon: "mdi-account-off" },
-      { title: "Gestion des notes", icon: "mdi-file-table" },
-      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
+      {
+        title: "Notes",
+        icon: "mdi-file-table",
+        link: { name: "Notes" },
+        roles: ["student"],
+      },
+      {
+        title: "Création de cours",
+        icon: "mdi-school",
+        link: { name: "CreationCours" },
+        roles: ["ap", "admin"],
+      },
+      {
+        title: "Gestion des absences",
+        icon: "mdi-account-off",
+        roles: ["ap", "admin"],
+      },
+      {
+        title: "Gestion des notes",
+        icon: "mdi-file-table",
+        roles: ["ap", "admin"],
+      },
+      {
+        title: "Admin",
+        icon: "mdi-cog",
+        link: { name: "Admin" },
+        roles: ["ap", "admin"],
+      },
     ],
   }),
   created() {
     this.$store.dispatch("user/fetch", this.$keycloak.loadUserProfile());
   },
   computed: {
+    pagesWithRoles: function () {
+      return this.pages.filter((page) => {
+        return page.roles.some((role) => this.$keycloak.hasRealmRole(role));
+      });
+    },
     display: {
       get() {
         return this.$store.state.snackbar.display;
