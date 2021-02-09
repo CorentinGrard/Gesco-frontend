@@ -42,7 +42,7 @@
       </v-list>
       <template v-slot:append>
         <v-list nav dense>
-          <v-list-item @click="$keycloak.logout()" link>
+          <v-list-item @click="logout" link>
             <v-list-item-icon>
               <v-icon>mdi-close-circle</v-icon>
             </v-list-item-icon>
@@ -92,7 +92,11 @@ export default {
         link: { name: "Planning" },
       },
       { title: "Notes", icon: "mdi-file-table", link: { name: "Notes" } },
-      { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
+      {
+        title: "Création de cours",
+        icon: "mdi-school",
+        link: { name: "CreationCours" },
+      },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
       { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
@@ -120,6 +124,11 @@ export default {
   watch: {
     $route() {
       updateToken();
+    },
+  },
+  methods: {
+    logout: function () {
+      this.$keycloak.logout();
     },
   },
 };
