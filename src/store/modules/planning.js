@@ -1,4 +1,4 @@
-import APIsessions from "../../api/sessions";
+import APIsessions from "@/api/sessions";
 
 // initial state
 const state = () => ({

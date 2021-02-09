@@ -1,15 +1,13 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title>
-        Admin
-      </v-card-title>
+      <v-card-title> Admin </v-card-title>
       <v-list nav dense>
         <v-list-item
-                v-for="item in items"
-                :key="item.title"
-                link
-                :to="item.link"
+          v-for="item in items"
+          :key="item.title"
+          link
+          :to="item.link"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -25,17 +23,31 @@
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      items: [
-        { title: "Création et modification des matières", icon: "mdi-book-open-variant",link: "/admin/Matieres" },
-        { title: "Création et modification des UE", icon: "mdi-book-open-variant",link: "/admin/Ue" },
-        { title: "Création et modification d'une formation", icon: "mdi-ballot-outline" },
-        { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus" },
-        { title: "Aller sur Darwin", icon: "mdi-account-group" },
-      ],
-    }),
-  };
+export default {
+  data: () => ({
+    items: [
+      {
+        title: "Création et modification des matières",
+        icon: "mdi-book-open-variant",
+        link: { name: "AdminMatieres" },
+      },
+      {
+        title: "Création et modification des UE",
+        icon: "mdi-book-open-variant",
+        link: { name: "AdminUe" },
+      },
+      {
+        title: "Création et modification d'une formation",
+        icon: "mdi-ballot-outline",
+      },
+      {
+        title: "Gestion des promotions et assignation des élèves",
+        icon: "mdi-account-multiple-plus",
+      },
+      { title: "Aller sur Darwin", icon: "mdi-account-group" },
+    ],
+  }),
+};
 </script>
 
 <style>

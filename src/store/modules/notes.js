@@ -1,4 +1,4 @@
-import notes from '../../api/notes'
+import notes from '@/api/notes'
 
 // initial state
 const state = () => ({
