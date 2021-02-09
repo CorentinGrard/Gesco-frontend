@@ -63,10 +63,14 @@
                         sm="6"
                         md="4"
                       >
-                        <v-text-field
+                        <v-select
                           v-model="editedItem.responsable"
+                          :items="responsables"
+                          :item-text="nomResponsable"
+                          return-object
                           label="Responsable"
-                        ></v-text-field>
+                        ></v-select>
+
                       </v-col>
                     </v-row>
                   </v-container>
@@ -155,6 +159,7 @@
     computed: {
       ...mapGetters({
         formations: "formations/getFormations",
+        responsables: "responsables/getResponsables",
       }),
 
       formTitle () {
@@ -173,9 +178,14 @@
 
     created () {
       this.$store.dispatch("formations/initFormations");
+      this.$store.dispatch("responsables/initResponsables");
     },
 
     methods: {
+      nomResponsable (item) {
+        return item.prenom + ' ' + item.nom
+      },
+
       editItem (item) {
         this.editedIndex = this.formations.indexOf(item)
         this.editedItem = Object.assign({}, item)

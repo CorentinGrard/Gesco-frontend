@@ -6,17 +6,32 @@ const data_formation = [
     {
         id: 1,
         name: "INFRES",
-        responsable: "RespoINFRES"
+        responsable: 
+            {
+                id: 1,
+                nom: "INFRES",
+                prenom: "Respo"
+            }
     },
     {
         id: 2,
         name: "MKX",
-        responsable: "RespoMKX"
+        responsable:
+            {
+                id: 2,
+                nom: "MKX",
+                prenom: "Respo"
+            }
     },
     {
         id: 3,
         name: "CMC",
-        responsable: "RespoCMC"
+        responsable:
+            {
+                id: 3,
+                nom: "CMC",
+                prenom: "Respo"
+            }
     }
 ]
 

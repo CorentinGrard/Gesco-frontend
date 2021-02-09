@@ -13,7 +13,7 @@ const getters = {
             formations_list.push({
                 id: formation.id,
                 name: formation.name,
-                responsable: formation.responsable
+                responsable: formation.responsable.prenom + ' ' + formation.responsable.nom
             })
         })
         return formations_list
