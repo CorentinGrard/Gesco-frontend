@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import planning from './modules/planning'
 import promotions from './modules/promotions'
 import notes from './modules/notes'
-import formations from './modules/admin/formation'
+import formations from './modules/admin/formations'
 
 Vue.use(Vuex)
 

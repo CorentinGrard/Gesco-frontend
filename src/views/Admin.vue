@@ -29,7 +29,7 @@
     data: () => ({
       items: [
         { title: "Création et modification d'une matière", icon: "mdi-book-open-variant" },
-        { title: "Création et modification d'une formation", icon: "mdi-ballot-outline", link: { name: "AdminFormation" } },
+        { title: "Création et modification d'une formation", icon: "mdi-ballot-outline", link: { name: "Formations" } },
         { title: "Gestion des promotions et assignation des élèves", icon: "mdi-account-multiple-plus" },
         { title: "Aller sur Darwin", icon: "mdi-account-group" },
       ],
