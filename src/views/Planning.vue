@@ -1,32 +1,18 @@
 <template>
-  <v-container fluid>
-    <v-calendar
-      type="week"
-      day-body
-      :weekdays="[1, 2, 3, 4, 5]"
-      :events="sessions"
-      :first-interval="7"
-      :interval-minutes="60"
-      :interval-count="13"
-    ></v-calendar>
-  </v-container>
+  <Planning />
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import Planning from "@/components/Planning";
 
 export default {
-  data: () => ({
-    events: [],
-  }),
-  computed: mapGetters({
-    sessions: "planning/getSessionForPlanning",
-  }),
-  created() {
-    this.$store.dispatch("planning/getAllSessions");
-  },
-};
+  components: {
+    Planning,
+  }
+
+}
 </script>
 
 <style>
+
 </style>
