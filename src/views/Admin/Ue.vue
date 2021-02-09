@@ -7,28 +7,15 @@
     disable-pagination
   >
     <template v-slot:top>
-      <v-toolbar
-        flat
-      > 
+      <br />
+      <SelectPromo @updateSelectedPromotion="fetchUe" />
+      <v-toolbar flat>
         <v-toolbar-title>UE</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
               Nouvelle UE
             </v-btn>
           </template>
@@ -40,60 +27,35 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.nom"
                       label="Nom"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.semestre"
                       label="Semestre"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.ects"
                       label="ECTS"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                  </v-col>
+                  <v-col cols="12" sm="6" md="4"> </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="close"
-              >
+              <v-btn color="blue darken-1" text @click="close">
                 Annuler
               </v-btn>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="save"
-              >
+              <v-btn color="blue darken-1" text @click="save">
                 Sauvegarder
               </v-btn>
             </v-card-actions>
@@ -101,39 +63,33 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="headline">Etes vous sur de vouloir supprimer cette UE ?</v-card-title>
+            <v-card-title class="headline"
+              >Etes vous sur de vouloir supprimer cette UE ?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Annuler</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >Annuler</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                >OK</v-btn
+              >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
-
-      
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
+      <v-icon small class="mr-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
+      <v-icon small @click="deleteItem(item)">
         mdi-delete
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        
-      >
+      <v-btn color="primary">
         Reset
       </v-btn>
     </template>
@@ -142,94 +98,106 @@
 
 <script>
 import { mapGetters } from "vuex";
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        {
-          text: 'Nom UE',
-          align: 'start',
-          sortable: false,
-          value: 'nom',
-        },
-        { text: 'Semestre', value: 'semestre' },
-        { text: 'ECTS', value: 'ects' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        nom : "",
-        semestre : "",
-        ects : 0
+import SelectPromo from "../../components/SelectPromo";
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        text: "Nom UE",
+        align: "start",
+        sortable: false,
+        value: "nom",
       },
-      defaultItem: {
-        nom : "",
-        semestre : "",
-        ects : 0
-      },
-    }),
-    computed: {
+      { text: "Semestre", value: "semestre" },
+      { text: "ECTS", value: "ects" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    editedIndex: -1,
+    editedItem: {
+      nom: "",
+      semestre: "",
+      ects: 0,
+    },
+    defaultItem: {
+      nom: "",
+      semestre: "",
+      ects: 0,
+    },
+  }),
+  components: {
+    SelectPromo,
+  },
+  computed: {
     ...mapGetters({
-        ue: "UeMatieres/getUeForDisplaying",
-      }),
-      formTitle(){
-        return this.editedIndex === -1 ? 'Nouvelle UE' : 'Edition UE'
-      },
+      ue: "UeMatieres/getUeForDisplaying",
+    }),
+    formTitle() {
+      return this.editedIndex === -1 ? "Nouvelle UE" : "Edition UE";
     },
-    created() {
-      this.$store.dispatch("UeMatieres/getAllUe");
+  },
+  created() {
+    this.$store.dispatch("UeMatieres/getAllUe");
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
-    methods: {
-      editItem (item) {
-        this.editedIndex = this.ue.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.ue.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.$store.dispatch("UeMatieres/deleteUe",this.editedIndex);
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          this.$store.dispatch("UeMatieres/editUe",{ ueIndex : this.editedIndex, ue : this.editedItem });
-        } else {
-          this.$store.dispatch("UeMatieres/addUe",this.editedItem);
-        }
-        this.close()
-      },
+  },
+  methods: {
+    editItem(item) {
+      this.editedIndex = this.ue.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
-  }
+
+    deleteItem(item) {
+      this.editedIndex = this.ue.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.$store.dispatch("UeMatieres/deleteUe", this.editedIndex);
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        this.$store.dispatch("UeMatieres/editUe", {
+          ueIndex: this.editedIndex,
+          ue: this.editedItem,
+        });
+      } else {
+        this.$store.dispatch("UeMatieres/addUe", this.editedItem);
+      }
+      this.close();
+    },
+    fetchUe: function(selectedPromotion) {
+      if (Number.isInteger(selectedPromotion)) {
+        //this.$store.dispatch("UeMatieres/fetch", selectedPromotion);
+      }
+    },
+  },
+};
 </script>

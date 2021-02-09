@@ -7,6 +7,8 @@
     disable-pagination
   >
     <template v-slot:top>
+      <br>
+      <SelectPromo @updateSelectedPromotion="fetchMatieres" />
       <v-toolbar
         flat
       > 
@@ -16,11 +18,14 @@
           inset
           vertical
         ></v-divider>
-        <v-spacer></v-spacer>
+        
+        <v-spacer></v-spacer>  
+        
         <v-dialog
           v-model="dialog"
           max-width="500px"
         >
+        
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               color="primary"
@@ -152,6 +157,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import SelectPromo from "../../components/SelectPromo";
   export default {
     data: () => ({
       dialog: false,
@@ -182,6 +188,9 @@ import { mapGetters } from "vuex";
         intervenant: "",
       },
     }),
+    components: {
+      SelectPromo,
+    },
     computed: {
     ...mapGetters({
         matieres: "UeMatieres/getMatieresForDisplaying",
@@ -245,6 +254,11 @@ import { mapGetters } from "vuex";
         }
         this.close()
       },
+      fetchMatieres: function (selectedPromotion) {
+        if (Number.isInteger(selectedPromotion)) {
+          //this.$store.dispatch("matieres/fetch", selectedPromotion);
+      }
+    },
     },
   }
 </script>
