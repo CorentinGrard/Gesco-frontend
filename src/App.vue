@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer permanent expand-on-hover app dark color="primary">
+    <v-navigation-drawer permanent app dark color="primary">
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -12,8 +12,10 @@
 
         <v-list-item link>
           <v-list-item-content>
-            <v-list-item-title class="title"> Sandra Adams </v-list-item-title>
-            <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
+            <v-list-item-title class="title">
+              {{ profile.firstName }} {{ profile.lastName }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{ profile.email }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -40,7 +42,7 @@
       </v-list>
       <template v-slot:append>
         <v-list nav dense>
-          <v-list-item link>
+          <v-list-item @click="$keycloak.logout()" link>
             <v-list-item-icon>
               <v-icon>mdi-close-circle</v-icon>
             </v-list-item-icon>
@@ -54,11 +56,31 @@
     </v-navigation-drawer>
     <v-main>
       <router-view></router-view>
+      <v-snackbar
+        v-model="display"
+        :timeout="snackbarTimeout"
+        :color="snackbarColor"
+      >
+        {{ snackbarText }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="black"
+            text
+            v-bind="attrs"
+            @click="$store.dispatch('snackbar/close')"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import updateToken from "@/middlewares/update-token";
+
 export default {
   name: "App",
 
@@ -70,11 +92,35 @@ export default {
         link: { name: "Planning" },
       },
       { title: "Notes", icon: "mdi-file-table", link: { name: "Notes" } },
-      { title: "Création de cours", icon: "mdi-school" },
+      { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
       { title: "Gestion des absences", icon: "mdi-account-off" },
       { title: "Gestion des notes", icon: "mdi-file-table" },
-      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" }  },
+      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),
+  created() {
+    this.$store.dispatch("user/fetch", this.$keycloak.loadUserProfile());
+  },
+  computed: {
+    display: {
+      get() {
+        return this.$store.state.snackbar.display;
+      },
+      set(display) {
+        this.$store.dispatch("snackbar/setDisplay", display);
+      },
+    },
+    ...mapState({
+      snackbarText: (state) => state.snackbar.text,
+      snackbarTimeout: (state) => state.snackbar.timeout,
+      snackbarColor: (state) => state.snackbar.color,
+      profile: (state) => state.user.profile,
+    }),
+  },
+  watch: {
+    $route() {
+      updateToken();
+    },
+  },
 };
 </script>

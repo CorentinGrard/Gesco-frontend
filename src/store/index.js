@@ -5,6 +5,10 @@ import promotions from './modules/promotions'
 import notes from './modules/notes'
 import formations from './modules/admin/formations'
 import responsables from './modules/admin/responsables'
+import matieres from './modules/matieres'
+import UeMatieres from './modules/UeMatieres'
+import snackbar from './modules/snackbar'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
@@ -16,7 +20,11 @@ export default new Vuex.Store({
     notes,
     promotions,
     formations,
-    responsables
+    responsables,
+    snackbar,
+    user,
+    matieres,
+    UeMatieres,
   },
   strict: debug,
 })

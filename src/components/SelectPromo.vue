@@ -1,7 +1,7 @@
 <template>
   <v-autocomplete
     :items="promotions"
-    item-text="name"
+    item-text="nomPromotion"
     item-value="id"
     label="Promotion"
     v-model="selectedPromotion"
@@ -16,6 +16,7 @@ export default {
   computed: {
     selectedPromotion: {
       get() {
+        this.$emit("updateSelectedPromotion", this.$store.state.promotions.selectedPromotion)
         return this.$store.state.promotions.selectedPromotion;
       },
       set(selectedPromotion) {
