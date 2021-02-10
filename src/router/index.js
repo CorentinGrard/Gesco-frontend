@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Formations from '../views/admin/Formations.vue'
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
 import AdminMatieres from '@/views/Admin/Matieres.vue'
+import Formations from '@/views/Admin/Formations.vue'
 import AdminUe from '@/views/Admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
@@ -48,14 +48,15 @@ const routes = [
     meta: { admin: true },
   },
   {
+    path: '/admin/formations',
+    name: 'Formations',
+    component: Formations,
+    meta: { admin: true },
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFoundComponent,
-  },
-  {
-    path: '/admin/formations',
-    name: 'Formations',
-    component: Formations
   },
 ]
 
