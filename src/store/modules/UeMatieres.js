@@ -1,4 +1,5 @@
 import ApiUeMatieres from '@/api/UeMatieres'
+import ApiMatieres from '@/api/matieres'
 
 // initial state
 const state = () => ({
@@ -23,10 +24,15 @@ const getters = {
 
 // actions
 const actions = {
-    getAllMatieres({ commit }) {
+    /*getAllMatieres({ commit }) {
         ApiUeMatieres.getDataMatiere(matieres => {
             commit('setMatieres', matieres)
         })
+    },*/
+    getMatiereByPromotion({commit},selectedPromotion){
+        ApiMatieres.getByPromotions(selectedPromotion, matieres => {
+            commit('setMatieres', matieres)
+          })
     },
     getAllUe({ commit }) {
         ApiUeMatieres.getDataUe(ue => {
@@ -55,8 +61,28 @@ const actions = {
 
 // mutations
 const mutations = {
-    setMatieres(state, matieres) {
-        state.dataMatiere = matieres
+    setMatieres(state, semestres) {
+        let finalMatieres = [];
+        semestres.forEach(function(item) {
+            let modules = item.modules
+            modules.forEach(function(item){
+                let moduleId = item.idModule
+                let moduleName = item.nomModule
+                let matieres = item.matieres
+                matieres.forEach(function(item){
+                    finalMatieres.push({
+                        id : item.idMatiere,
+                        nom : item.nomMatiere,
+                        module : {id : moduleId, name: moduleName},
+                        coefficient : item.coefficient,
+                        intervenant : "M.Robot"
+                      },
+                )
+                })
+            })
+          });   
+        state.dataMatiere = finalMatieres
+        
     },
     setUe(state, ue){
         state.dataUe = ue
