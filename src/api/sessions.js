@@ -25,14 +25,19 @@ import backend from '@/plugins/axios';
 // ]
 
 export default {
-  getSessions(cb) {
-    return backend.get("/sessions")
+  getSessions(start, end, cb) {
+    return backend.get()
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  getSessionsByIdPromotion(id, start, end, cb) {
+    return backend.get(`/promotions/${id}/start/${start}/end/${end}/sessions`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error))
   },
   addSession(session, cb) {
     console.log(session)
-    backend.post("/sessions",session)
+    backend.post("/sessions", session)
       .then((response) => {
         console.log(response)
         cb(response.data)

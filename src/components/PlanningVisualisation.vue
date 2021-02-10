@@ -14,6 +14,12 @@
             {{ $refs.calendar.title }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
+          <SelectPromo
+            v-if="!$keycloak.hasRealmRole('student')"
+            @updateSelectedPromotion="updateSelectedPromotion"
+            class="mt-5"
+          />
+          <v-spacer></v-spacer>
           <v-menu bottom right>
             <template v-slot:activator="{ on, attrs }">
               <v-btn outlined v-bind="attrs" v-on="on">
@@ -46,23 +52,12 @@
           @click:event="showEvent"
           @click:more="viewDay"
           @click:date="viewDay"
+          @change="saveInterval"
           :first-interval="7"
           :interval-minutes="60"
           :interval-count="13"
           :weekdays="weekdays"
-          @mousedown:event="startDrag"
-          @mousedown:time="startTime"
-          @mousemove:time="mouseMove"
-          @mouseup:time="endDrag"
-          @mouseleave.native="cancelDrag"
         >
-          <template v-slot:event="{ event, timed, eventSummary }">
-            <div class="v-event-draggable" v-html="eventSummary()"></div>
-            <div
-              class="v-event-drag-bottom"
-              @mousedown.stop="extendBottom(event)"
-            ></div>
-          </template>
         </v-calendar>
         <v-menu
           v-model="selectedOpen"
@@ -71,7 +66,7 @@
           offset-x
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar color="grey lighten-4">
+            <v-toolbar v-if="!$keycloak.hasRealmRole('student')" color="grey lighten-4">
               <v-btn icon>
                 <v-icon @click="editFormOpen = !editFormOpen"
                   >mdi-pencil</v-icon
@@ -105,10 +100,16 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
+import SelectPromo from "@/components/SelectPromo";
 import EditSessionFormModal from "../components/EditSessionFormModal";
+
 export default {
-  props: ["selectedMatiere"],
+  components: {
+    SelectPromo,
+    EditSessionFormModal,
+  },
   data: () => ({
+    selectedPromotion: 0,
     editFormOpen: false,
     focus: "",
     weekdays: [1, 2, 3, 4, 5],
@@ -120,11 +121,8 @@ export default {
     },
     selectedElement: null,
     selectedOpen: false,
-    dragEvent: null,
-    dragStart: null,
-    createEvent: null,
-    createStart: null,
-    extendOriginal: null,
+    start: "",
+    end: "",
   }),
   computed: {
     ...mapGetters({
@@ -135,14 +133,13 @@ export default {
       selectedSession: (state) => state.planning.selectedSession,
     }),
   },
-  created() {
-    this.$store.dispatch("planning/fetchSessionsByIdPromotion");
+  watch: {
+    selectedPromotion: function () {
+      this.fetchSessions();
+    },
   },
   mounted() {
     this.$refs.calendar.checkChange();
-  },
-  components: {
-    EditSessionFormModal,
   },
   methods: {
     deleteSession() {
@@ -186,113 +183,51 @@ export default {
       } else {
         open();
       }
-
       nativeEvent.stopPropagation();
     },
-    startDrag({ event, timed }) {
-      if (event && timed) {
-        this.dragEvent = event;
-        this.dragTime = null;
-        this.extendOriginal = null;
-      }
+    saveInterval({ start, end }) {
+      this.start = this.getDateFromEvent(start);
+      this.end = this.getDateFromEvent(end);
+      this.fetchSessions();
     },
-    startTime(tms) {
-      const mouse = this.toTime(tms);
+    getDateFromEvent(event) {
+      Date.prototype.yyyymmdd = function () {
+        var mm = this.getMonth() + 1; // getMonth() is zero-based
+        var dd = this.getDate();
 
-      if (this.dragEvent && this.dragTime === null) {
-        const start = this.dragEvent.start;
-
-        this.dragTime = mouse - start;
-      } else {
-        if (this.selectedMatiere !== null) {
-          this.createStart = this.roundTime(mouse);
-          this.createEvent = {
-            matiere: this.selectedMatiere,
-            detail: "TODO",
-            type: "TD",
-            obligatoire: true,
-            dateDebut: new Date(this.createStart),
-            dateFin: new Date(this.createStart),
-          };
-          this.$store.dispatch("planning/addSession", this.createEvent);
+        return [
+          this.getFullYear(),
+          (mm > 9 ? "" : "0") + mm,
+          (dd > 9 ? "" : "0") + dd,
+        ].join("");
+      };
+      let date = new Date(event.date);
+      return date.yyyymmdd();
+    },
+    fetchSessions() {
+      if (this.start !== "" && this.end !== "") {
+        if (this.$keycloak.hasRealmRole("student")) {
+          this.$store.dispatch("planning/fetchSessions");
         } else {
-          this.$store.dispatch("snackbar/error", {
-            text:
-              "Erreur : Selectionner une matière pour pouvoir créer un cour",
-          });
+          if (
+            !(
+              this.selectedPromotion &&
+              Object.keys(this.selectedPromotion).length === 0 &&
+              this.selectedPromotion.constructor === Object
+            )
+          ) {
+            this.$store.dispatch("planning/fetchSessionsByIdPromotion", {
+              id: this.selectedPromotion,
+              start: this.start,
+              end: this.end,
+            });
+          }
         }
       }
     },
-    extendBottom(event) {
-      this.createEvent = event;
-      this.createStart = event.start;
-      this.extendOriginal = event.end;
-    },
-    mouseMove(tms) {
-      const mouse = this.toTime(tms);
-
-      if (this.dragEvent && this.dragTime !== null) {
-        const start = this.dragEvent.start;
-        const end = this.dragEvent.end;
-        const duration = end - start;
-        const newStartTime = mouse - this.dragTime;
-        const newStart = this.roundTime(newStartTime);
-        const newEnd = newStart + duration;
-
-        this.dragEvent.start = newStart;
-        this.dragEvent.end = newEnd;
-        this.$store.dispatch("planning/updateSessionByEvent", this.dragEvent);
-      } else if (this.createEvent && this.createStart !== null) {
-        const mouseRounded = this.roundTime(mouse, false);
-        const min = Math.min(mouseRounded, this.createStart);
-        const max = Math.max(mouseRounded, this.createStart);
-
-        this.createEvent.start = min;
-        this.createEvent.end = max;
-        this.$store.dispatch("planning/updateSessionByEvent", this.createEvent);
-      }
-    },
-    endDrag() {
-      this.dragTime = null;
-      this.dragEvent = null;
-      this.createEvent = null;
-      this.createStart = null;
-      this.extendOriginal = null;
-    },
-    cancelDrag() {
-      if (this.createEvent) {
-        if (this.extendOriginal) {
-          this.createEvent.end = this.extendOriginal;
-          this.$store.dispatch(
-            "planning/updateSessionByEvent",
-            this.createEvent
-          );
-        } else {
-          this.$store.dispatch("planning/deleteSession", this.createEvent);
-        }
-      }
-
-      this.createEvent = null;
-      this.createStart = null;
-      this.dragTime = null;
-      this.dragEvent = null;
-    },
-    roundTime(time, down = true) {
-      const roundTo = 15; // minutes
-      const roundDownTime = roundTo * 60 * 1000;
-
-      return down
-        ? time - (time % roundDownTime)
-        : time + (roundDownTime - (time % roundDownTime));
-    },
-    toTime(tms) {
-      return new Date(
-        tms.year,
-        tms.month - 1,
-        tms.day,
-        tms.hour,
-        tms.minute
-      ).getTime();
+    updateSelectedPromotion: function (selectedPromotion) {
+      this.$store.dispatch("planning/clearSessions");
+      this.selectedPromotion = selectedPromotion;
     },
   },
 };

@@ -90,7 +90,7 @@ export default {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
-        roles: ["student"],
+        roles: ["admin", "student"],
       },
       {
         title: "Notes",

@@ -15,7 +15,7 @@ const routes = [
     path: '/planning',
     name: 'Planning',
     component: Planning,
-    meta: { student: true }
+    meta: { admin: true, student: true }
   },
   {
     path: '/notes',
@@ -26,7 +26,7 @@ const routes = [
     path: '/creationcours',
     name: 'CreationCours',
     component: CreationCours,
-    meta: { ad: true },
+    meta: { admin: true, ad: true },
   },
   {
     path: '/admin',
@@ -60,24 +60,23 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.admin)) {
-    if (Vue.$keycloak.hasRealmRole("admin")) {
-      next()
-    } else {
-      next("/")
-    }
+  if (to.matched.some(record => record.meta.admin) && Vue.$keycloak.hasRealmRole("admin")) {
+    next()
+    return true
   }
 
-
-  if (to.matched.some(record => record.meta.student)) {
-    if (Vue.$keycloak.hasRealmRole("student")) {
-      next()
-    } else {
-      next("/")
-    }
+  if (to.matched.some(record => record.meta.student) && Vue.$keycloak.hasRealmRole("student")) {
+    next()
+    return true
   }
 
-  next()
+  if (to.matched.some(record => record.meta && Object.keys(record.meta).length === 0 && record.meta.constructor === Object)) {
+    next()
+    return true
+  } else {
+    next('/')
+    return false
+  }
 })
 
 

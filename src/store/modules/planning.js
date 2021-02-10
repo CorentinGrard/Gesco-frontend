@@ -33,8 +33,19 @@ const getters = {
 
 // actions
 const actions = {
-  getAllSessions({ commit }) {
-    APIsessions.getSessions((sessions) => {
+  fetchSessionsByIdPromotion({ commit }, { id, start, end }) {
+    APIsessions.getSessionsByIdPromotion(id, start, end, (sessions) => {
+      sessions.forEach(session => {
+        console.log(session)
+        session.dateDebut = new Date(session.dateDebut)
+        session.dateFin = new Date(session.dateFin)
+        session.detail = "TODO"
+      });
+      commit("ADD_SESSIONS", sessions);
+    });
+  },
+  fetchSessions({ commit }, month) {
+    APIsessions.getSessions(month, (sessions) => {
       sessions.forEach(session => {
         session.dateDebut = new Date(session.dateDebut)
         session.dateFin = new Date(session.dateFin)
@@ -43,6 +54,11 @@ const actions = {
       commit("setSessions", sessions);
     });
   },
+
+  clearSessions({ commit }) {
+    commit("CLEAR_SESSIONS")
+  },
+
   updateSessionBySelectedSession({ commit }) {
     commit("updateSessionBySelectedSession");
     //TODO Appel api
@@ -66,6 +82,18 @@ const actions = {
 
 // mutations
 const mutations = {
+  ADD_SESSIONS(state, sessions) {
+    sessions.forEach(session => {
+      console.log(session)
+      const sessionAlreadyExist = state.sessions.some(stateSession => stateSession.id == session.id)
+      if (!sessionAlreadyExist) {
+        state.sessions.push(session)
+      }
+    })
+  },
+  CLEAR_SESSIONS(state) {
+    state.sessions = []
+  },
   setSessions(state, sessions) {
     state.sessions = sessions;
   },
