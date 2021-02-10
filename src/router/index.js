@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Formations from '../views/admin/Formations.vue'
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
@@ -50,6 +51,11 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: NotFoundComponent,
+  },
+  {
+    path: '/admin/formations',
+    name: 'Formations',
+    component: Formations
   },
 ]
 
