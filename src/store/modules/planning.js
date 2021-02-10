@@ -10,15 +10,8 @@ const state = () => ({
 const getters = {
   getEventsForPlanning: (state) => {
     return state.sessions.map((session) => {
-      let newSession = {};
-      newSession.id = session.id;
-      newSession.matiere = session.matiere;
-      newSession.detail = session.detail;
-      newSession.type = session.type;
-      newSession.obligatoire = session.obligatoire;
-      newSession.dateDebut = session.dateDebut;
-      newSession.dateFin = session.dateFin;
-      newSession.name = session.matiere.nom;
+      let newSession = JSON.parse(JSON.stringify(session))
+      // newSession.name = session.matiere.nom;
       newSession.start = session.dateDebut;
       newSession.end = session.dateFin;
       newSession.timed = true;
@@ -36,7 +29,6 @@ const actions = {
   fetchSessionsByIdPromotion({ commit }, { id, start, end }) {
     APIsessions.getSessionsByIdPromotion(id, start, end, (sessions) => {
       sessions.forEach(session => {
-        console.log(session)
         session.dateDebut = new Date(session.dateDebut)
         session.dateFin = new Date(session.dateFin)
         session.detail = "TODO"
@@ -84,7 +76,6 @@ const actions = {
 const mutations = {
   ADD_SESSIONS(state, sessions) {
     sessions.forEach(session => {
-      console.log(session)
       const sessionAlreadyExist = state.sessions.some(stateSession => stateSession.id == session.id)
       if (!sessionAlreadyExist) {
         state.sessions.push(session)

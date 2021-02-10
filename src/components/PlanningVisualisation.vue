@@ -58,6 +58,23 @@
           :interval-count="13"
           :weekdays="weekdays"
         >
+          <template #event="{ event }">
+            <h3>{{ event.matiere.nom }}</h3>
+            <div>Description : {{ event.detail }}</div>
+            <div>
+              Salles :
+              <ul>
+                <li v-for="salle in event.sessionSalle" :key="salle.id">
+                  {{ salle.nomSalle }}
+                </li>
+              </ul>
+            </div>
+            <div>Intervenants :</div>
+            <div>
+              {{ event.start.getHours() }}:{{ event.start.getMinutes() }} -
+              {{ event.end.getHours() }}:{{ event.end.getMinutes() }}
+            </div>
+          </template>
         </v-calendar>
         <v-menu
           v-model="selectedOpen"
@@ -66,7 +83,10 @@
           offset-x
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar v-if="!$keycloak.hasRealmRole('student')" color="grey lighten-4">
+            <v-toolbar
+              v-if="!$keycloak.hasRealmRole('student')"
+              color="grey lighten-4"
+            >
               <v-btn icon>
                 <v-icon @click="editFormOpen = !editFormOpen"
                   >mdi-pencil</v-icon
@@ -81,7 +101,16 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedSession.detail"></span>
+              <span>{{ selectedSession.detail }}</span>
+            </v-card-text>
+            <v-card-text>
+              Salles : [
+              <span
+                v-for="salle in selectedSession.sessionSalle"
+                :key="salle.id"
+                >{{ salle.nomSalle }};
+              </span>
+              ]
             </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
