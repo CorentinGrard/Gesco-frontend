@@ -40,7 +40,6 @@ const actions = {
         })
     },
     addMatiere({ commit }, matiere) {
-        commit('addMatiere', matiere)
         console.log(matiere)
         let matiereApiFormat =
         {
