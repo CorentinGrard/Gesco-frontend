@@ -3,10 +3,11 @@ import VueRouter from 'vue-router'
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
-import AdminMatieres from '@/views/Admin/Matieres.vue'
-import AdminUe from '@/views/Admin/Ue.vue'
+import AdminMatieres from '@/views/admin/Matieres.vue'
+import AdminUe from '@/views/admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
+import AdminEleve from '@/views/admin/Eleves.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,12 @@ const routes = [
     path: '/admin/ue',
     name: 'AdminUe',
     component: AdminUe,
+    meta: { admin: true },
+  },
+  {
+    path: '/admin/eleve',
+    name: 'AdminEleve',
+    component: AdminEleve,
     meta: { admin: true },
   },
   {

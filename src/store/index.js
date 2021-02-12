@@ -7,6 +7,8 @@ import matieres from './modules/matieres'
 import UeMatieres from './modules/UeMatieres'
 import snackbar from './modules/snackbar'
 import user from './modules/user'
+import eleves from './modules/admin/eleves'
+import promotionsCRUD from './modules/admin/promotionsCRUD'
 
 Vue.use(Vuex)
 
@@ -20,7 +22,9 @@ export default new Vuex.Store({
     snackbar,
     user,
     matieres,
-    UeMatieres
+    UeMatieres,
+    eleves,
+    promotionsCRUD
   },
   strict: debug,
 })

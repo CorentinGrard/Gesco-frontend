@@ -1,4 +1,4 @@
-import promotion from '../../../api/admin/promotion'
+import promotion from '../../../api/admin/promotionsCRUD'
 
 // initial state
 const state = () => ({
@@ -62,7 +62,7 @@ const mutations = {
         state.data_promotions.splice(index, 1)
     },
     editPromotion(state, {editedIndex, editedItem}){
-        Object.assign(state.data_eleves[editedIndex], editedItem)
+        Object.assign(state.data_promotions[editedIndex], editedItem)
     }
 }
 

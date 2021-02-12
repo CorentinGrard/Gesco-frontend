@@ -193,8 +193,8 @@
 
     computed: {
       ...mapGetters({
-                   promotions: "promotions/getPromotionsByFormationForDisplaying",
-                   formations: "promotions/getFormations",
+                   promotions: "promotionsCRUD/getPromotionsByFormationForDisplaying",
+                   formations: "promotionsCRUD/getFormations",
                  }),
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvelle promotion' : 'Modifier promotion'
@@ -202,7 +202,7 @@
     },
 
     created() {
-      this.$store.dispatch("promotions/initPromotions");
+      this.$store.dispatch("promotionsCRUD/initPromotions");
     },
 
     methods: {
@@ -219,7 +219,7 @@
       },
 
       deleteItemConfirm () {
-        this.$store.dispatch("promotions/removePromotion", this.editedIndex);
+        this.$store.dispatch("promotionsCRUD/removePromotion", this.editedIndex);
         this.closeDelete()
       },
 
@@ -241,9 +241,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          this.$store.dispatch("promotions/editPromotion", {editedIndex: this.editedIndex, editedItem: this.editedItem});
+          this.$store.dispatch("promotionsCRUD/editPromotion", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         } else {
-          this.$store.dispatch("promotions/addPromotion", this.editedItem);
+          this.$store.dispatch("promotionsCRUD/addPromotion", this.editedItem);
         }
         this.close()
       },

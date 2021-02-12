@@ -73,6 +73,26 @@
                               sm="6"
                               md="4"
                       >
+                        <v-text-field
+                                v-model="editedItem.numeroTel"
+                                label="Numéro"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                              cols="12"
+                              sm="6"
+                              md="4"
+                      >
+                        <v-text-field
+                                v-model="editedItem.adresse"
+                                label="Adresse"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                              cols="12"
+                              sm="6"
+                              md="4"
+                      >
                         <v-select
                                 v-model="editedItem.promotion_id"
                                 :items="promotions"
@@ -175,6 +195,9 @@
         { text: "Prénom", value: "eleve_firstname", align: "left", groupable: false },
         { text: "Nom", value: "eleve_lastname", align: "left", groupable: false },
         { text: "Promotion", value: "promotion", align: "left", groupable: true },
+        { text: "Email", value: "email", align: "left", groupable: false },
+        { text: "Numéro", value: "numeroTel", align: "left", groupable: false },
+        { text: "Adresse", value: "adresse", align: "left", groupable: false },
         { text: 'Actions', value: 'actions', align: "right", sortable: false, groupable: false },
       ],
       events: [],
@@ -184,6 +207,8 @@
         promotion_id: 'test',
         eleve_firstname: 'test',
         eleve_lastname: 'test',
+        numeroTel: '0xxxxxxxxx',
+        adresse: 'test',
         promotion: 'test',
       },
       defaultItem: {
@@ -191,6 +216,8 @@
         promotion_id: 'test',
         eleve_firstname: 'test',
         eleve_lastname: 'test',
+        numeroTel: '0xxxxxxxxx',
+        adresse: 'test',
         promotion: 'test',
       },
       promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick", link: { name: "Promotions" }  }
@@ -200,7 +227,7 @@
     computed: {
       ...mapGetters({
                    eleves: "eleves/getElevesByPromotionForDisplaying",
-                   promotions: "promotions/getPromotions",
+                   promotions: "promotionsCRUD/getPromotions",
                  }),
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvel élève' : 'Modifier élève'
@@ -209,7 +236,7 @@
 
     created() {
       this.$store.dispatch("eleves/initEleves");
-      this.$store.dispatch("promotions/initPromotions");
+      this.$store.dispatch("promotionsCRUD/initPromotions");
     },
 
     methods: {
@@ -226,7 +253,7 @@
       },
 
       deleteItemConfirm () {
-        this.$store.dispatch("eleves/removeEleve", this.editedIndex);
+        this.$store.dispatch("eleves/removeEleve", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         this.closeDelete()
       },
 

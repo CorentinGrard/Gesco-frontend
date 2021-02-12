@@ -1,41 +1,46 @@
 /**
  * Mocking client-server processing
  */
-const data_eleves = [
-    {
-        id: 1,
-        name: "INFRES11",
-        eleve: [
-            {
-                id: 1,
-                lastname: "eleve1",
-                firstname : "eleve1"
-            },
-            {
-                id: 2,
-                lastname: "eleve2",
-                firstname : "eleve2"
-            }]
-    },
-    {
-        id: 2,
-        name: "INFRES12",
-        eleve: [
-            {
-                id: 3,
-                lastname: "eleve3",
-                firstname: "eleve3"
-            },
-            {
-                id: 4,
-                lastname: "eleve4",
-                firstname: "eleve4"
-            }]
-    }
-]
+// const data_eleves = [
+//   {
+//     "id": 1,
+//     "nom": "INFRES 11",
+//     "Etudiants": [
+//       {
+//         "Personne": {
+//           "id": 4,
+//           "nom": "CABANE",
+//           "prenom": "Antonin",
+//           "email": "antonin.cabane@mines-ales.org",
+//           "adresse": "479 Avenue des euzières\n34190 Brissac",
+//           "numeroTel": "0750214383"
+//         }
+//       }
+//     ]
+//   },
+//   {
+//     "id": 2,
+//     "nom": "11",
+//     "Etudiants": []
+//   }
+// ]
+
+import backend from '@/plugins/axios';
 
 export default {
     getData_Eleves(cb) {
-        setTimeout(() => cb(data_eleves), 100)
+        backend.get("/promotions/etudiants")
+            .then((response) => cb(response.data))
+            .catch((error) => Promise.reject(error))
+    },
+    post_Eleve(id_promotion, eleve, cb) {
+        backend.post("/promotion/" + id_promotion + "/etudiant", JSON.stringify(eleve))
+            .then((response) => cb(response.data))
+            .catch((error) => Promise.reject(error))
+    },
+    delete_Eleve(id_eleve) {
+        backend.delete("/promotion/etudiant/" + id_eleve)
+            .then()
+            .catch((error) => Promise.reject(error))
     },
 }
