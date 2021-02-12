@@ -1,8 +1,9 @@
 import userAPI from "@/api/user"
+import roles from "@/roles"
 
 const state = () => ({
   profile: {
-    roles: []
+    roles: {}
   },
 })
 
@@ -11,25 +12,33 @@ const getters = {
     return state.profile.roles
   },
   isAdmin: (state) => {
-    return state.profile.roles.some(role => role === "ROLE_ADMIN")
+    return state.profile.roles.admin
   },
-  isEleve: (state) => {
-    return state.profile.roles.some(role => role === "ROLE_ELEVE")
+  isEtudiant: (state) => {
+    return state.profile.roles.etudiant
   },
   isIntervenant: (state) => {
-    return state.profile.roles.some(role => role === "ROLE_INTERVENANT")
+    return state.profile.roles.intervenant
   },
   isResponsableFormation: (state) => {
-    return state.profile.roles.some(role => role === "ROLE_RESPONSABLE_FORMATION")
+    return state.profile.roles.responsableFormation
   },
   isAssistantPedagogique: (state) => {
-    return state.profile.roles.some(role => role === "ROLE_ASSISTANT_PEDAGOGIQUE")
+    return state.profile.roles.assistantPedagogique
   }
 };
 
 const actions = {
   async fetch({ commit }) {
     await userAPI.get(profile => {
+      let newRoles = {}
+      profile.roles.forEach(element => {
+        let role = roles.find(role => role.role === element)
+        if (typeof (role) !== 'undefined') {
+          newRoles[role.name] = true
+        }
+      })
+      profile.roles = newRoles
       commit("SET_PROFILE", profile)
     })
   }
