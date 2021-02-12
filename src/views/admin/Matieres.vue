@@ -184,7 +184,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("UeMatieres/deleteMatiere", this.editedIndex);
+      this.$store.dispatch("UeMatieres/deleteMatiere", {editedIndex : this.editedItem.id, editedId: this.editedIndex});
       this.closeDelete();
     },
 

@@ -65,5 +65,10 @@ export default {
         .then((response) => cb(response.data))
         .catch((error) => Promise.reject(error))
 },
+deleteMatiere(idMatiere, cb) {
+  backend.delete("/matieres/" + idMatiere)
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
+},
 
 }
