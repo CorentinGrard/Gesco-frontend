@@ -37,6 +37,11 @@ export default {
         link: { name: "AdminUe" },
       },
       {
+        title: "Création et modification des semestres",
+        icon: "mdi-ballot-outline",
+        link: { name: "AdminSemestres" },
+      },
+      {
         title: "Création et modification d'une formation",
         icon: "mdi-ballot-outline",
         link: { name: "AdminFormations" },
