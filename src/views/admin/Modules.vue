@@ -1,24 +1,22 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="matieres"
+    :items="ue"
     class="elevation-1"
     hide-default-footer
     disable-pagination
   >
     <template v-slot:top>
       <br />
-      <SelectPromo @updateSelectedPromotion="fetchMatieres" />
+      <SelectPromo @updateSelectedPromotion="fetchUe" />
       <v-toolbar flat>
-        <v-toolbar-title>Matières</v-toolbar-title>
+        <v-toolbar-title>Modules</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-
         <v-spacer></v-spacer>
-
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              Nouvelle matière
+              Nouveau module
             </v-btn>
           </template>
           <v-card>
@@ -36,27 +34,18 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-select
-                      v-model="editedItem.module"
-                      label="UE"
-                      :items="ue"
-                      item-text="nom"
-                      item-value="id"
-                      return-object
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.coefficient"
-                      label="Coefficient"
+                      v-model="editedItem.semestre"
+                      label="Semestre"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.intervenant"
-                      label="Intervenant"
+                      v-model="editedItem.ects"
+                      label="ECTS"
                     ></v-text-field>
                   </v-col>
+                  <v-col cols="12" sm="6" md="4"> </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -75,7 +64,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="headline"
-              >Etes vous sur de vouloir supprimer cette matière ?</v-card-title
+              >Etes vous sur de vouloir supprimer ce module ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -116,28 +105,25 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Nom matière",
+        text: "Nom module",
         align: "start",
         sortable: false,
         value: "nom",
       },
-      { text: "Module", value: "module.name" },
-      { text: "Coefficient", value: "coefficient" },
-      { text: "Intervenant", value: "intervenant" },
+      { text: "Semestre", value: "semestre" },
+      { text: "ECTS", value: "ects" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      module: "",
-      coefficient: 1,
-      intervenant: "",
+      nom: "",
+      semestre: "",
+      ects: 0,
     },
     defaultItem: {
-      name: "",
-      module: "",
-      coefficient: 1,
-      intervenant: "",
+      nom: "",
+      semestre: "",
+      ects: 0,
     },
   }),
   components: {
@@ -145,11 +131,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      matieres: "UeMatieres/getMatieresForDisplaying",
       ue: "UeMatieres/getUeForDisplaying",
     }),
     formTitle() {
-      return this.editedIndex === -1 ? "Nouvelle matière" : "Edition matière";
+      return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
     },
   },
   created() {
@@ -165,19 +150,19 @@ export default {
   },
   methods: {
     editItem(item) {
-      this.editedIndex = this.matieres.indexOf(item);
+      this.editedIndex = this.ue.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.matieres.indexOf(item);
+      this.editedIndex = this.ue.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("UeMatieres/deleteMatiere", this.editedIndex);
+      this.$store.dispatch("UeMatieres/deleteUe", this.editedIndex);
       this.closeDelete();
     },
 
@@ -199,21 +184,18 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        this.$store.dispatch("UeMatieres/editMatiere", {
-          matiereIndex: this.editedIndex,
-          matiere: this.editedItem,
+        this.$store.dispatch("UeMatieres/editUe", {
+          ueIndex: this.editedIndex,
+          ue: this.editedItem,
         });
       } else {
-        this.$store.dispatch("UeMatieres/addMatiere", this.editedItem);
+        this.$store.dispatch("UeMatieres/addUe", this.editedItem);
       }
       this.close();
     },
-    fetchMatieres: function(selectedPromotion) {
+    fetchUe: function(selectedPromotion) {
       if (Number.isInteger(selectedPromotion)) {
-        this.$store.dispatch(
-          "UeMatieres/getMatiereByPromotion",
-          selectedPromotion
-        );
+        //this.$store.dispatch("UeMatieres/fetch", selectedPromotion);
       }
     },
   },
