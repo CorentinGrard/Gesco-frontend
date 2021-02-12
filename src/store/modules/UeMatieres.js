@@ -40,8 +40,30 @@ const actions = {
         })
     },
     addMatiere({ commit }, matiere) {
-            commit('addMatiere', matiere)
+        commit('addMatiere', matiere)
+        console.log(matiere)
+        let matiereApiFormat =
+        {
+            "nom": matiere.nom,
+            "coefficient": matiere.coefficient,
+            "nombreHeuresAPlacer": matiere.nombreHeuresAPlacer,
+        }
+        ApiMatieres.postMatiere(
+            matiere.module.id,
+            matiereApiFormat,
+            matiere_response => {
+                let newMatiere = {
+                    nom : matiere_response.nom,
+                    module : {id : matiere_response.moduleId, name: matiere_response.moduleName},
+                    coefficient : matiere_response.coefficient,
+                    nombreHeuresAPlacer : matiere_response.nombreHeuresAPlacer,
+                    intervenant : "M.Robot"
+                }
+                commit("addMatiere", newMatiere)
+            }
+        )
     },
+
     editMatiere({ commit }, {matiereIndex, matiere}) {
             commit('editMatiere', {matiereIndex, matiere})
     },
@@ -75,6 +97,7 @@ const mutations = {
                         nom : item.nomMatiere,
                         module : {id : moduleId, name: moduleName},
                         coefficient : item.coefficient,
+                        nombreHeuresAPlacer : item.nombreHeuresAPlacer,
                         intervenant : "M.Robot"
                       },
                 )
