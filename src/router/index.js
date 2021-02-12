@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index.js'
+
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
-import AdminMatieres from '@/views/Admin/Matieres.vue'
-import AdminUe from '@/views/Admin/Ue.vue'
+import AdminMatieres from '@/views/admin/Matieres.vue'
+import AdminUe from '@/views/admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 
@@ -61,7 +63,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.admin)) {
-    if (Vue.$keycloak.hasRealmRole("admin")) {
+    if (store.getters["user/isAdmin"]) {
       next()
     } else {
       next("/")
@@ -70,7 +72,7 @@ router.beforeEach((to, from, next) => {
 
 
   if (to.matched.some(record => record.meta.student)) {
-    if (Vue.$keycloak.hasRealmRole("student")) {
+    if (store.getters["user/isEleve"]) {
       next()
     } else {
       next("/")
