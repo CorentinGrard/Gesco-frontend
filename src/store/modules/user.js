@@ -1,14 +1,20 @@
+import userAPI from "@/api/user"
 
 const state = () => ({
-  profile: {},
+  profile: {
+    roles: []
+  },
 })
 
 const getters = {
+  getRoles : (state) => {
+    return state.profile.roles
+  }
 };
 
 const actions = {
-  fetch({ commit }, promiseProfile) {
-    promiseProfile.then(profile => {
+  fetch({ commit }) {
+    userAPI.get(profile => {
       commit("SET_PROFILE", profile)
     })
   }

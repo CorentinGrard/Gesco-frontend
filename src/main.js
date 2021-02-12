@@ -15,6 +15,7 @@ Vue.$keycloak
   })
   .then((authenticated) => {
     console.log(`Authentification : ${authenticated}`)
+    store.dispatch("user/fetch")
     new Vue({
       vuetify,
       router,

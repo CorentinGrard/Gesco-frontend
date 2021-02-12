@@ -13,7 +13,7 @@
         <v-list-item link>
           <v-list-item-content>
             <v-list-item-title class="title">
-              {{ profile.firstName }} {{ profile.lastName }}
+              {{ profile.prenom }} {{ profile.nom }}
             </v-list-item-title>
             <v-list-item-subtitle>{{ profile.email }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -102,9 +102,6 @@ export default {
       { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),
-  created() {
-    this.$store.dispatch("user/fetch", this.$keycloak.loadUserProfile());
-  },
   computed: {
     display: {
       get() {
