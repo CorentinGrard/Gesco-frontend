@@ -31,19 +31,17 @@ const actions = {
       sessions.forEach(session => {
         session.dateDebut = new Date(session.dateDebut)
         session.dateFin = new Date(session.dateFin)
-        session.detail = "TODO"
       });
       commit("ADD_SESSIONS", sessions);
     });
   },
-  fetchSessions({ commit }, month) {
-    APIsessions.getSessions(month, (sessions) => {
+  fetchSessions({ commit }, { start, end }) {
+    APIsessions.getSessions(start, end, (sessions) => {
       sessions.forEach(session => {
         session.dateDebut = new Date(session.dateDebut)
         session.dateFin = new Date(session.dateFin)
-        session.detail = "TODO"
       });
-      commit("setSessions", sessions);
+      commit("ADD_SESSIONS", sessions);
     });
   },
 

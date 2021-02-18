@@ -236,7 +236,10 @@ export default {
     fetchSessions() {
       if (this.start !== "" && this.end !== "") {
         if (this.$keycloak.hasRealmRole("student")) {
-          this.$store.dispatch("planning/fetchSessions");
+          this.$store.dispatch("planning/fetchSessions", {
+            start: this.start,
+            end: this.end,
+          });
         } else {
           if (
             !(

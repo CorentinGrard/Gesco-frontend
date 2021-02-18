@@ -26,7 +26,7 @@ import backend from '@/plugins/axios';
 
 export default {
   getSessions(start, end, cb) {
-    return backend.get()
+    return backend.get(`/start/${start}/end/${end}/sessions`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error))
   },
