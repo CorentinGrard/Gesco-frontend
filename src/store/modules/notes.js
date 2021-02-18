@@ -1,4 +1,4 @@
-import notes from '../../api/notes'
+import notes from '@/api/notes'
 
 // initial state
 const state = () => ({
@@ -12,14 +12,13 @@ const getters = {
         state.data_notes.forEach(semester => {
             semester.UE.forEach(UE => {
                 UE.matieres.forEach(matiere => {
-                    console.log(typeof(matiere.note))
-                        notes.push({
-                            note : matiere.note,
-                            matiere : matiere.name,
-                            semester : semester.name,
-                            category : UE.name,
-                            coeff : matiere.coeff
-                        })
+                    notes.push({
+                        note: matiere.note,
+                        matiere: matiere.name,
+                        semester: semester.name,
+                        category: UE.name,
+                        coeff: matiere.coeff
+                    })
                 })
             })
         })
@@ -28,12 +27,7 @@ const getters = {
     getSemesters: state => {
         let semesters = []
         state.data_notes.forEach(semester => {
-            semester.UE.forEach(UE => {
-                UE.matieres.forEach(matiere => {
-                    console.log(typeof(matiere.note))
-                    semesters.push(semester.name)
-                })
-            })
+            semesters.push(semester.name)
         })
         return semesters
     }
