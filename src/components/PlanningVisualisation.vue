@@ -15,7 +15,7 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <SelectPromo
-            v-if="!$keycloak.hasRealmRole('student')"
+            v-if="!isEtudiant"
             @updateSelectedPromotion="updateSelectedPromotion"
             class="mt-5"
           />
@@ -84,7 +84,7 @@
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
             <v-toolbar
-              v-if="!$keycloak.hasRealmRole('student')"
+              v-if="!isEtudiant"
               color="grey lighten-4"
             >
               <v-btn icon>
@@ -157,6 +157,7 @@ export default {
     ...mapGetters({
       events: "planning/getEventsForPlanning",
       getSessionById: "planning/getSessionById",
+      isEtudiant: "user/isEtudiant"
     }),
     ...mapState({
       selectedSession: (state) => state.planning.selectedSession,
@@ -235,7 +236,7 @@ export default {
     },
     fetchSessions() {
       if (this.start !== "" && this.end !== "") {
-        if (this.$keycloak.hasRealmRole("student")) {
+        if (this.isEtudiant) {
           this.$store.dispatch("planning/fetchSessions", {
             start: this.start,
             end: this.end,
