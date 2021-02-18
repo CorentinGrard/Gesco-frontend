@@ -13,7 +13,7 @@
         <v-list-item link>
           <v-list-item-content>
             <v-list-item-title class="title">
-              {{ profile.firstName }} {{ profile.lastName }}
+              {{ profile.prenom }} {{ profile.nom }}
             </v-list-item-title>
             <v-list-item-subtitle>{{ profile.email }}</v-list-item-subtitle>
           </v-list-item-content>
@@ -25,7 +25,7 @@
       <v-list nav dense>
         <v-list-item-group>
           <v-list-item
-            v-for="item in pagesWithRoles"
+            v-for="item in itemsByRoles"
             :key="item.title"
             link
             :to="item.link"
@@ -42,7 +42,7 @@
       </v-list>
       <template v-slot:append>
         <v-list nav dense>
-          <v-list-item @click="$keycloak.logout()" link>
+          <v-list-item @click="logout" link>
             <v-list-item-icon>
               <v-icon>mdi-close-circle</v-icon>
             </v-list-item-icon>
@@ -80,6 +80,7 @@
 <script>
 import { mapState } from "vuex";
 import updateToken from "@/middlewares/update-token";
+import roles from "@/roles";
 
 export default {
   name: "App",
@@ -90,41 +91,38 @@ export default {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
-        roles: ["admin", "student"],
+        meta: { etudiant: true, assistantPedagogique: true },
       },
       {
         title: "Notes",
         icon: "mdi-file-table",
         link: { name: "Notes" },
-        roles: ["student"],
+        meta: { etudiant: true },
       },
       {
         title: "Création de cours",
         icon: "mdi-school",
         link: { name: "CreationCours" },
-        roles: ["ap", "admin"],
+        meta: { admin: true, assistantPedagogique: true },
       },
       {
         title: "Gestion des absences",
         icon: "mdi-account-off",
-        roles: ["ap", "admin"],
+        meta: { admin: true, assistantPedagogique: true },
       },
       {
         title: "Gestion des notes",
         icon: "mdi-file-table",
-        roles: ["ap", "admin"],
+        meta: { admin: true, assistantPedagogique: true },
       },
       {
         title: "Admin",
         icon: "mdi-cog",
         link: { name: "Admin" },
-        roles: ["ap", "admin"],
+        meta: { admin: true },
       },
     ],
   }),
-  created() {
-    this.$store.dispatch("user/fetch", this.$keycloak.loadUserProfile());
-  },
   computed: {
     pagesWithRoles: function () {
       return this.pages.filter((page) => {
@@ -145,10 +143,26 @@ export default {
       snackbarColor: (state) => state.snackbar.color,
       profile: (state) => state.user.profile,
     }),
+    itemsByRoles() {
+      let itemsByRoles = [];
+      roles.forEach((role) => {
+        if (this.$store.getters[role.getter]) {
+          itemsByRoles.push(this.items.filter((item) => item.meta[role.name]));
+        }
+      });
+      itemsByRoles = itemsByRoles.flat()
+      itemsByRoles = [...new Set([...itemsByRoles])];
+      return itemsByRoles;
+    },
   },
   watch: {
     $route() {
       updateToken();
+    },
+  },
+  methods: {
+    logout: function () {
+      this.$keycloak.logout();
     },
   },
 };
