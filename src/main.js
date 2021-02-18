@@ -13,8 +13,9 @@ Vue.$keycloak
   .init({
     onLoad: 'login-required',
   })
-  .then((authenticated) => {
+  .then(async (authenticated) => {
     console.log(`Authentification : ${authenticated}`)
+    await store.dispatch("user/fetch")
     new Vue({
       vuetify,
       router,

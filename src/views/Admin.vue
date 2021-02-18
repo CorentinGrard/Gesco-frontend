@@ -39,6 +39,7 @@ export default {
       {
         title: "Création et modification d'une formation",
         icon: "mdi-ballot-outline",
+        link: { name: "AdminFormations" },
       },
       {
         title: "Gestion des promotions et assignation des élèves",
