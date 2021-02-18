@@ -220,7 +220,7 @@
         adresse: 'test',
         promotion: 'test',
       },
-      promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick", link: { name: "Promotions" }  }
+      promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick"}
     }),
 
 

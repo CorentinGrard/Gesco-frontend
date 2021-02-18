@@ -3,6 +3,11 @@ FROM node:lts-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+ARG VUE_APP_BACKEND_BASE_URL
+ARG VUE_APP_BASE_URL
+ARG VUE_APP_KEYCLOAK_CLIENT_ID
+ARG VUE_APP_KEYCLOAK_REALM
+ARG VUE_APP_KEYCLOAK_URL
 COPY . .
 RUN npm run build
 

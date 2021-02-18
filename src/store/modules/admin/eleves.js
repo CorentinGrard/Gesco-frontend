@@ -25,8 +25,7 @@ const actions = {
             "prenom": eleve.eleve_firstname,
             "nom": eleve.eleve_lastname,
             "adresse": eleve.adresse,
-            "numeroTel": eleve.numeroTel,
-            "isAlternant": true
+            "numeroTel": eleve.numeroTel
         }
         APIeleves.post_Eleve(
             eleve.promotion_id,

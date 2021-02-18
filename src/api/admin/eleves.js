@@ -43,4 +43,14 @@ export default {
             .then()
             .catch((error) => Promise.reject(error))
     },
+    put_Eleve(id_eleve, eleve, cb) {
+        backend.put("/etudiant/" + id_eleve, JSON.stringify(eleve))
+            .then((response) => cb(response.data))
+            .catch((error) => Promise.reject(error))
+    },
+    put_Eleve_in_Promotion(id_promotion, id_eleve, eleve, cb) {
+        backend.put("/promotion/" + id_promotion + "/etudiant/" + id_eleve, JSON.stringify(eleve))
+            .then((response) => cb(response.data))
+            .catch((error) => Promise.reject(error))
+    }
 }
