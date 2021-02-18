@@ -7,28 +7,17 @@
     disable-pagination
   >
     <template v-slot:top>
-      <v-toolbar
-        flat
-      > 
+      <br />
+      <SelectPromo @updateSelectedPromotion="fetchMatieres" />
+      <v-toolbar flat>
         <v-toolbar-title>Matières</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+        <v-divider class="mx-4" inset vertical></v-divider>
+
         <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
+
+        <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
               Nouvelle matière
             </v-btn>
           </template>
@@ -40,47 +29,38 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.nom"
                       label="Nom"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.module"
                       label="UE"
                       :items="ue"
                       item-text="nom"
                       item-value="id"
+                      return-object
                     ></v-select>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.coefficient"
                       label="Coefficient"
                     ></v-text-field>
                   </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.intervenant"
                       label="Intervenant"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.nombreHeuresAPlacer"
+                      label="Nombre d'heures de cours"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -89,18 +69,10 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="close"
-              >
+              <v-btn color="blue darken-1" text @click="close">
                 Annuler
               </v-btn>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="save"
-              >
+              <v-btn color="blue darken-1" text @click="save">
                 Sauvegarder
               </v-btn>
             </v-card-actions>
@@ -108,143 +80,149 @@
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="headline">Etes vous sur de vouloir supprimer cette matière ?</v-card-title>
+            <v-card-title class="headline"
+              >Etes vous sur de vouloir supprimer cette matière ?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Annuler</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >Annuler</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                >OK</v-btn
+              >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
-
-      
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
+      <v-icon small class="mr-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
+      <v-icon small @click="deleteItem(item)">
         mdi-delete
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        
-      >
+      <v-btn color="primary">
         Reset
       </v-btn>
     </template>
   </v-data-table>
-
 </template>
-
-
 
 <script>
 import { mapGetters } from "vuex";
-  export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        {
-          text: 'Nom matière',
-          align: 'start',
-          sortable: false,
-          value: 'nom',
-        },
-        { text: 'Module', value: 'module' },
-        { text: 'Coefficient', value: 'coefficient' },
-        { text: 'Intervenant', value: 'intervenant' },
-        { text: 'Actions', value: 'actions', sortable: false },
-      ],
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        module: '',
-        coefficient: 1,
-        intervenant: "",
+import SelectPromo from "../../components/SelectPromo";
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        text: "Nom matière",
+        align: "start",
+        sortable: false,
+        value: "nom",
       },
-      defaultItem: {
-        name: "",
-        module: '',
-        coefficient: 1,
-        intervenant: "",
-      },
-    }),
-    computed: {
+      { text: "Module", value: "module.name" },
+      { text: "Coefficient", value: "coefficient" },
+      { text: "Intervenant", value: "intervenant" },
+      { text: "Nombre heure de cours", value: "nombreHeuresAPlacer" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    editedIndex: -1,
+    editedItem: {
+      name: "",
+      module: "",
+      coefficient: 1,
+      intervenant: "",
+    },
+    defaultItem: {
+      name: "",
+      module: "",
+      coefficient: 1,
+      intervenant: "",
+    },
+  }),
+  components: {
+    SelectPromo,
+  },
+  computed: {
     ...mapGetters({
-        matieres: "UeMatieres/getMatieresForDisplaying",
-        ue: "UeMatieres/getUeForDisplaying"
-      }),
-      formTitle(){
-        return this.editedIndex === -1 ? 'Nouvelle matière' : 'Edition matière'
-      },
+      matieres: "UeMatieres/getMatieresForDisplaying",
+      ue: "UeMatieres/getUeForDisplaying",
+    }),
+    formTitle() {
+      return this.editedIndex === -1 ? "Nouvelle matière" : "Edition matière";
     },
-    created() {
-      this.$store.dispatch("UeMatieres/getAllMatieres");
-      this.$store.dispatch("UeMatieres/getAllUe");
+  },
+  created() {
+    this.$store.dispatch("UeMatieres/getAllUe");
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
     },
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
-    methods: {
-      editItem (item) {
-        this.editedIndex = this.matieres.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
-      },
-
-      deleteItem (item) {
-        this.editedIndex = this.matieres.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
-
-      deleteItemConfirm () {
-        this.$store.dispatch("UeMatieres/deleteMatiere",this.editedIndex);
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          this.$store.dispatch("UeMatieres/editMatiere",{ matiereIndex : this.editedIndex, matiere : this.editedItem });
-        } else {
-          this.$store.dispatch("UeMatieres/addMatiere",this.editedItem);
-        }
-        this.close()
-      },
+  },
+  methods: {
+    editItem(item) {
+      this.editedIndex = this.matieres.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
-  }
+
+    deleteItem(item) {
+      this.editedIndex = this.matieres.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.$store.dispatch("UeMatieres/deleteMatiere", {editedIndex : this.editedItem.id, editedId: this.editedIndex});
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        this.$store.dispatch("UeMatieres/editMatiere", {
+          matiereIndex: this.editedIndex,
+          matiere: this.editedItem,
+        });
+      } else {
+        this.$store.dispatch("UeMatieres/addMatiere", this.editedItem);
+      }
+      this.close();
+    },
+    fetchMatieres: function(selectedPromotion) {
+      if (Number.isInteger(selectedPromotion)) {
+        this.$store.dispatch(
+          "UeMatieres/getMatiereByPromotion",
+          selectedPromotion
+        );
+      }
+    },
+  },
+};
 </script>
