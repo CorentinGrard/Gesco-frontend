@@ -52,6 +52,7 @@ const actions = {
             matiereApiFormat,
             matiere_response => {
                 let newMatiere = {
+                    id : matiere_response.id,
                     nom : matiere_response.nom,
                     module : {id : matiere_response.moduleId, name: matiere_response.moduleName},
                     coefficient : matiere_response.coefficient,
@@ -66,8 +67,9 @@ const actions = {
     editMatiere({ commit }, {matiereIndex, matiere}) {
             commit('editMatiere', {matiereIndex, matiere})
     },
-    deleteMatiere({ commit }, matiere) {
-        commit('deleteMatiere', matiere)
+    deleteMatiere({ commit }, {editedIndex,editedId}) {
+        ApiMatieres.deleteMatiere(editedId);
+        commit('deleteMatiere', editedIndex)
     },
     addUe({ commit }, ue) {
             commit('addUe', ue)
