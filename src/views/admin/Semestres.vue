@@ -1,11 +1,14 @@
 <template>
   <v-container>
     <v-card>
+      <SelectPromo />
+      {{ editedItem.id }}
       <v-data-table
         :headers="headers"
         :items="semestres"
         hide-default-footer
         disable-pagination
+        v-if="selectedPromotion >= 0"
       >
         <!-- Les elements liés à la data table -->
         <template v-slot:top>
@@ -95,6 +98,7 @@
 
 <script>
 import { mapState } from "vuex";
+import SelectPromo from "@/components/SelectPromo";
 
 export default {
   data: () => ({
@@ -106,16 +110,19 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
-      name: "",
+      nom: "",
     },
     defaultItem: {
-      name: "",
+      nom: "",
     },
   }),
-
+  components: {
+    SelectPromo,
+  },
   computed: {
     ...mapState({
       semestres: (state) => state.semestres.semestres,
+      selectedPromotion: (state) => state.promotions.selectedPromotion,
     }),
 
     formTitle() {
@@ -130,10 +137,9 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
-  },
-
-  created() {
-    this.$store.dispatch("semestres/fetch");
+    selectedPromotion(val) {
+      this.$store.dispatch("semestres/fetch", val);
+    },
   },
 
   methods: {
@@ -154,7 +160,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("semestres/delete", this.editedIndex);
+      this.$store.dispatch("semestres/delete", this.editedItem.id);
       this.closeDelete();
     },
 
@@ -177,11 +183,14 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         this.$store.dispatch("semestres/update", {
-          editedIndex: this.editedIndex,
-          editedItem: this.editedItem,
+          id: this.editedItem.id,
+          semestre: this.editedItem,
         });
       } else {
-        this.$store.dispatch("semestres/add", this.editedItem);
+        this.$store.dispatch("semestres/add", {
+          id: this.selectedPromotion,
+          semestre: this.editedItem,
+        });
       }
       this.close();
     },

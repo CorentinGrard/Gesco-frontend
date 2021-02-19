@@ -11,21 +11,25 @@ const getters = {
 
 // actions
 const actions = {
-  fetch({ commit }) {
-    semestreAPI.getSemestresByPromotion(0, semestres => {
+  fetch({ commit }, idPromotion) {
+    semestreAPI.getSemestresByPromotion(idPromotion, semestres => {
       commit('SET', semestres)
     })
   },
-  add({ commit }, semestre) {
-    commit('ADD', semestre)
+  add({ commit }, { id, semestre }) {
+    semestreAPI.add(id, semestre, semestre => {
+      commit('ADD', semestre)
+    })
   },
-  delete({ commit }, index) {
-    commit('DELETE', index)
+  update({ commit }, { id, semestre }) {
+    semestreAPI.update(id, semestre, semestre => {
+      commit('UPDATE', { id: semestre.id, semestre })
+    })
   },
-  update({ commit }, { editedIndex, editedItem }) {
-    commit('UPDATE', { editedIndex, editedItem })
-  }
-
+  delete({ commit }, id) {
+    semestreAPI.delete(id)
+    commit('DELETE', id)
+  },
 }
 
 // mutations
@@ -36,11 +40,12 @@ const mutations = {
   ADD(state, semestre) {
     state.semestres.push(semestre)
   },
-  DELETE(state, index) {
+  DELETE(state, id) {
+    let index = state.semestres.findIndex(semestre => semestre.id === id)
     state.semestres.splice(index, 1)
   },
-  UPDATE(state, { editedIndex, editedItem }) {
-    Object.assign(state.semestres[editedIndex], editedItem)
+  UPDATE(state, { id, semestre }) {
+    Object.assign(state.semestres.find(semestre => semestre.id === id), semestre)
   }
 
 }
