@@ -3,7 +3,7 @@ import backend from "../plugins/axios";
 export default {
   getByPromotions(promotion, cb) {
     backend
-      .get(`/promotions/${promotion}/matieres`)
+      .get(`/promotions/${promotion}/modules`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },

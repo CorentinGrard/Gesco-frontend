@@ -1,10 +1,9 @@
-import ApiUeMatieres from "@/api/UeMatieres";
 import ApiMatieres from "@/api/matieres";
 import ApiModules from "@/api/modules";
 // initial state
 const state = () => ({
   dataMatiere: [],
-  dataUe: [],
+  dataModule: [],
 });
 
 // getters
@@ -12,8 +11,8 @@ const getters = {
   getMatieresForDisplaying: (state) => {
     return state.dataMatiere;
   },
-  getUeForDisplaying: (state) => {
-    return state.dataUe;
+  getModulesForDisplaying: (state) => {
+    return state.dataModule;
   },
   getUeAsNameList: (state) => {
     let nameList = [];
@@ -42,7 +41,6 @@ const actions = {
       });
   },
   addMatiere({ commit }, matiere) {
-    console.log(matiere);
     let matiereApiFormat = {
       nom: matiere.nom,
       coefficient: matiere.coefficient,
@@ -117,7 +115,21 @@ const mutations = {
     state.dataMatiere = finalMatieres;
   },
   setModules(state, modules) {
-    state.dataUe = ue;
+    let finalModules = [];
+    modules.semestres.forEach(function(item) {
+        let modulesArray = item.modules;
+        let semestreId = item.id;
+        let semestreName = item.nom;
+        modulesArray.forEach(function(item) {
+            finalModules.push({
+            id: item.id,
+            nom: item.nom,
+            semestre: { id: semestreId, name: semestreName },
+            ects: item.ects,
+        });
+      });
+    });
+    state.dataModule = finalModules;
   },
   addMatiere(state, matiere) {
     state.dataMatiere.push(matiere);
@@ -129,13 +141,13 @@ const mutations = {
     state.dataMatiere.splice(matiereIndex, 1);
   },
   addUe(state, ue) {
-    state.dataUe.push(ue);
+    state.dataModule.push(ue);
   },
   editUe(state, { ueIndex, ue }) {
-    Object.assign(state.dataUe[ueIndex], ue);
+    Object.assign(state.dataModule[ueIndex], ue);
   },
   deleteUe(state, ueIndex) {
-    state.dataUe.splice(ueIndex, 1);
+    state.dataModule.splice(ueIndex, 1);
   },
 };
 

@@ -1,14 +1,14 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="ue"
+    :items="modules"
     class="elevation-1"
     hide-default-footer
     disable-pagination
   >
     <template v-slot:top>
       <br />
-      <SelectPromo @updateSelectedPromotion="fetchUe" />
+      <SelectPromo @updateSelectedPromotion="fetchModules" />
       <v-toolbar flat>
         <v-toolbar-title>Modules</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -110,7 +110,7 @@ export default {
         sortable: false,
         value: "nom",
       },
-      { text: "Semestre", value: "semestre" },
+      { text: "Semestre", value: "semestre.name" },
       { text: "ECTS", value: "ects" },
       { text: "Actions", value: "actions", sortable: false },
     ],
@@ -131,14 +131,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      ue: "UeMatieres/getUeForDisplaying",
+      modules: "UeMatieres/getModulesForDisplaying",
     }),
     formTitle() {
       return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
     },
   },
   created() {
-    this.$store.dispatch("UeMatieres/getAllUe");
+    //this.$store.dispatch("UeMatieres/getModuleByPromotion");
   },
   watch: {
     dialog(val) {
@@ -193,9 +193,9 @@ export default {
       }
       this.close();
     },
-    fetchUe: function(selectedPromotion) {
+    fetchModules: function(selectedPromotion) {
       if (Number.isInteger(selectedPromotion)) {
-        //this.$store.dispatch("UeMatieres/fetch", selectedPromotion);
+        this.$store.dispatch("UeMatieres/getModuleByPromotion", selectedPromotion);
       }
     },
   },
