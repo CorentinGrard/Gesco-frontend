@@ -1,6 +1,6 @@
 import ApiUeMatieres from "@/api/UeMatieres";
 import ApiMatieres from "@/api/matieres";
-
+import ApiModules from "@/api/modules";
 // initial state
 const state = () => ({
   dataMatiere: [],
@@ -36,10 +36,10 @@ const actions = {
       commit("setMatieres", matieres);
     });
   },
-  getAllUe({ commit }) {
-    ApiUeMatieres.getDataUe((ue) => {
-      commit("setUe", ue);
-    });
+  getModuleByPromotion({ commit },selectedPromotion) {
+    ApiModules.getByPromotions(selectedPromotion, (modules) => {
+        commit("setModules", modules);
+      });
   },
   addMatiere({ commit }, matiere) {
     console.log(matiere);
@@ -67,15 +67,14 @@ const actions = {
       }
     );
   },
-
   editMatiere({ commit }, { matiereIndex, matiere }) {
     let matiereApi = {
-        nom: matiere.nom,
-        coefficient: matiere.coefficient,
-        nombreHeuresAPlacer: matiere.nombreHeuresAPlacer,
-        module_id: matiere.module.id
-    }
-    ApiMatieres.putMatiere(matiere.id, matiereApi)
+      nom: matiere.nom,
+      coefficient: matiere.coefficient,
+      nombreHeuresAPlacer: matiere.nombreHeuresAPlacer,
+      module_id: matiere.module.id,
+    };
+    ApiMatieres.putMatiere(matiere.id, matiereApi);
     commit("editMatiere", { matiereIndex, matiere });
   },
   deleteMatiere({ commit }, { editedIndex, editedId }) {
@@ -117,7 +116,7 @@ const mutations = {
     });
     state.dataMatiere = finalMatieres;
   },
-  setUe(state, ue) {
+  setModules(state, modules) {
     state.dataUe = ue;
   },
   addMatiere(state, matiere) {
