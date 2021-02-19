@@ -3,7 +3,7 @@ import APIPromotions from '@/api/promotions'
 // initial state
 const state = () => ({
   promotions: [],
-  selectedPromotion: {}
+  selectedPromotion: -1
 })
 
 // actions
