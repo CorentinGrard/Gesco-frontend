@@ -1,4 +1,4 @@
-import axios from '../plugins/axios';
+import backend from '../plugins/axios';
 
 /**
  * Mocking client-server processing
@@ -56,7 +56,7 @@ import axios from '../plugins/axios';
 
 export default {
   getByPromotions(promotion, cb) {
-    axios.backend.get(`/promotions/${promotion}/matieres`)
+    backend.get(`/promotions/${promotion}/matieres`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error))
   },

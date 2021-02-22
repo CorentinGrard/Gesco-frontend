@@ -11,10 +11,10 @@ const getters = {
   getEventsForPlanning: (state) => {
     return state.sessions.map((session) => {
       let newSession = JSON.parse(JSON.stringify(session))
-      // newSession.name = session.matiere.nom;
-      newSession.start = session.dateDebut;
-      newSession.end = session.dateFin;
-      newSession.timed = true;
+      newSession.dateDebut = new Date(newSession.dateDebut)
+      newSession.dateFin = new Date(newSession.dateFin)
+      newSession.start = new Date(newSession.start).getTime()
+      newSession.end = new Date(newSession.end).getTime()
       return newSession;
     });
   },
@@ -27,46 +27,42 @@ const getters = {
 // actions
 const actions = {
   fetchSessionsByIdPromotion({ commit }, { id, start, end }) {
-    APIsessions.getSessionsByIdPromotion(id, start, end, (sessions) => {
-      sessions.forEach(session => {
-        session.dateDebut = new Date(session.dateDebut)
-        session.dateFin = new Date(session.dateFin)
-      });
+    APIsessions.getByIdPromotion(id, start, end, (sessions) => {
       commit("ADD_SESSIONS", sessions);
     });
   },
   fetchSessions({ commit }, { start, end }) {
-    APIsessions.getSessions(start, end, (sessions) => {
-      sessions.forEach(session => {
-        session.dateDebut = new Date(session.dateDebut)
-        session.dateFin = new Date(session.dateFin)
-      });
+    APIsessions.get(start, end, (sessions) => {
       commit("ADD_SESSIONS", sessions);
     });
   },
-
   clearSessions({ commit }) {
     commit("CLEAR_SESSIONS")
   },
-
-  updateSessionBySelectedSession({ commit }) {
-    commit("updateSessionBySelectedSession");
-    //TODO Appel api
-  },
-  deleteSessionBySelectedSession({ commit }) {
-    commit("deleteSessionBySelectedSession");
-  },
   addSession({ commit }, session) {
-    // API save
-    APIsessions.addSession(session, (session) => {
-      commit("addSession", session)
+    APIsessions.add(session.matiere, session, (session) => {
+      commit("ADD_SESSIONS", [session])
     })
   },
-  updateSessionByEvent({ commit }, event) {
-    commit("updateSessionByEvent", event)
+  updateSessionBySelectedSession({ commit, state }) {
+    let session = state.selectedSession
+    session.idMatiere = session.matiere.id
+    APIsessions.update(session.id, session)
+    commit("UPDATE_SESSION", session)
+  },
+  updateTimeSession({ commit }, session) {
+    session.idMatiere = session.matiere.id
+    APIsessions.update(session.id, session)
+    commit("UPDATE_SESSION", session)
   },
   deleteSession({ commit }, session) {
-    commit("deleteSession", session)
+    APIsessions.delete(session.id)
+    commit("DELETE_SESSION", session)
+  },
+  deleteSessionBySelectedSession({ commit, state }) {
+    let session = state.selectedSession
+    APIsessions.delete(session.id)
+    commit("DELETE_SESSION", session);
   },
 };
 
@@ -82,35 +78,6 @@ const mutations = {
   },
   CLEAR_SESSIONS(state) {
     state.sessions = []
-  },
-  setSessions(state, sessions) {
-    state.sessions = sessions;
-  },
-  deleteSessionBySelectedSession(state) {
-    let indexSession = state.sessions.findIndex((sessionT) => sessionT.id === state.selectedSession.id)
-    state.sessions.splice(indexSession, 1)
-    //TODO API Call
-  },
-  updateSessionBySelectedSession(state) {
-    const session = state.sessions.find((sessionT) => sessionT.id === state.selectedSession.id)
-    session.id = state.selectedSession.id;
-    session.matiere = state.selectedSession.matiere;
-    session.detail = state.selectedSession.detail;
-    session.type = state.selectedSession.type;
-    session.obligatoire = state.selectedSession.obligatoire;
-    session.dateDebut = state.selectedSession.dateDebut;
-    session.dateFin = state.selectedSession.dateFin;
-  },
-  setSelectedSession(state, session) {
-    let temp = JSON.stringify(session);
-    let newObj = JSON.parse(temp, function (key, value) {
-      if (key === "dateFin" || key === "dateDebut") {
-        return new Date(value);
-      } else {
-        return value;
-      }
-    });
-    state.selectedSession = newObj;
   },
   updateSelectedSessionMatiere(state, matiere) {
     state.selectedSession.matiere = matiere;
@@ -130,21 +97,31 @@ const mutations = {
   updateSelectedSessionDateDebut(state, dateDebut) {
     state.selectedSession.dateDebut = dateDebut;
   },
-  addSession(state, session) {
-    state.sessions.push(session)
+  setSelectedSession(state, session) {
+    let temp = JSON.stringify(session);
+    let newObj = JSON.parse(temp, function (key, value) {
+      if (key === "dateFin" || key === "dateDebut") {
+        return new Date(value);
+      } else {
+        return value;
+      }
+    });
+    state.selectedSession = newObj;
   },
-  deleteSession(state, session) {
-    const i = state.sessions.indexOf(session);
+  DELETE_SESSION(state, session) {
+    const i = state.sessions.findIndex(mySession => mySession.id === session.id);
     if (i !== -1) {
       state.sessions.splice(i, 1);
     }
   },
-  updateSessionByEvent(state, event) {
+  UPDATE_SESSION(state, event) {
     const session = state.sessions.find((session) => session.id === event.id);
     session.matiere = event.matiere;
     session.detail = event.detail;
     session.type = event.type;
     session.obligatoire = event.obligatoire;
+    session.start = event.start;
+    session.end = event.end;
     session.dateDebut = new Date(event.start);
     session.dateFin = new Date(event.end);
   }

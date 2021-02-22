@@ -10,6 +10,7 @@ import matieres from './modules/matieres'
 import UeMatieres from './modules/UeMatieres'
 import snackbar from './modules/snackbar'
 import user from './modules/user'
+import salles from './modules/salles'
 
 Vue.use(Vuex)
 
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     matieres,
     UeMatieres,
     semestres,
+    salles,
   },
   strict: debug,
 })

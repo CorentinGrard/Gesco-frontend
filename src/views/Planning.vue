@@ -1,15 +1,15 @@
 <template>
   <v-container fluid>
-    <PlanningVisualisation />
+    <Planning />
   </v-container>
 </template>
 
 <script>
-import PlanningVisualisation from "@/components/PlanningVisualisation";
+import Planning from "@/components/Planning";
 
 export default {
   components: {
-    PlanningVisualisation,
+    Planning,
   },
 };
 </script>
