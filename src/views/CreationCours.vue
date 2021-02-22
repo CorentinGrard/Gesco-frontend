@@ -2,9 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="3">
-        <SelectPromo @updateSelectedPromotion="fetchMatieres" />
-        <v-divider></v-divider>
-        <v-expansion-panels>
+        <v-expansion-panels class="mb-5">
           <v-expansion-panel
             v-for="semestre in semestres"
             :key="semestre.idSemestre"
@@ -47,34 +45,45 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <v-divider></v-divider>
-        <v-autocomplete :items="salles" label="Salle" outlined></v-autocomplete>
+        <SelectSalle />
+        <v-textarea solo name="details" label="Details"></v-textarea>
+        <v-text-field
+          label="Durée"
+          value="02:00"
+          type="time"
+          suffix="hh:mm"
+        ></v-text-field>
       </v-col>
       <v-col>
-        <Planning :selectedMatiere="selectedMatiere" />
+        <Planning />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Planning from "../components/Planning";
-import SelectPromo from "../components/SelectPromo";
+import { mapGetters, mapState } from "vuex";
+import Planning from "@/components/Planning";
+import SelectSalle from "@/components/SelectSalle";
 
 export default {
-  data: () => ({
-    selectedMatiere: null,
-    salles: ["M105", "M107", "M165", "M102", "M145"],
-  }),
+  data: () => ({}),
   components: {
     Planning,
-    SelectPromo,
+    SelectSalle,
   },
   computed: {
     ...mapGetters({
       semestres: "matieres/getForCreationCours",
     }),
+    ...mapState({
+      selectedPromotion: (state) => state.promotions.selectedPromotion,
+    }),
+  },
+  watch: {
+    selectedPromotion() {
+      this.fetchMatieres();
+    },
   },
   methods: {
     pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
@@ -86,11 +95,11 @@ export default {
       } else return "orange";
     },
     selectMatiere: function (matiere) {
-      this.selectedMatiere = matiere;
+      this.$store.dispatch("matieres/setSelectedMatiere", matiere);
     },
-    fetchMatieres: function (selectedPromotion) {
-      if (Number.isInteger(selectedPromotion)) {
-        this.$store.dispatch("matieres/fetch", selectedPromotion);
+    fetchMatieres: function () {
+      if (this.selectedPromotion !== null) {
+        this.$store.dispatch("matieres/fetch", this.selectedPromotion);
       }
     },
   },
