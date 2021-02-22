@@ -3,7 +3,7 @@ import APIPromotions from '@/api/admin/promotions'
 // initial state
 const state = () => ({
   promotions: [],
-  selectedPromotion: {},
+  selectedPromotion: -1,
   promotions_list: []
 })
 
@@ -77,10 +77,9 @@ const actions = {
       })
     }
   },
-
   setSelectedPromotion({ commit }, selectedPromotion) {
     commit('setSelectedPromotion', selectedPromotion)
-  },
+  }
 
 }
 
