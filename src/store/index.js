@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import planning from './modules/planning'
-import promotions from './modules/promotions'
+import promotions from './modules/admin/promotions'
 import notes from './modules/notes'
 import formations from './modules/admin/formations'
 import responsables from './modules/admin/responsables'
@@ -10,7 +10,7 @@ import UeMatieres from './modules/UeMatieres'
 import snackbar from './modules/snackbar'
 import user from './modules/user'
 import eleves from './modules/admin/eleves'
-import promotionsCRUD from './modules/admin/promotionsCRUD'
+import assistants from "./modules/admin/assistants";
 
 Vue.use(Vuex)
 
@@ -28,7 +28,7 @@ export default new Vuex.Store({
     matieres,
     UeMatieres,
     eleves,
-    promotionsCRUD
+    assistants
   },
   strict: debug,
 })

@@ -31,17 +31,7 @@ const actions = {
             eleve.promotion_id,
             eleveAPIformat,
             eleve_response => {
-                let new_eleve = {
-                    eleve_id: eleve_response.id,
-                    eleve_lastname: eleve_response.nom,
-                    eleve_firstname: eleve_response.prenom,
-                    email: eleve_response.email,
-                    numeroTel: eleve_response.numeroTel,
-                    adresse: eleve_response.adresse,
-                    promotion: eleve.promotion,
-                    promotion_id: eleve.promotion_id
-                }
-                commit("addEleve", new_eleve)
+                commit("addEleve", {eleve, eleve_response})
             }
         )
     },
@@ -52,6 +42,18 @@ const actions = {
         commit('removeEleve', editedIndex)
     },
     editEleve({ commit }, {editedIndex, editedItem}) {
+        let eleveAPIformat =
+            {
+                "prenom": editedItem.eleve_firstname,
+                "nom": editedItem.eleve_lastname,
+                "adresse": editedItem.adresse,
+                "numeroTel": editedItem.numeroTel,
+                "promotion_id": editedItem.promotion_id
+            }
+        APIeleves.put_Eleve(
+            editedItem.eleve_id,
+            eleveAPIformat,
+        )
         commit('editEleve', {editedIndex, editedItem})
     }
 }
@@ -63,7 +65,7 @@ const mutations = {
         eleves.forEach(promotion => {
             promotion.Etudiants.forEach(eleve => {
                 state.data_eleves.push({
-                    eleve_id: eleve.Personne.id,
+                    eleve_id: eleve.id,
                     eleve_lastname: eleve.Personne.nom,
                     eleve_firstname: eleve.Personne.prenom,
                     email: eleve.Personne.email,
@@ -75,8 +77,18 @@ const mutations = {
             })
         })
     },
-    addEleve(state, eleve) {
-        state.data_eleves.push(eleve)
+    addEleve(state, {eleve, eleve_response}) {
+        let new_eleve = {
+            eleve_id: eleve_response.id,
+            eleve_lastname: eleve_response.Personne.nom,
+            eleve_firstname: eleve_response.Personne.prenom,
+            email: eleve_response.Personne.email,
+            numeroTel: eleve_response.Personne.numeroTel,
+            adresse: eleve_response.Personne.adresse,
+            promotion: eleve.promotion,
+            promotion_id: eleve.promotion_id
+        }
+        state.data_eleves.push(new_eleve)
     },
     removeEleve(state, index) {
         state.data_eleves.splice(index, 1)

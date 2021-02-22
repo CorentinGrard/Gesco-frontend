@@ -54,7 +54,7 @@
                               md="4"
                       >
                         <v-text-field
-                                v-model="editedItem.name"
+                                v-model="editedItem.nom"
                                 label="Nom"
                         ></v-text-field>
                       </v-col>
@@ -64,8 +64,10 @@
                               md="4"
                       >
                         <v-select
-                                v-model="editedItem.formation"
+                                v-model="editedItem.idFormation"
                                 :items="formations"
+                                item-text="name"
+                                item-value="id"
                                 label="Formation"
                         ></v-select>
                       </v-col>
@@ -74,10 +76,13 @@
                               sm="6"
                               md="4"
                       >
-                        <v-text-field
-                                v-model="editedItem.assistant"
+                        <v-select
+                                v-model="editedItem.idAssistant"
+                                :items="assistants"
+                                item-text="nom_assistant"
+                                item-value="id"
                                 label="Assistant"
-                        ></v-text-field>
+                        ></v-select>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -117,6 +122,8 @@
           <v-select
                   v-model="search"
                   :items="formations"
+                  item-text="name"
+                  item-value="name"
                   label="Formation"
                   clearable
           ></v-select>
@@ -168,7 +175,7 @@
       dialogDelete: false,
       search: "",
       headers: [
-        { text: "Nom", value: "name", align: "left", groupable: false },
+        { text: "Nom", value: "nomPromotion", align: "left", groupable: false },
         { text: "Formation", value: "formation", align: "left", groupable: false },
         { text: "Assistant", value: "assistant", align: "left", groupable: true },
         { text: 'Actions', value: 'actions', align: "right", sortable: false, groupable: false },
@@ -177,24 +184,31 @@
       editedIndex: -1,
       editedItem: {
         id: 'test',
-        name: 'test',
-        formation: 'test',
+        nom: 'test',
+        nomPromotion: 'test',
         assistant: 'test',
+        idAssistant: 'test',
+        formation: 'test',
+        idFormation: 'test'
       },
       defaultItem: {
-        id:'test',
-        name: 'test',
-        formation: 'test',
+        id: 'test',
+        nom: 'test',
+        nomPromotion: 'test',
         assistant: 'test',
+        idAssistant: 'test',
+        formation: 'test',
+        idFormation: 'test'
       },
-      eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "Eleves" }  }
+      eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "AdminEleve" }  }
     }),
 
 
     computed: {
       ...mapGetters({
-                   promotions: "promotionsCRUD/getPromotionsByFormationForDisplaying",
-                   formations: "promotionsCRUD/getFormations",
+        promotions: "promotions/getPromotions",
+        formations: "formations/getFormations",
+        assistants: "assistants/getAssistant"
                  }),
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvelle promotion' : 'Modifier promotion'
@@ -202,7 +216,9 @@
     },
 
     created() {
-      this.$store.dispatch("promotionsCRUD/initPromotions");
+      this.$store.dispatch("promotions/initPromotions");
+      this.$store.dispatch("formations/initFormations");
+      this.$store.dispatch("assistants/initAssistants");
     },
 
     methods: {
@@ -219,7 +235,7 @@
       },
 
       deleteItemConfirm () {
-        this.$store.dispatch("promotionsCRUD/removePromotion", this.editedIndex);
+        this.$store.dispatch("promotions/removePromotion", this.editedIndex);
         this.closeDelete()
       },
 
@@ -241,9 +257,9 @@
 
       save () {
         if (this.editedIndex > -1) {
-          this.$store.dispatch("promotionsCRUD/editPromotion", {editedIndex: this.editedIndex, editedItem: this.editedItem});
+          this.$store.dispatch("promotions/editPromotion", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         } else {
-          this.$store.dispatch("promotionsCRUD/addPromotion", this.editedItem);
+          this.$store.dispatch("promotions/addPromotion", this.editedItem);
         }
         this.close()
       },

@@ -9,6 +9,7 @@ import AdminUe from '@/views/admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 import AdminEleve from '@/views/admin/Eleves.vue'
+import AdminPromotion from '@/views/admin/Promotions.vue'
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,12 @@ const routes = [
     path: '/admin/eleve',
     name: 'AdminEleve',
     component: AdminEleve,
+    meta: { admin: true },
+  },
+  {
+    path: '/admin/promotion',
+    name: 'AdminPromotion',
+    component: AdminPromotion,
     meta: { admin: true },
   },
   {

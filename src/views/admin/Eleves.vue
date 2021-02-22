@@ -96,7 +96,7 @@
                         <v-select
                                 v-model="editedItem.promotion_id"
                                 :items="promotions"
-                                item-text="name"
+                                item-text="nomPromotion"
                                 item-value="id"
                                 label="Promotion"
                         ></v-select>
@@ -139,8 +139,8 @@
           <v-select
                   v-model="search"
                   :items="promotions"
-                  item-text="name"
-                  item-value="name"
+                  item-text="nomPromotion"
+                  item-value="nomPromotion"
                   label="Promotion"
                   clearable
           ></v-select>
@@ -220,14 +220,14 @@
         adresse: 'test',
         promotion: 'test',
       },
-      promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick"}
+      promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick", link: { name: "AdminPromotion" }}
     }),
 
 
     computed: {
       ...mapGetters({
                    eleves: "eleves/getElevesByPromotionForDisplaying",
-                   promotions: "promotionsCRUD/getPromotions",
+                   promotions: "promotions/getPromotions",
                  }),
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvel élève' : 'Modifier élève'
@@ -236,7 +236,7 @@
 
     created() {
       this.$store.dispatch("eleves/initEleves");
-      this.$store.dispatch("promotionsCRUD/initPromotions");
+      this.$store.dispatch("promotions/initPromotions");
     },
 
     methods: {
@@ -275,9 +275,10 @@
 
       save () {
         if (this.editedIndex > -1) {
+          this.editedItem.promotion = this.promotions.find(promo => promo.id == this.editedItem.promotion_id).nomPromotion
           this.$store.dispatch("eleves/editEleve", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         } else {
-          this.editedItem.promotion = this.promotions.find(promo => promo.id == this.editedItem.promotion_id).name
+          this.editedItem.promotion = this.promotions.find(promo => promo.id == this.editedItem.promotion_id).nomPromotion
           this.$store.dispatch("eleves/addEleve", this.editedItem);
         }
         this.close()
