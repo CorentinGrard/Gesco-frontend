@@ -35,7 +35,7 @@ function sessionToEvent(session) {
 
 export default {
   get(start, end, cb) {
-    return backend.get(`/start/${start}/end/${end}/sessions`)
+    return backend.get(`/etudiants/start/${start}/end/${end}/sessions`)
       .then((response) => {
         let sessions = response.data
         sessions = sessions.map(session => sessionToEvent(session))
