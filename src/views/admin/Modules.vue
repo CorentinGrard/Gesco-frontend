@@ -38,7 +38,7 @@
                       v-model="editedItem.semestre"
                       label="Semestre"
                       :items="semestres"
-                      item-text="name"
+                      item-text="nom"
                       item-value="id"
                       return-object
                     ></v-select>
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SelectPromo from "../../components/SelectPromo";
 export default {
   data: () => ({
@@ -136,7 +136,9 @@ export default {
   computed: {
     ...mapGetters({
       modules: "UeMatieres/getModulesForDisplaying",
-      semestres:[]
+    }),
+    ...mapState({
+      semestres: (state) => state.semestres.semestres,
     }),
     formTitle() {
       return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
@@ -167,7 +169,10 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("UeMatieres/deleteModule", {editedIndex : this.editedIndex, editedId : this.editedItem.id});
+      this.$store.dispatch("UeMatieres/deleteModule", {
+        editedIndex: this.editedIndex,
+        editedId: this.editedItem.id,
+      });
       this.closeDelete();
     },
 
@@ -194,13 +199,17 @@ export default {
           module: this.editedItem,
         });
       } else {
-        this.$store.dispatch("UeMatieres/addUe", this.editedItem);
+        this.$store.dispatch("UeMatieres/addModule", this.editedItem);
       }
       this.close();
     },
     fetchModules: function(selectedPromotion) {
-      if (Number.isInteger(selectedPromotion)) {
-        this.$store.dispatch("UeMatieres/getModuleByPromotion", selectedPromotion);
+      if (Number.isInteger(selectedPromotion) && selectedPromotion != -1) {
+        this.$store.dispatch(
+          "UeMatieres/getModuleByPromotion",
+          selectedPromotion
+        );
+        this.$store.dispatch("semestres/fetch", selectedPromotion);
       }
     },
   },

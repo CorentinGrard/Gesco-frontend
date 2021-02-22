@@ -35,10 +35,10 @@ const actions = {
       commit("setMatieres", matieres);
     });
   },
-  getModuleByPromotion({ commit },selectedPromotion) {
+  getModuleByPromotion({ commit }, selectedPromotion) {
     ApiModules.getByPromotions(selectedPromotion, (modules) => {
-        commit("setModules", modules);
-      });
+      commit("setModules", modules);
+    });
   },
   addMatiere({ commit }, matiere) {
     let matiereApiFormat = {
@@ -79,17 +79,32 @@ const actions = {
     ApiMatieres.deleteMatiere(editedId);
     commit("deleteMatiere", editedIndex);
   },
-  addUe({ commit }, ue) {
-    commit("addUe", ue);
+  addModule({ commit }, module ) {
+    let moduleApi = {
+      nom: module.nom,
+      ects: module.ects,
+    };
+    ApiModules.postModule(module.semestre.id, moduleApi, (module_response) => {
+      let newModule = {
+        id: module_response.id,
+        nom: module_response.nom,
+        ects: module_response.ects,
+        semestre: {
+          id: module_response.semestre.id,
+          name: module_response.semestre.name,
+        },
+      };
+      commit("addModule", newModule);
+    });
   },
   editModule({ commit }, { moduleIndex, module }) {
     let moduleApi = {
       id: module.id,
       nom: module.nom,
       ects: module.ects,
-      semestre_id: module.semestre.id
-    }
-    ApiModules.putModule(moduleApi)
+      semestre_id: module.semestre.id,
+    };
+    ApiModules.putModule(moduleApi);
     commit("editModule", { moduleIndex, module });
   },
   deleteModule({ commit }, { editedIndex, editedId }) {
@@ -125,15 +140,15 @@ const mutations = {
   setModules(state, modules) {
     let finalModules = [];
     modules.semestres.forEach(function(item) {
-        let modulesArray = item.modules;
-        let semestreId = item.id;
-        let semestreName = item.nom;
-        modulesArray.forEach(function(item) {
-            finalModules.push({
-            id: item.id,
-            nom: item.nom,
-            semestre: { id: semestreId, name: semestreName },
-            ects: item.ects,
+      let modulesArray = item.modules;
+      let semestreId = item.id;
+      let semestreName = item.nom;
+      modulesArray.forEach(function(item) {
+        finalModules.push({
+          id: item.id,
+          nom: item.nom,
+          semestre: { id: semestreId, name: semestreName },
+          ects: item.ects,
         });
       });
     });
@@ -148,8 +163,8 @@ const mutations = {
   deleteMatiere(state, matiereIndex) {
     state.dataMatiere.splice(matiereIndex, 1);
   },
-  addUe(state, ue) {
-    state.dataModule.push(ue);
+  addModule(state, module) {
+    state.dataModule.push(module);
   },
   editModule(state, { moduleIndex, module }) {
     Object.assign(state.dataModule[moduleIndex], module);
