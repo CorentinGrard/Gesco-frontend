@@ -61,6 +61,7 @@ const actions = {
           nombreHeuresAPlacer: matiere_response.nombreHeuresAPlacer,
           intervenant: "M.Robot",
         };
+        newMatiere.module.name = matiere.module.nom;
         commit("addMatiere", newMatiere);
       }
     );
@@ -72,6 +73,7 @@ const actions = {
       nombreHeuresAPlacer: matiere.nombreHeuresAPlacer,
       module_id: matiere.module.id,
     };
+    matiere.module.name = matiere.module.nom;
     ApiMatieres.putMatiere(matiere.id, matiereApi);
     commit("editMatiere", { matiereIndex, matiere });
   },
@@ -79,7 +81,7 @@ const actions = {
     ApiMatieres.deleteMatiere(editedId);
     commit("deleteMatiere", editedIndex);
   },
-  addModule({ commit }, module ) {
+  addModule({ commit }, module) {
     let moduleApi = {
       nom: module.nom,
       ects: module.ects,
@@ -94,6 +96,7 @@ const actions = {
           name: module_response.semestre.name,
         },
       };
+      newModule.semestre.name = module.semestre.nom;
       commit("addModule", newModule);
     });
   },
@@ -105,6 +108,7 @@ const actions = {
       semestre_id: module.semestre.id,
     };
     ApiModules.putModule(moduleApi);
+    module.semestre.name = module.semestre.nom;
     commit("editModule", { moduleIndex, module });
   },
   deleteModule({ commit }, { editedIndex, editedId }) {
