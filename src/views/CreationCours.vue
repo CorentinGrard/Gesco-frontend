@@ -46,13 +46,32 @@
           </v-expansion-panel>
         </v-expansion-panels>
         <SelectSalle />
-        <v-textarea solo name="details" label="Details"></v-textarea>
+        <v-textarea
+          :value="details"
+          @input="updateDetails"
+          solo
+          name="details"
+          label="Details"
+        ></v-textarea>
         <v-text-field
+          :value="duree"
+          @input="updateDuree"
           label="Durée"
-          value="02:00"
           type="time"
           suffix="hh:mm"
         ></v-text-field>
+        <v-select
+          :value="type"
+          @input="updateType"
+          :items="types"
+          label="Type"
+          outlined
+        ></v-select>
+        <v-switch
+          :input-value="obligatoire"
+          @change="updateObligatoire"
+          :label="`Obligatoire: ${obligatoire ? 'Oui' : 'Non'}`"
+        ></v-switch>
       </v-col>
       <v-col>
         <Planning />
@@ -67,7 +86,9 @@ import Planning from "@/components/Planning";
 import SelectSalle from "@/components/SelectSalle";
 
 export default {
-  data: () => ({}),
+  data: () => ({
+    types: ["cours", "conference", "tp", "td", "examen", "autre"],
+  }),
   components: {
     Planning,
     SelectSalle,
@@ -78,6 +99,10 @@ export default {
     }),
     ...mapState({
       selectedPromotion: (state) => state.promotions.selectedPromotion,
+      obligatoire: (state) => state.planning.obligatoire,
+      type: (state) => state.planning.type,
+      duree: (state) => state.planning.duree,
+      details: (state) => state.planning.details,
     }),
   },
   watch: {
@@ -86,6 +111,18 @@ export default {
     },
   },
   methods: {
+    updateObligatoire(obligatoire) {
+      this.$store.commit("planning/SET_OBLIGATOIRE", obligatoire);
+    },
+    updateType(type) {
+      this.$store.commit("planning/SET_TYPE", type);
+    },
+    updateDuree(duree) {
+      this.$store.commit("planning/SET_DUREE", duree);
+    },
+    updateDetails(details) {
+      this.$store.commit("planning/SET_DETAILS", details);
+    },
     pickColor: (nombreHeuresPlace, nombreHeuresTotal) => {
       let pourcentageNbHeures = nombreHeuresPlace / nombreHeuresTotal;
       if (pourcentageNbHeures == 0) {

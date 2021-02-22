@@ -4,6 +4,10 @@ import APIsessions from "@/api/sessions";
 const state = () => ({
   sessions: [],
   selectedSession: { matiere: {} },
+  details: "",
+  obligatoire: true,
+  duree: "02:00",
+  type: ""
 });
 
 // getters
@@ -22,6 +26,10 @@ const getters = {
     let temp = state.sessions.find((session) => session.id === id);
     return temp;
   },
+  getDuree: (state) => {
+    const [heures, minutes] = state.duree.split(":");
+    return (parseInt(heures) * 60 + parseInt(minutes)) * 60 * 1000;
+  }
 };
 
 // actions
@@ -107,6 +115,18 @@ const mutations = {
       }
     });
     state.selectedSession = newObj;
+  },
+  SET_OBLIGATOIRE(state, obligatoire) {
+    state.obligatoire = obligatoire
+  },
+  SET_TYPE(state, type) {
+    state.type = type
+  },
+  SET_DUREE(state, duree) {
+    state.duree = duree
+  },
+  SET_DETAILS(state, details) {
+    state.details = details
   },
   DELETE_SESSION(state, session) {
     const i = state.sessions.findIndex(mySession => mySession.id === session.id);

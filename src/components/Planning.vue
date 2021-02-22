@@ -19,18 +19,18 @@
           <v-menu bottom right>
             <template v-slot:activator="{ on, attrs }">
               <v-btn outlined v-bind="attrs" v-on="on">
-                <span>{{ typeToLabel[type] }}</span>
+                <span>{{ typeToLabel[typeCalendar] }}</span>
                 <v-icon right> mdi-menu-down </v-icon>
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="type = 'day'">
+              <v-list-item @click="typeCalendar = 'day'">
                 <v-list-item-title>Jour</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'week'">
+              <v-list-item @click="typeCalendar = 'week'">
                 <v-list-item-title>Semaine</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'month'">
+              <v-list-item @click="typeCalendar = 'month'">
                 <v-list-item-title>Mois</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -44,7 +44,7 @@
           v-model="focus"
           color="primary"
           :events="events"
-          :type="type"
+          :type="typeCalendar"
           :first-interval="7"
           :interval-minutes="60"
           :interval-count="13"
@@ -63,6 +63,7 @@
             <div class="v-event-draggable">
               <h3>{{ event.matiere.nom }}</h3>
               <div>Description : {{ event.detail }}</div>
+              <div>Type : {{ event.type }}</div>
               <div>
                 Salles :
                 <ul>
@@ -109,6 +110,7 @@
             <v-card-text>
               <span>{{ selectedSession.detail }}</span>
             </v-card-text>
+          <v-card-text>Type : {{ selectedSession.type }}</v-card-text>
             <v-card-text>
               Salles : [
               <span
@@ -147,7 +149,7 @@ export default {
     editFormOpen: false,
     focus: "",
     weekdays: [1, 2, 3, 4, 5],
-    type: "week",
+    typeCalendar: "week",
     typeToLabel: {
       month: "Mois",
       week: "Semaine",
@@ -168,11 +170,15 @@ export default {
       events: "planning/getEventsForPlanning",
       getSessionById: "planning/getSessionById",
       isEtudiant: "user/isEtudiant",
+      duree: "planning/getDuree",
     }),
     ...mapState({
       selectedSession: (state) => state.planning.selectedSession,
       selectedPromotion: (state) => state.promotions.selectedPromotion,
       selectedMatiere: (state) => state.matieres.selectedMatiere,
+      details: (state) => state.planning.details,
+      obligatoire: (state) => state.planning.obligatoire,
+      type: (state) => state.planning.type,
     }),
   },
   watch: {
@@ -248,11 +254,11 @@ export default {
             this.createStart = this.roundTime(mouse);
             this.createEvent = {
               matiere: this.selectedMatiere,
-              detail: "TODO",
-              type: "TD",
-              obligatoire: true,
+              detail: this.details,
+              type: this.type,
+              obligatoire: this.obligatoire,
               dateDebut: new Date(this.createStart),
-              dateFin: new Date(this.createStart),
+              dateFin: new Date(this.createStart + this.duree),
             };
             this.$store.dispatch("planning/addSession", this.createEvent);
           } else {
