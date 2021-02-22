@@ -10,15 +10,8 @@ const state = () => ({
 const getters = {
   getEventsForPlanning: (state) => {
     return state.sessions.map((session) => {
-      let newSession = {};
-      newSession.id = session.id;
-      newSession.matiere = session.matiere;
-      newSession.detail = session.detail;
-      newSession.type = session.type;
-      newSession.obligatoire = session.obligatoire;
-      newSession.dateDebut = session.dateDebut;
-      newSession.dateFin = session.dateFin;
-      newSession.name = session.matiere.nom;
+      let newSession = JSON.parse(JSON.stringify(session))
+      // newSession.name = session.matiere.nom;
       newSession.start = session.dateDebut;
       newSession.end = session.dateFin;
       newSession.timed = true;
@@ -33,16 +26,29 @@ const getters = {
 
 // actions
 const actions = {
-  getAllSessions({ commit }) {
-    APIsessions.getSessions((sessions) => {
+  fetchSessionsByIdPromotion({ commit }, { id, start, end }) {
+    APIsessions.getSessionsByIdPromotion(id, start, end, (sessions) => {
       sessions.forEach(session => {
         session.dateDebut = new Date(session.dateDebut)
         session.dateFin = new Date(session.dateFin)
-        session.detail = "TODO"
       });
-      commit("setSessions", sessions);
+      commit("ADD_SESSIONS", sessions);
     });
   },
+  fetchSessions({ commit }, { start, end }) {
+    APIsessions.getSessions(start, end, (sessions) => {
+      sessions.forEach(session => {
+        session.dateDebut = new Date(session.dateDebut)
+        session.dateFin = new Date(session.dateFin)
+      });
+      commit("ADD_SESSIONS", sessions);
+    });
+  },
+
+  clearSessions({ commit }) {
+    commit("CLEAR_SESSIONS")
+  },
+
   updateSessionBySelectedSession({ commit }) {
     commit("updateSessionBySelectedSession");
     //TODO Appel api
@@ -66,6 +72,17 @@ const actions = {
 
 // mutations
 const mutations = {
+  ADD_SESSIONS(state, sessions) {
+    sessions.forEach(session => {
+      const sessionAlreadyExist = state.sessions.some(stateSession => stateSession.id == session.id)
+      if (!sessionAlreadyExist) {
+        state.sessions.push(session)
+      }
+    })
+  },
+  CLEAR_SESSIONS(state) {
+    state.sessions = []
+  },
   setSessions(state, sessions) {
     state.sessions = sessions;
   },

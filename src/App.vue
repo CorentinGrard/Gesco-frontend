@@ -25,17 +25,17 @@
       <v-list nav dense>
         <v-list-item-group>
           <v-list-item
-            v-for="item in itemsByRoles"
-            :key="item.title"
+            v-for="page in pagesByRoles"
+            :key="page.title"
             link
-            :to="item.link"
+            :to="page.link"
           >
             <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon>{{ page.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title>{{ page.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -86,7 +86,7 @@ export default {
   name: "App",
 
   data: () => ({
-    items: [
+    pages: [
       {
         title: "Planning",
         icon: "mdi-calendar-check",
@@ -138,16 +138,16 @@ export default {
       snackbarColor: (state) => state.snackbar.color,
       profile: (state) => state.user.profile,
     }),
-    itemsByRoles() {
-      let itemsByRoles = [];
+    pagesByRoles() {
+      let pagesByRoles = [];
       roles.forEach((role) => {
         if (this.$store.getters[role.getter]) {
-          itemsByRoles.push(this.items.filter((item) => item.meta[role.name]));
+          pagesByRoles.push(this.pages.filter((page) => page.meta[role.name]));
         }
       });
-      itemsByRoles = itemsByRoles.flat()
-      itemsByRoles = [...new Set([...itemsByRoles])];
-      return itemsByRoles;
+      pagesByRoles = pagesByRoles.flat();
+      pagesByRoles = [...new Set([...pagesByRoles])];
+      return pagesByRoles;
     },
   },
   watch: {
