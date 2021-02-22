@@ -9,6 +9,7 @@ import Admin from '@/views/Admin.vue'
 import AdminMatieres from '@/views/admin/Matieres.vue'
 import AdminModule from '@/views/admin/Modules.vue'
 import AdminFormations from '@/views/admin/Formations.vue'
+import AdminSemestres from '@/views/admin/Semestres.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 
@@ -54,6 +55,12 @@ const routes = [
     path: '/admin/formations',
     name: 'AdminFormations',
     component: AdminFormations,
+    meta: { admin: true },
+  },
+  {
+    path: '/admin/semestres',
+    name: 'AdminSemestres',
+    component: AdminSemestres,
     meta: { admin: true },
   },
   {
