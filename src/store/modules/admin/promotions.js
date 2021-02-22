@@ -37,7 +37,6 @@ const actions = {
     APIPromotions.post_Promotion(
         promotionAPIformat,
         promotion_response => {
-          console.log(promotion_response)
           commit("addPromotion", promotion_response)
         }
     )
@@ -66,7 +65,6 @@ const actions = {
           editedItem.nomPromotion = promotion_response.nomPromotion
           editedItem.assistant = promotion_response.assistant.Personne.nom + " " + promotion_response.assistant.Personne.prenom
           editedItem.formation = promotion_response.formation.nom
-          console.log(editedItem)
           commit('editPromotion', {editedIndex, editedItem})
         }
     )
@@ -111,6 +109,7 @@ const mutations = {
     })
   },
   addPromotion(state, {promotion_response}) {
+    console.log(promotion_response)
     let new_promotion = {
       id: promotion_response.id,
       nom: promotion_response.nom,
