@@ -4,6 +4,7 @@ import planning from './modules/planning'
 import promotions from './modules/admin/promotions'
 import notes from './modules/notes'
 import formations from './modules/admin/formations'
+import semestres from './modules/admin/semestres'
 import responsables from './modules/admin/responsables'
 import matieres from './modules/matieres'
 import UeMatieres from './modules/UeMatieres'
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     user,
     matieres,
     UeMatieres,
+    semestres,
     eleves,
     assistants
   },
