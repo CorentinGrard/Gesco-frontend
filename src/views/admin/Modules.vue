@@ -144,9 +144,6 @@ export default {
       return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
     },
   },
-  created() {
-    //this.$store.dispatch("UeMatieres/getModuleByPromotion");
-  },
   watch: {
     dialog(val) {
       val || this.close();

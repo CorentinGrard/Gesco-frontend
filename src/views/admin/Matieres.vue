@@ -159,9 +159,6 @@ export default {
       return this.editedIndex === -1 ? "Nouvelle matière" : "Edition matière";
     },
   },
-  created() {
-    this.$store.dispatch("UeMatieres/getAllUe");
-  },
   watch: {
     dialog(val) {
       val || this.close();
@@ -216,7 +213,7 @@ export default {
       this.close();
     },
     fetchMatieres: function(selectedPromotion) {
-      if (Number.isInteger(selectedPromotion)) {
+      if (Number.isInteger(selectedPromotion) && selectedPromotion >=0) {
         this.$store.dispatch(
           "UeMatieres/getMatiereByPromotion",
           selectedPromotion
