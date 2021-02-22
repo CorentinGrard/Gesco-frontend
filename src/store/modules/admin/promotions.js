@@ -107,8 +107,7 @@ const mutations = {
       })
     })
   },
-  addPromotion(state, {promotion_response}) {
-    console.log(promotion_response)
+  addPromotion(state, promotion_response) {
     let new_promotion = {
       id: promotion_response.id,
       nom: promotion_response.nom,
@@ -118,7 +117,6 @@ const mutations = {
       formation: promotion_response.formation.nom,
       idFormation: promotion_response.formation.id
     }
-    console.log(new_promotion)
     state.promotions_list.push(new_promotion)
   },
   removePromotion(state, index) {
