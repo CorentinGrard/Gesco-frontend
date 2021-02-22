@@ -38,8 +38,8 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-select
                       v-model="editedItem.module"
-                      label="UE"
-                      :items="ue"
+                      label="Module"
+                      :items="module"
                       item-text="nom"
                       item-value="id"
                       return-object
@@ -153,7 +153,7 @@ export default {
   computed: {
     ...mapGetters({
       matieres: "UeMatieres/getMatieresForDisplaying",
-      ue: "UeMatieres/getUeForDisplaying",
+      module: "UeMatieres/getModulesForDisplaying",
     }),
     formTitle() {
       return this.editedIndex === -1 ? "Nouvelle matière" : "Edition matière";
@@ -219,6 +219,10 @@ export default {
       if (Number.isInteger(selectedPromotion)) {
         this.$store.dispatch(
           "UeMatieres/getMatiereByPromotion",
+          selectedPromotion
+        );
+        this.$store.dispatch(
+          "UeMatieres/getModuleByPromotion",
           selectedPromotion
         );
       }

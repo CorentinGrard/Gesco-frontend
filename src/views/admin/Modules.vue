@@ -34,10 +34,14 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
+                    <v-select
                       v-model="editedItem.semestre"
                       label="Semestre"
-                    ></v-text-field>
+                      :items="semestres"
+                      item-text="name"
+                      item-value="id"
+                      return-object
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
@@ -132,6 +136,7 @@ export default {
   computed: {
     ...mapGetters({
       modules: "UeMatieres/getModulesForDisplaying",
+      semestres:[]
     }),
     formTitle() {
       return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
@@ -150,19 +155,19 @@ export default {
   },
   methods: {
     editItem(item) {
-      this.editedIndex = this.ue.indexOf(item);
+      this.editedIndex = this.modules.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.ue.indexOf(item);
+      this.editedIndex = this.modules.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("UeMatieres/deleteUe", this.editedIndex);
+      this.$store.dispatch("UeMatieres/deleteModule", {editedIndex : this.editedIndex, editedId : this.editedItem.id});
       this.closeDelete();
     },
 
@@ -184,9 +189,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        this.$store.dispatch("UeMatieres/editUe", {
-          ueIndex: this.editedIndex,
-          ue: this.editedItem,
+        this.$store.dispatch("UeMatieres/editModule", {
+          moduleIndex: this.editedIndex,
+          module: this.editedItem,
         });
       } else {
         this.$store.dispatch("UeMatieres/addUe", this.editedItem);

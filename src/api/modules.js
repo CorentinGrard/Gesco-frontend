@@ -9,13 +9,13 @@ export default {
   },
   putModule(module, cb) {
     backend
-      .put(`/module/${module.id}`)
+      .put(`/module/${module.id}`,JSON.stringify(module))
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },
   deleteModule(moduleId, cb) {
     backend
-      .get(`/modules/${moduleId}`)
+      .delete(`/modules/${moduleId}`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },

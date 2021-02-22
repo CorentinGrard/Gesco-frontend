@@ -14,10 +14,10 @@ const getters = {
   getModulesForDisplaying: (state) => {
     return state.dataModule;
   },
-  getUeAsNameList: (state) => {
+  getModulesAsNameList: (state) => {
     let nameList = [];
-    state.dataUe.forEach((ue) => {
-      nameList.push(ue.name);
+    state.dataModule.forEach((module) => {
+      nameList.push(module.name);
     });
     return nameList;
   },
@@ -82,11 +82,19 @@ const actions = {
   addUe({ commit }, ue) {
     commit("addUe", ue);
   },
-  editUe({ commit }, { ueIndex, ue }) {
-    commit("editUe", { ueIndex, ue });
+  editModule({ commit }, { moduleIndex, module }) {
+    let moduleApi = {
+      id: module.id,
+      nom: module.nom,
+      ects: module.ects,
+      semestre_id: module.semestre.id
+    }
+    ApiModules.putModule(moduleApi)
+    commit("editModule", { moduleIndex, module });
   },
-  deleteUe({ commit }, ue) {
-    commit("deleteUe", ue);
+  deleteModule({ commit }, { editedIndex, editedId }) {
+    ApiModules.deleteModule(editedId);
+    commit("deleteModule", editedIndex);
   },
 };
 
@@ -143,11 +151,11 @@ const mutations = {
   addUe(state, ue) {
     state.dataModule.push(ue);
   },
-  editUe(state, { ueIndex, ue }) {
-    Object.assign(state.dataModule[ueIndex], ue);
+  editModule(state, { moduleIndex, module }) {
+    Object.assign(state.dataModule[moduleIndex], module);
   },
-  deleteUe(state, ueIndex) {
-    state.dataModule.splice(ueIndex, 1);
+  deleteModule(state, moduleIndex) {
+    state.dataModule.splice(moduleIndex, 1);
   },
 };
 
