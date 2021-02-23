@@ -56,6 +56,8 @@
                         <v-text-field
                                 v-model="editedItem.eleve_lastname"
                                 label="Nom"
+                                :rules="rules.required"
+                                required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -66,6 +68,8 @@
                         <v-text-field
                                 v-model="editedItem.eleve_firstname"
                                 label="Prénom"
+                                :rules="rules.required"
+                                required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -76,6 +80,8 @@
                         <v-text-field
                                 v-model="editedItem.numeroTel"
                                 label="Numéro"
+                                :rules="[rules.required, rules.numeroTel]"
+                                required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -86,6 +92,10 @@
                         <v-text-field
                                 v-model="editedItem.adresse"
                                 label="Adresse"
+                                :rules="[rules.required, rules.adresse]"
+                                counter
+                                maxlength="50"
+                                required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -93,13 +103,15 @@
                               sm="6"
                               md="4"
                       >
-                        <v-select
+                        <v-autocomplete
                                 v-model="editedItem.promotion_id"
                                 :items="promotions"
                                 item-text="nomPromotion"
                                 item-value="id"
                                 label="Promotion"
-                        ></v-select>
+                                :rules="rules.promotion"
+                                required
+                        ></v-autocomplete>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -117,6 +129,7 @@
                   <v-btn
                           color="blue darken-1"
                           text
+                          :disabled="!formIsValid"
                           @click="save"
                   >
                     Sauvegarder
@@ -136,14 +149,14 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
-          <v-select
+          <v-autocomplete
                   v-model="search"
                   :items="promotions"
                   item-text="nomPromotion"
                   item-value="nomPromotion"
                   label="Promotion"
                   clearable
-          ></v-select>
+          ></v-autocomplete>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon
@@ -220,6 +233,15 @@
         adresse: 'test',
         promotion: 'test',
       },
+      rules: {
+        required: value => !!value || 'This field is required.',
+        adresse: value => value.length <= 50 || 'Max 50 characters',
+        promotion: [val => val > 0 || 'This field is required'],
+        numeroTel: val => {
+          const pattern = /^(?:(?:(?:\+|00)33\D?(?:\D?\(0\)\D?)?)|0){1}[1-9]{1}(?:\D?\d{2}){4}$/
+          return pattern.test(val) || 'Required phone pattern'
+        },
+      },
       promotionLink : { title: "Ajouter et modifier des promotions", icon: "mdi-arrow-right-thick", link: { name: "AdminPromotion" }}
     }),
 
@@ -232,6 +254,16 @@
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvel élève' : 'Modifier élève'
     },
+      formIsValid () {
+        return (
+                this.editedItem.eleve_firstname.length > 0 &&
+                this.editedItem.eleve_lastname.length > 0 &&
+                this.editedItem.promotion_id > 0 &&
+                this.editedItem.adresse.length > 0 &&
+                this.editedItem.adresse.length <= 50 &&
+                /^(?:(?:(?:\+|00)33\D?(?:\D?\(0\)\D?)?)|0){1}[1-9]{1}(?:\D?\d{2}){4}$/.test(this.editedItem.numeroTel)
+        )
+      },
     },
 
     created() {

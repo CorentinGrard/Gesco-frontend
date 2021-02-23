@@ -55,7 +55,9 @@
                       >
                         <v-text-field
                                 v-model="editedItem.nom"
+                                :rules="rules.nom"
                                 label="Nom"
+                                required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -63,26 +65,30 @@
                               sm="6"
                               md="4"
                       >
-                        <v-select
+                        <v-autocomplete
                                 v-model="editedItem.idFormation"
+                                :rules="rules.formation"
                                 :items="formations"
                                 item-text="name"
                                 item-value="id"
                                 label="Formation"
-                        ></v-select>
+                                required
+                        ></v-autocomplete>
                       </v-col>
                       <v-col
                               cols="12"
                               sm="6"
                               md="4"
                       >
-                        <v-select
+                        <v-autocomplete
                                 v-model="editedItem.idAssistant"
+                                :rules="rules.assistant"
                                 :items="assistants"
                                 item-text="nom_assistant"
                                 item-value="id"
                                 label="Assistant"
-                        ></v-select>
+                                required
+                        ></v-autocomplete>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -100,6 +106,7 @@
                   <v-btn
                           color="blue darken-1"
                           text
+                          :disabled="!formIsValid"
                           @click="save"
                   >
                     Sauvegarder
@@ -119,14 +126,15 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
-          <v-select
+
+          <v-autocomplete
                   v-model="search"
                   :items="formations"
                   item-text="name"
                   item-value="name"
                   label="Formation"
                   clearable
-          ></v-select>
+          ></v-autocomplete>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon
@@ -186,19 +194,24 @@
         id: 'test',
         nom: 'test',
         nomPromotion: 'test',
-        assistant: 'test',
-        idAssistant: 'test',
-        formation: 'test',
-        idFormation: 'test'
+        assistant: '',
+        idAssistant: '',
+        formation: '',
+        idFormation: ''
       },
       defaultItem: {
         id: 'test',
         nom: 'test',
         nomPromotion: 'test',
-        assistant: 'test',
-        idAssistant: 'test',
-        formation: 'test',
-        idFormation: 'test'
+        assistant: '',
+        idAssistant: '',
+        formation: '',
+        idFormation: ''
+      },
+      rules: {
+        nom: [val => (val || '').length > 0 || 'This field is required'],
+        formation: [val => val > 0 || 'This field is required'],
+        assistant: [val => val > 0 || 'This field is required'],
       },
       eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "AdminEleve" }  }
     }),
@@ -212,6 +225,9 @@
                  }),
       formTitle () {
         return this.editedIndex === -1 ? 'Nouvelle promotion' : 'Modifier promotion'
+    },
+    formIsValid () {
+      return this.editedItem.nom.length > 0 && this.editedItem.idAssistant > 0 && this.editedItem.idFormation > 0
     },
     },
 
