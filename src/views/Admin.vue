@@ -49,6 +49,7 @@ export default {
       {
         title: "Gestion des promotions et assignation des élèves",
         icon: "mdi-account-multiple-plus",
+        link: { name: "AdminEleve" },
       },
       { title: "Aller sur Darwin", icon: "mdi-account-group" },
     ],
