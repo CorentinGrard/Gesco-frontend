@@ -119,7 +119,7 @@ export default {
         title: "Admin",
         icon: "mdi-cog",
         link: { name: "Admin" },
-        meta: { admin: true },
+        meta: { admin: true, responsableFormation: true },
       },
     ],
   }),
