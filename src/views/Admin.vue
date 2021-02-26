@@ -37,6 +37,11 @@ export default {
         link: { name: "AdminUe" },
       },
       {
+        title: "Création et modification des semestres",
+        icon: "mdi-ballot-outline",
+        link: { name: "AdminSemestres" },
+      },
+      {
         title: "Création et modification d'une formation",
         icon: "mdi-ballot-outline",
         link: { name: "AdminFormations" },
@@ -44,6 +49,7 @@ export default {
       {
         title: "Gestion des promotions et assignation des élèves",
         icon: "mdi-account-multiple-plus",
+        link: { name: "AdminEleve" },
       },
       { title: "Aller sur Darwin", icon: "mdi-account-group" },
     ],

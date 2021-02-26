@@ -8,10 +8,13 @@ import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
 import AdminMatieres from '@/views/admin/Matieres.vue'
 import AdminFormations from '@/views/admin/Formations.vue'
+import AdminSemestres from '@/views/admin/Semestres.vue'
 import AdminUe from '@/views/admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 import GestionDesNotes from '@/views/GestionDesNotes.vue'
+import AdminEleve from '@/views/admin/Eleves.vue'
+import AdminPromotion from '@/views/admin/Promotions.vue'
 
 Vue.use(VueRouter)
 
@@ -58,9 +61,27 @@ const routes = [
     meta: { admin: true },
   },
   {
+    path: '/admin/eleve',
+    name: 'AdminEleve',
+    component: AdminEleve,
+    meta: { admin: true },
+  },
+  {
+    path: '/admin/promotion',
+    name: 'AdminPromotion',
+    component: AdminPromotion,
+    meta: { admin: true },
+  },
+  {
     path: '/admin/formations',
     name: 'AdminFormations',
     component: AdminFormations,
+    meta: { admin: true },
+  },
+  {
+    path: '/admin/semestres',
+    name: 'AdminSemestres',
+    component: AdminSemestres,
     meta: { admin: true },
   },
   {
