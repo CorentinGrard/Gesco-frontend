@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
+import roles from '@/roles'
+
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/Notes.vue'
 import Admin from '@/views/Admin.vue'
-import AdminMatieres from '@/views/Admin/Matieres.vue'
-import AdminUe from '@/views/Admin/Ue.vue'
+import AdminMatieres from '@/views/admin/Matieres.vue'
+import AdminFormations from '@/views/admin/Formations.vue'
+import AdminUe from '@/views/admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
 import GestionDesNotes from '@/views/GestionDesNotes.vue'
@@ -16,13 +20,13 @@ const routes = [
     path: '/planning',
     name: 'Planning',
     component: Planning,
-    meta: { student: true }
+    meta: { etudiant: true, assistantPedagogique: true }
   },
   {
     path: '/notes',
     name: 'Notes',
     component: Notes,
-    meta: { student: true }
+    meta: { etudiant: true }
   }, {
     path: '/creationcours',
     name: 'CreationCours',
@@ -32,7 +36,8 @@ const routes = [
   {
     path: '/ap/notes/',
     name: 'GestionDesNotes',
-    component: GestionDesNotes
+    component: GestionDesNotes,
+    meta: { assistantPedagogique: true, admin: true },
   },
   {
     path: '/admin',
@@ -53,6 +58,12 @@ const routes = [
     meta: { admin: true },
   },
   {
+    path: '/admin/formations',
+    name: 'AdminFormations',
+    component: AdminFormations,
+    meta: { admin: true },
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFoundComponent,
@@ -67,24 +78,21 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.admin)) {
-    if (Vue.$keycloak.hasRealmRole("admin")) {
+  for (const id in roles) {
+    const role = roles[id]
+    if (to.matched.some(record => record.meta[role.name]) && store.getters[role.getter]) {
       next()
-    } else {
-      next("/")
+      return true
     }
   }
 
-
-  if (to.matched.some(record => record.meta.student)) {
-    if (Vue.$keycloak.hasRealmRole("student")) {
-      next()
-    } else {
-      next("/")
-    }
+  if (to.matched.some(record => record.meta && Object.keys(record.meta).length === 0 && record.meta.constructor === Object)) {
+    next()
+    return true
+  } else {
+    next("/")
+    return false
   }
-
-  next()
 })
 
 
