@@ -1,24 +1,22 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="matieres"
+    :items="modules"
     class="elevation-1"
     hide-default-footer
     disable-pagination
   >
     <template v-slot:top>
       <br />
-      <SelectPromo @updateSelectedPromotion="fetchMatieres" />
+      <SelectPromo @updateSelectedPromotion="fetchModules" />
       <v-toolbar flat>
-        <v-toolbar-title>Matières</v-toolbar-title>
+        <v-toolbar-title>Modules</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
-
         <v-spacer></v-spacer>
-
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              Nouvelle matière
+              Nouveau module
             </v-btn>
           </template>
           <v-card>
@@ -37,9 +35,9 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-select
-                      v-model="editedItem.module"
-                      label="Module"
-                      :items="module"
+                      v-model="editedItem.semestre"
+                      label="Semestre"
+                      :items="semestres"
                       item-text="nom"
                       item-value="id"
                       return-object
@@ -47,22 +45,11 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.coefficient"
-                      label="Coefficient"
+                      v-model="editedItem.ects"
+                      label="ECTS"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.intervenant"
-                      label="Intervenant"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.nombreHeuresAPlacer"
-                      label="Nombre d'heures de cours"
-                    ></v-text-field>
-                  </v-col>
+                  <v-col cols="12" sm="6" md="4"> </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -81,7 +68,7 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="headline"
-              >Etes vous sur de vouloir supprimer cette matière ?</v-card-title
+              >Etes vous sur de vouloir supprimer ce module ?</v-card-title
             >
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -114,7 +101,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SelectPromo from "../../components/SelectPromo";
 export default {
   data: () => ({
@@ -122,29 +109,25 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: "Nom matière",
+        text: "Nom module",
         align: "start",
         sortable: false,
         value: "nom",
       },
-      { text: "Module", value: "module.name" },
-      { text: "Coefficient", value: "coefficient" },
-      { text: "Intervenant", value: "intervenant" },
-      { text: "Nombre heure de cours", value: "nombreHeuresAPlacer" },
+      { text: "Semestre", value: "semestre.name" },
+      { text: "ECTS", value: "ects" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     editedIndex: -1,
     editedItem: {
-      name: "",
-      module: "",
-      coefficient: 1,
-      intervenant: "",
+      nom: "",
+      semestre: "",
+      ects: 0,
     },
     defaultItem: {
-      name: "",
-      module: "",
-      coefficient: 1,
-      intervenant: "",
+      nom: "",
+      semestre: "",
+      ects: 0,
     },
   }),
   components: {
@@ -152,11 +135,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      matieres: "UeMatieres/getMatieresForDisplaying",
-      module: "UeMatieres/getModulesForDisplaying",
+      modules: "UeMatieres/getModulesForDisplaying",
+    }),
+    ...mapState({
+      semestres: (state) => state.semestres.semestres,
     }),
     formTitle() {
-      return this.editedIndex === -1 ? "Nouvelle matière" : "Edition matière";
+      return this.editedIndex === -1 ? "Nouveau module" : "Edition module";
     },
   },
   watch: {
@@ -169,19 +154,22 @@ export default {
   },
   methods: {
     editItem(item) {
-      this.editedIndex = this.matieres.indexOf(item);
+      this.editedIndex = this.modules.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.matieres.indexOf(item);
+      this.editedIndex = this.modules.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.$store.dispatch("UeMatieres/deleteMatiere", {editedId : this.editedItem.id, editedIndex: this.editedIndex});
+      this.$store.dispatch("UeMatieres/deleteModule", {
+        editedIndex: this.editedIndex,
+        editedId: this.editedItem.id,
+      });
       this.closeDelete();
     },
 
@@ -203,25 +191,22 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        this.$store.dispatch("UeMatieres/editMatiere", {
-          matiereIndex: this.editedIndex,
-          matiere: this.editedItem,
+        this.$store.dispatch("UeMatieres/editModule", {
+          moduleIndex: this.editedIndex,
+          module: this.editedItem,
         });
       } else {
-        this.$store.dispatch("UeMatieres/addMatiere", this.editedItem);
+        this.$store.dispatch("UeMatieres/addModule", this.editedItem);
       }
       this.close();
     },
-    fetchMatieres: function(selectedPromotion) {
-      if (Number.isInteger(selectedPromotion) && selectedPromotion >=0) {
-        this.$store.dispatch(
-          "UeMatieres/getMatiereByPromotion",
-          selectedPromotion
-        );
+    fetchModules: function(selectedPromotion) {
+      if (Number.isInteger(selectedPromotion) && selectedPromotion != -1) {
         this.$store.dispatch(
           "UeMatieres/getModuleByPromotion",
           selectedPromotion
         );
+        this.$store.dispatch("semestres/fetch", selectedPromotion);
       }
     },
   },
