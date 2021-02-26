@@ -3,7 +3,7 @@ import APIMatieres from '../../api/matieres'
 // initial state
 const state = () => ({
   matieres: [],
-  selectedMatiere: {}
+  selectedMatiere: null
 })
 
 const getters = {
@@ -27,6 +27,9 @@ const actions = {
     APIMatieres.getByPromotions(selectedPromotion, matieres => {
       commit('SET_MATIERES', matieres)
     })
+  },
+  setSelectedMatiere({commit}, matiere){
+    commit("SET_SELECTED_MATIERE", matiere)
   }
 }
 
@@ -35,6 +38,9 @@ const mutations = {
   SET_MATIERES(state, matieres) {
     state.matieres = matieres
   },
+  SET_SELECTED_MATIERE(state, matiere){
+    state.selectedMatiere = matiere
+  }
 }
 
 export default {

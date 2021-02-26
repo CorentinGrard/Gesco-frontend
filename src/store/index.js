@@ -12,6 +12,7 @@ import snackbar from './modules/snackbar'
 import user from './modules/user'
 import eleves from './modules/admin/eleves'
 import assistants from "./modules/admin/assistants";
+import salles from './modules/salles'
 
 Vue.use(Vuex)
 
@@ -30,7 +31,8 @@ export default new Vuex.Store({
     UeMatieres,
     semestres,
     eleves,
-    assistants
+    assistants,
+    salles,
   },
   strict: debug,
 })
