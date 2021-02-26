@@ -24,7 +24,12 @@ const getters = {
   },
   getSessionById: (state) => (id) => {
     let temp = state.sessions.find((session) => session.id === id);
-    return temp;
+    let newSession = JSON.parse(JSON.stringify(temp))
+    newSession.dateDebut = new Date(newSession.dateDebut)
+    newSession.dateFin = new Date(newSession.dateFin)
+    newSession.start = new Date(newSession.start).getTime()
+    newSession.end = new Date(newSession.end).getTime()
+    return newSession;
   },
   getDuree: (state) => {
     const [heures, minutes] = state.duree.split(":");

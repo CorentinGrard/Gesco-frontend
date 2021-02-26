@@ -20,7 +20,7 @@ const routes = [
     path: '/planning',
     name: 'Planning',
     component: Planning,
-    meta: { etudiant: true, assistantPedagogique: true }
+    meta: { etudiant: true, assistantPedagogique: true, admin: true }
   },
   {
     path: '/notes',

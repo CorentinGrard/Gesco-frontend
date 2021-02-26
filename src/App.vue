@@ -91,7 +91,7 @@ export default {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
-        meta: { etudiant: true, assistantPedagogique: true },
+        meta: { etudiant: true, assistantPedagogique: true, admin: true },
       },
       {
         title: "Notes",

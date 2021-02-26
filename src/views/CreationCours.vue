@@ -63,7 +63,7 @@
         <v-select
           :value="type"
           @input="updateType"
-          :items="types"
+          :items="typeSession"
           label="Type"
           outlined
         ></v-select>
@@ -84,10 +84,11 @@
 import { mapGetters, mapState } from "vuex";
 import Planning from "@/components/Planning";
 import SelectSalle from "@/components/SelectSalle";
+import typesSession from "@/typesSession"
 
 export default {
   data: () => ({
-    types: ["cours", "conference", "tp", "td", "examen", "autre"],
+    typeSession: typesSession
   }),
   components: {
     Planning,

@@ -66,13 +66,10 @@
               <div>Type : {{ event.type }}</div>
               <div>
                 Salles :
-                <ul>
-                  <li v-for="salle in event.sessionSalle" :key="salle.id">
-                    {{ salle.nomSalle }}
-                  </li>
-                </ul>
+                <span v-for="salle in event.sessionSalle" :key="salle.id">
+                  {{ salle.nomSalle }} ,
+                </span>
               </div>
-              <div>Intervenants :</div>
               <div>
                 {{ event.dateDebut.getHours() }}:{{
                   event.dateDebut.getMinutes()
@@ -108,18 +105,32 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span>{{ selectedSession.detail }}</span>
+              <span>Description : {{ selectedSession.detail }}</span>
             </v-card-text>
-          <v-card-text>Type : {{ selectedSession.type }}</v-card-text>
+            <v-card-text>Type : {{ selectedSession.type }}</v-card-text>
             <v-card-text>
-              Salles : [
-              <span
-                v-for="salle in selectedSession.sessionSalle"
-                :key="salle.id"
-                >{{ salle.nomSalle }};
-              </span>
-              ]
+              Salles :
+              <ul>
+                <li
+                  v-for="salle in selectedSession.sessionSalle"
+                  :key="salle.id"
+                >
+                  {{ salle.nomSalle }}
+                </li>
+              </ul>
             </v-card-text>
+            <!-- <v-card-text>
+              Horaires : {{ selectedSession.dateDebut.getHours() }}:{{
+                selectedSession.dateDebut.getMinutes()
+              }}
+              - {{ selectedSession.dateFin.getHours() }}:{{
+                selectedSession.dateFin.getMinutes()
+              }}
+            </v-card-text> -->
+            <v-card-text v-if="selectedSession.obligatoire">
+              Obligatoire
+            </v-card-text>
+            <v-card-text v-else> Non obligatoire </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
                 Fermer
@@ -235,43 +246,45 @@ export default {
       nativeEvent.stopPropagation();
     },
     startDrag({ event, timed }) {
-      if (event && timed) {
+      if (!this.isEtudiant && event && timed) {
         this.dragEvent = event;
         this.dragTime = null;
         this.extendOriginal = null;
       }
     },
     startTime(tms) {
-      const mouse = this.toTime(tms);
+      if (!this.isEtudiant) {
+        const mouse = this.toTime(tms);
 
-      if (this.dragEvent && this.dragTime === null) {
-        const start = this.dragEvent.start;
+        if (this.dragEvent && this.dragTime === null) {
+          const start = this.dragEvent.start;
 
-        this.dragTime = mouse - start;
-      } else {
-        if (this.selectedPromotion !== null) {
-          if (this.selectedMatiere !== null) {
-            this.createStart = this.roundTime(mouse);
-            this.createEvent = {
-              matiere: this.selectedMatiere,
-              detail: this.details,
-              type: this.type,
-              obligatoire: this.obligatoire,
-              dateDebut: new Date(this.createStart),
-              dateFin: new Date(this.createStart + this.duree),
-            };
-            this.$store.dispatch("planning/addSession", this.createEvent);
+          this.dragTime = mouse - start;
+        } else {
+          if (this.selectedPromotion !== null) {
+            if (this.selectedMatiere !== null) {
+              this.createStart = this.roundTime(mouse);
+              this.createEvent = {
+                matiere: this.selectedMatiere,
+                detail: this.details,
+                type: this.type,
+                obligatoire: this.obligatoire,
+                dateDebut: new Date(this.createStart),
+                dateFin: new Date(this.createStart + this.duree),
+              };
+              this.$store.dispatch("planning/addSession", this.createEvent);
+            } else {
+              this.$store.dispatch("snackbar/error", {
+                text:
+                  "Erreur : Selectionner une matière pour pouvoir créer un cours",
+              });
+            }
           } else {
             this.$store.dispatch("snackbar/error", {
               text:
-                "Erreur : Selectionner une matière pour pouvoir créer un cours",
+                "Erreur : Selectionner une promotion pour pouvoir créer un cours",
             });
           }
-        } else {
-          this.$store.dispatch("snackbar/error", {
-            text:
-              "Erreur : Selectionner une promotion pour pouvoir créer un cours",
-          });
         }
       }
     },
