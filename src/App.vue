@@ -94,7 +94,7 @@ export default {
       { title: "Notes", icon: "mdi-file-table", link: { name: "Notes" } },
       { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
       { title: "Gestion des absences", icon: "mdi-account-off" },
-      { title: "Gestion des notes", icon: "mdi-file-table" },
+      { title: "Gestion des notes", icon: "mdi-file-table", link :{name: "GestionDesNotes"} },
       { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),

@@ -7,6 +7,7 @@ import AdminMatieres from '@/views/Admin/Matieres.vue'
 import AdminUe from '@/views/Admin/Ue.vue'
 import CreationCours from '@/views/CreationCours.vue'
 import NotFoundComponent from '@/views/404.vue'
+import GestionDesNotes from '@/views/GestionDesNotes.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     name: 'CreationCours',
     component: CreationCours,
     meta: { ad: true },
+  },  
+  {
+    path: '/ap/notes/',
+    name: 'GestionDesNotes',
+    component: GestionDesNotes
   },
   {
     path: '/admin',
@@ -51,11 +57,7 @@ const routes = [
     name: 'NotFound',
     component: NotFoundComponent,
   },
-  {
-    path: '/ap/notes/',
-    name: 'GestionDesNotes',
-    component: GestionDesNotes
-  },
+
 ]
 
 const router = new VueRouter({

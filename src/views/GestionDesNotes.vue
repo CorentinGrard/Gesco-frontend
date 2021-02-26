@@ -34,14 +34,11 @@
 
       <v-stepper-items>
         <v-stepper-content step="1">
-          <ListPromotions
-            @change-promotion="
-              (promotion) => {
-                selectedPromotion = promotion;
-                etape++;
-              }
-            "
-          />
+       <SelectPromo @updateSelectedPromotion="fetchMatieres;" />
+
+        <button @click="etape++">
+          Valider
+        </button>
         </v-stepper-content>
         <v-stepper-content step="2">
           <ListSemestres
@@ -107,7 +104,7 @@
 </template>
 
 <script>
-import ListPromotions from "../components/ListPromotions";
+import SelectPromo from "../components/SelectPromo";
 import ListMatieres from "../components/ListMatieres";
 import ListElevesNotes from "../components/ListElevesNotes";
 import ListSemestres from "../components/ListSemestres";
@@ -120,7 +117,7 @@ export default {
     selectedMatiere: {},
   }),
   components: {
-    ListPromotions,
+    SelectPromo,
     ListMatieres,
     ListElevesNotes,
     ListSemestres,
