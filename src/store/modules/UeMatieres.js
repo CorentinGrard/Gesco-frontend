@@ -74,12 +74,14 @@ const actions = {
       module_id: matiere.module.id,
     };
     matiere.module.name = matiere.module.nom;
-    ApiMatieres.putMatiere(matiere.id, matiereApi);
-    commit("editMatiere", { matiereIndex, matiere });
+    ApiMatieres.putMatiere(matiere.id, matiereApi, () => {
+      commit("editMatiere", { matiereIndex, matiere });
+    });
   },
   deleteMatiere({ commit }, { editedIndex, editedId }) {
-    ApiMatieres.deleteMatiere(editedId);
-    commit("deleteMatiere", editedIndex);
+    ApiMatieres.deleteMatiere(editedId, () => {
+      commit("deleteMatiere", editedIndex);
+    });
   },
   addModule({ commit }, module) {
     let moduleApi = {
@@ -107,13 +109,15 @@ const actions = {
       ects: module.ects,
       semestre_id: module.semestre.id,
     };
-    ApiModules.putModule(moduleApi);
-    module.semestre.name = module.semestre.nom;
-    commit("editModule", { moduleIndex, module });
+    ApiModules.putModule(moduleApi, () => {
+      module.semestre.name = module.semestre.nom;
+      commit("editModule", { moduleIndex, module });
+    });
   },
   deleteModule({ commit }, { editedIndex, editedId }) {
-    ApiModules.deleteModule(editedId);
-    commit("deleteModule", editedIndex);
+    ApiModules.deleteModule(editedId, () => {
+      commit("deleteModule", editedIndex);
+    });
   },
 };
 
