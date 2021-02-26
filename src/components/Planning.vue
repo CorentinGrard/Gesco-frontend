@@ -92,45 +92,47 @@
           offset-x
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar v-if="!isEtudiant" color="grey lighten-4">
-              <v-btn @click="editFormOpen = !editFormOpen" icon>
+            <v-toolbar color="grey lighten-4">
+              <v-btn
+                v-if="!isEtudiant"
+                @click="editFormOpen = !editFormOpen"
+                icon
+              >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title
                 v-html="selectedSession.matiere.nom"
               ></v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon @click="deleteSession()">
+              <v-btn v-if="!isEtudiant" icon @click="deleteSession()">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span>Description : {{ selectedSession.detail }}</span>
+              <div>Description : {{ selectedSession.detail }}</div>
+              <div> Type : {{ selectedSession.type }} </div>
+              <div>
+                Salles :
+                <ul>
+                  <li
+                    v-for="salle in selectedSession.sessionSalle"
+                    :key="salle.id"
+                  >
+                    {{ salle.nomSalle }}
+                  </li>
+                </ul>
+              </div>
+              <div>
+                Horaires : {{ new Date(selectedSession.dateDebut).getHours() }}:{{
+                  new Date(selectedSession.dateDebut).getMinutes()
+                }}
+                - {{ new Date(selectedSession.dateFin).getHours() }}:{{
+                  new Date(selectedSession.dateFin).getMinutes()
+                }}
+              </div>
+              <div v-if="selectedSession.obligatoire"> Obligatoire </div>
+              <div v-else> Non obligatoire </div>
             </v-card-text>
-            <v-card-text>Type : {{ selectedSession.type }}</v-card-text>
-            <v-card-text>
-              Salles :
-              <ul>
-                <li
-                  v-for="salle in selectedSession.sessionSalle"
-                  :key="salle.id"
-                >
-                  {{ salle.nomSalle }}
-                </li>
-              </ul>
-            </v-card-text>
-            <!-- <v-card-text>
-              Horaires : {{ selectedSession.dateDebut.getHours() }}:{{
-                selectedSession.dateDebut.getMinutes()
-              }}
-              - {{ selectedSession.dateFin.getHours() }}:{{
-                selectedSession.dateFin.getMinutes()
-              }}
-            </v-card-text> -->
-            <v-card-text v-if="selectedSession.obligatoire">
-              Obligatoire
-            </v-card-text>
-            <v-card-text v-else> Non obligatoire </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
                 Fermer
@@ -156,6 +158,7 @@ export default {
     SelectPromo,
     EditSessionFormModal,
   },
+  props: ["edition"],
   data: () => ({
     editFormOpen: false,
     focus: "",
@@ -246,14 +249,14 @@ export default {
       nativeEvent.stopPropagation();
     },
     startDrag({ event, timed }) {
-      if (!this.isEtudiant && event && timed) {
+      if (!this.isEtudiant && !this.edition && event && timed) {
         this.dragEvent = event;
         this.dragTime = null;
         this.extendOriginal = null;
       }
     },
     startTime(tms) {
-      if (!this.isEtudiant) {
+      if (!this.isEtudiant && !this.edition) {
         const mouse = this.toTime(tms);
 
         if (this.dragEvent && this.dragTime === null) {
@@ -294,50 +297,58 @@ export default {
       this.extendOriginal = event.end;
     },
     mouseMove(tms) {
-      const mouse = this.toTime(tms);
+      if (!this.isEtudiant && !this.edition) {
+        const mouse = this.toTime(tms);
 
-      if (this.dragEvent && this.dragTime !== null) {
-        const start = this.dragEvent.start;
-        const end = this.dragEvent.end;
-        const duration = end - start;
-        const newStartTime = mouse - this.dragTime;
-        const newStart = this.roundTime(newStartTime);
-        const newEnd = newStart + duration;
+        if (this.dragEvent && this.dragTime !== null) {
+          const start = this.dragEvent.start;
+          const end = this.dragEvent.end;
+          const duration = end - start;
+          const newStartTime = mouse - this.dragTime;
+          const newStart = this.roundTime(newStartTime);
+          const newEnd = newStart + duration;
 
-        this.dragEvent.start = newStart;
-        this.dragEvent.end = newEnd;
-        this.$store.dispatch("planning/updateTimeSession", this.dragEvent);
-      } else if (this.createEvent && this.createStart !== null) {
-        const mouseRounded = this.roundTime(mouse, false);
-        const min = Math.min(mouseRounded, this.createStart);
-        const max = Math.max(mouseRounded, this.createStart);
+          this.dragEvent.start = newStart;
+          this.dragEvent.end = newEnd;
+          this.$store.dispatch("planning/updateTimeSession", this.dragEvent);
+        } else if (this.createEvent && this.createStart !== null) {
+          const mouseRounded = this.roundTime(mouse, false);
+          const min = Math.min(mouseRounded, this.createStart);
+          const max = Math.max(mouseRounded, this.createStart);
 
-        this.createEvent.start = min;
-        this.createEvent.end = max;
-        this.$store.dispatch("planning/updateTimeSession", this.createEvent);
+          this.createEvent.start = min;
+          this.createEvent.end = max;
+          this.$store.dispatch("planning/updateTimeSession", this.createEvent);
+        }
       }
     },
     endDrag() {
-      this.dragTime = null;
-      this.dragEvent = null;
-      this.createEvent = null;
-      this.createStart = null;
-      this.extendOriginal = null;
+      if (!this.isEtudiant && !this.edition) {
+        this.dragTime = null;
+        this.dragEvent = null;
+        this.createEvent = null;
+        this.createStart = null;
+        this.extendOriginal = null;
+      }
     },
     cancelDrag() {
-      if (this.createEvent) {
-        if (this.extendOriginal) {
-          this.createEvent.end = this.extendOriginal;
-          this.$store.dispatch("planning/updateTimeSession", this.createEvent);
-        } else {
-          this.$store.dispatch("planning/deleteSession", this.createEvent);
+      if (!this.isEtudiant && !this.edition) {
+        if (this.createEvent) {
+          if (this.extendOriginal) {
+            this.createEvent.end = this.extendOriginal;
+            this.$store.dispatch(
+              "planning/updateTimeSession",
+              this.createEvent
+            );
+          } else {
+            this.$store.dispatch("planning/deleteSession", this.createEvent);
+          }
         }
+        this.createEvent = null;
+        this.createStart = null;
+        this.dragTime = null;
+        this.dragEvent = null;
       }
-
-      this.createEvent = null;
-      this.createStart = null;
-      this.dragTime = null;
-      this.dragEvent = null;
     },
     roundTime(time, down = true) {
       const roundTo = 15; // minutes

@@ -2,79 +2,57 @@
   <v-container fluid>
     <v-row>
       <v-col cols="3">
-        <v-expansion-panels class="mb-5">
-          <v-expansion-panel
-            v-for="semestre in semestres"
-            :key="semestre.idSemestre"
-          >
-            <v-expansion-panel-header>
-              {{ semestre.nomSemestre }}
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list rounded>
-                <v-list-item-group>
-                  <v-list-item
-                    v-for="matiere in semestre.matieres"
-                    :key="matiere.idMatiere"
-                    @click="selectMatiere(matiere.idMatiere)"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="matiere.nomMatiere"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-chip
-                        class="ma-2"
-                        :color="
-                          pickColor(
-                            matiere.nombreHeuresPlace,
-                            matiere.nombreHeuresTotal
-                          )
-                        "
-                        text-color="white"
-                      >
-                        {{ matiere.nombreHeuresPlace }}/{{
-                          matiere.nombreHeuresTotal
-                        }}h</v-chip
-                      >
-                    </v-list-item-action>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-        <SelectSalle />
-        <v-textarea
-          :value="details"
-          @input="updateDetails"
-          solo
-          name="details"
-          label="Details"
-        ></v-textarea>
-        <v-text-field
-          :value="duree"
-          @input="updateDuree"
-          label="Durée"
-          type="time"
-          suffix="hh:mm"
-        ></v-text-field>
-        <v-select
-          :value="type"
-          @input="updateType"
-          :items="typeSession"
-          label="Type"
-          outlined
-        ></v-select>
-        <v-switch
-          :input-value="obligatoire"
-          @change="updateObligatoire"
-          :label="`Obligatoire: ${obligatoire ? 'Oui' : 'Non'}`"
-        ></v-switch>
+        <span v-if="selectedPromotion">
+          <v-autocomplete
+            :items="semestres"
+            item-text="nomSemestre"
+            label="Selectionnez un semestre"
+            v-model="selectedSemestre"
+            return-object
+            outlined
+          ></v-autocomplete>
+          <v-autocomplete
+            v-if="selectedSemestre"
+            :items="selectedSemestre.matieres"
+            item-text="nomMatiere"
+            item-value="idMatiere"
+            label="Selectionnez une matiere"
+            v-model="selectedMatiere"
+            outlined
+          ></v-autocomplete>
+          <span v-if="selectedMatiere">
+            <SelectSalle />
+            <v-textarea
+              :value="details"
+              @input="updateDetails"
+              solo
+              name="details"
+              label="Details"
+            ></v-textarea>
+            <v-text-field
+              :value="duree"
+              @input="updateDuree"
+              label="Durée"
+              type="time"
+              suffix="hh:mm"
+            ></v-text-field>
+            <v-select
+              :value="type"
+              @input="updateType"
+              :items="typeSession"
+              label="Type"
+              outlined
+            ></v-select>
+            <v-switch
+              :input-value="obligatoire"
+              @change="updateObligatoire"
+              :label="`Obligatoire: ${obligatoire ? 'Oui' : 'Non'}`"
+            ></v-switch>
+          </span>
+        </span>
       </v-col>
       <v-col>
-        <Planning />
+        <Planning :edition="true"/>
       </v-col>
     </v-row>
   </v-container>
@@ -84,11 +62,13 @@
 import { mapGetters, mapState } from "vuex";
 import Planning from "@/components/Planning";
 import SelectSalle from "@/components/SelectSalle";
-import typesSession from "@/typesSession"
+import typesSession from "@/typesSession";
 
 export default {
   data: () => ({
-    typeSession: typesSession
+    typeSession: typesSession,
+    selectedSemestre: null,
+    selectedMatiere: null,
   }),
   components: {
     Planning,
@@ -109,6 +89,10 @@ export default {
   watch: {
     selectedPromotion() {
       this.fetchMatieres();
+    },
+    selectedMatiere(idMatiere) {
+      console.log(idMatiere)
+      this.$store.dispatch("matieres/setSelectedMatiere", idMatiere);
     },
   },
   methods: {
@@ -131,9 +115,6 @@ export default {
       } else if (pourcentageNbHeures == 1) {
         return "green";
       } else return "orange";
-    },
-    selectMatiere: function (matiere) {
-      this.$store.dispatch("matieres/setSelectedMatiere", matiere);
     },
     fetchMatieres: function () {
       if (this.selectedPromotion !== null) {

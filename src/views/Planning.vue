@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <Planning />
+    <Planning edition="false" />
   </v-container>
 </template>
 
