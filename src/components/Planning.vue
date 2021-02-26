@@ -249,14 +249,14 @@ export default {
       nativeEvent.stopPropagation();
     },
     startDrag({ event, timed }) {
-      if (!this.isEtudiant && !this.edition && event && timed) {
+      if (!this.isEtudiant && this.edition==true && event && timed) {
         this.dragEvent = event;
         this.dragTime = null;
         this.extendOriginal = null;
       }
     },
     startTime(tms) {
-      if (!this.isEtudiant && !this.edition) {
+      if (!this.isEtudiant && this.edition==true) {
         const mouse = this.toTime(tms);
 
         if (this.dragEvent && this.dragTime === null) {
@@ -297,7 +297,7 @@ export default {
       this.extendOriginal = event.end;
     },
     mouseMove(tms) {
-      if (!this.isEtudiant && !this.edition) {
+      if (!this.isEtudiant && this.edition==true) {
         const mouse = this.toTime(tms);
 
         if (this.dragEvent && this.dragTime !== null) {
@@ -323,7 +323,7 @@ export default {
       }
     },
     endDrag() {
-      if (!this.isEtudiant && !this.edition) {
+      if (!this.isEtudiant && this.edition==true) {
         this.dragTime = null;
         this.dragEvent = null;
         this.createEvent = null;
@@ -332,7 +332,7 @@ export default {
       }
     },
     cancelDrag() {
-      if (!this.isEtudiant && !this.edition) {
+      if (!this.isEtudiant && this.edition==true) {
         if (this.createEvent) {
           if (this.extendOriginal) {
             this.createEvent.end = this.extendOriginal;
