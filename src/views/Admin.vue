@@ -32,9 +32,14 @@ export default {
         link: { name: "AdminMatieres" },
       },
       {
-        title: "Création et modification des UE",
+        title: "Création et modification des modules",
         icon: "mdi-book-open-variant",
-        link: { name: "AdminUe" },
+        link: { name: "AdminModule" },
+      },
+      {
+        title: "Création et modification des semestres",
+        icon: "mdi-ballot-outline",
+        link: { name: "AdminSemestres" },
       },
       {
         title: "Création et modification d'une formation",
