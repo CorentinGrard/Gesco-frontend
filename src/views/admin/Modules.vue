@@ -20,17 +20,24 @@
             </v-btn>
           </template>
           <v-card>
+            <v-form
+              ref="form"
+              v-model="valid"
+              >
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
 
             <v-card-text>
+              
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.nom"
                       label="Nom"
+                      :rules="[v => !!v || 'Champ obligatoire']"
+                      required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -40,18 +47,23 @@
                       :items="semestres"
                       item-text="nom"
                       item-value="id"
+                      :rules="[v => !!v || 'Champ obligatoire']"
                       return-object
+                      required
                     ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.ects"
                       label="ECTS"
+                      :rules="[v => !!v || 'Champ obligatoire',v => v >= 0 && v <= 999|| 'Nombre seulement',]"
+                      required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4"> </v-col>
                 </v-row>
               </v-container>
+              
             </v-card-text>
 
             <v-card-actions>
@@ -59,10 +71,11 @@
               <v-btn color="blue darken-1" text @click="close">
                 Annuler
               </v-btn>
-              <v-btn color="blue darken-1" text @click="save">
+              <v-btn color="blue darken-1" text @click="save" :disabled="!valid" >
                 Sauvegarder
               </v-btn>
             </v-card-actions>
+            </v-form>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -122,13 +135,13 @@ export default {
     editedItem: {
       nom: "",
       semestre: "",
-      ects: 0,
+      ects: "",
     },
     defaultItem: {
-      nom: "",
-      semestre: "",
-      ects: 0,
+
     },
+    valid: true,
+
   }),
   components: {
     SelectPromo,
@@ -190,6 +203,7 @@ export default {
     },
 
     save() {
+      this.$refs.form.validate()
       if (this.editedIndex > -1) {
         this.$store.dispatch("UeMatieres/editModule", {
           moduleIndex: this.editedIndex,
