@@ -56,7 +56,7 @@
                     <v-text-field
                       v-model="editedItem.ects"
                       label="ECTS"
-                      :rules="[v => !!v || 'Champ obligatoire']"
+                      :rules="[v => !!v || 'Champ obligatoire',v => v >= 0 && v <= 999|| 'Nombre seulement',]"
                       required
                     ></v-text-field>
                   </v-col>

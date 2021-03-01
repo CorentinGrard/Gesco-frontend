@@ -22,6 +22,10 @@
             </v-btn>
           </template>
           <v-card>
+            <v-form
+              ref="form"
+              v-model="valid"
+              >
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
             </v-card-title>
@@ -33,6 +37,8 @@
                     <v-text-field
                       v-model="editedItem.nom"
                       label="Nom"
+                      :rules="[v => !!v || 'Champ obligatoire']"
+                      required
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -42,6 +48,7 @@
                       :items="module"
                       item-text="nom"
                       item-value="id"
+                      :rules="[v => !!v || 'Champ obligatoire']"
                       return-object
                     ></v-select>
                   </v-col>
@@ -49,18 +56,21 @@
                     <v-text-field
                       v-model="editedItem.coefficient"
                       label="Coefficient"
+                      :rules="[v => !!v || 'Champ obligatoire',v => v >= 0 && v <= 999|| 'Nombre seulement',]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.intervenant"
                       label="Intervenant"
+                      :rules="[v => !!v || 'Champ obligatoire']"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.nombreHeuresAPlacer"
                       label="Nombre d'heures de cours"
+                      :rules="[v => !!v || 'Champ obligatoire',v => v >= 0 && v <= 999|| 'Nombre seulement',]"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -72,10 +82,11 @@
               <v-btn color="blue darken-1" text @click="close">
                 Annuler
               </v-btn>
-              <v-btn color="blue darken-1" text @click="save">
+              <v-btn color="blue darken-1" text @click="save" :disabled="!valid">
                 Sauvegarder
               </v-btn>
             </v-card-actions>
+            </v-form>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -137,16 +148,18 @@ export default {
     editedItem: {
       name: "",
       module: "",
-      coefficient: 1,
+      coefficient: "",
       intervenant: "",
     },
     defaultItem: {
       name: "",
       module: "",
-      coefficient: 1,
+      coefficient: "",
       intervenant: "",
     },
   }),
+      valid: true,
+
   components: {
     SelectPromo,
   },
