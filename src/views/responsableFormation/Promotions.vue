@@ -209,9 +209,9 @@
         idFormation: ''
       },
       rules: {
-        nom: [val => (val || '').length > 0 || 'This field is required'],
-        formation: [val => val > 0 || 'This field is required'],
-        assistant: [val => val > 0 || 'This field is required'],
+        nom: [val => (val || '').length > 0 || 'Ce champ est requis'],
+        formation: [val => val > 0 || 'Ce champ est requis'],
+        assistant: [val => val > 0 || 'Ce champ est requis'],
       },
       eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "ResponsableFormationEleve" }  }
     }),
