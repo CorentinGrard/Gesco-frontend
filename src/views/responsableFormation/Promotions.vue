@@ -213,7 +213,7 @@
         formation: [val => val > 0 || 'This field is required'],
         assistant: [val => val > 0 || 'This field is required'],
       },
-      eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "AdminEleve" }  }
+      eleveLink : { title: "Ajouter et modifier des élèves", icon: "mdi-arrow-left-thick", link: { name: "ResponsableFormationEleve" }  }
     }),
 
 
