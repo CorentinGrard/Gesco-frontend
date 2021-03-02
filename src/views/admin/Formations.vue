@@ -199,7 +199,7 @@
       },
 
       deleteItemConfirm () {
-        this.$store.dispatch("formations/removeFormation", this.editedIndex);
+        this.$store.dispatch("formations/removeFormation", {id:this.editedItem.id ,index:this.editedIndex});
         this.closeDelete()
       },
 
@@ -221,7 +221,7 @@
 
       save () {
         if (this.editedIndex > -1) {
-          this.$store.dispatch("formations/editFormation", {editedIndex: this.editedIndex, editedItem: this.editedItem});
+          this.$store.dispatch("formations/editFormation", this.editedItem);
         } else {
           this.$store.dispatch("formations/addFormation", this.editedItem);
         }
