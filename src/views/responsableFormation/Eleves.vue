@@ -222,7 +222,7 @@ export default {
     promotionLink: {
       title: "Ajouter et modifier des promotions",
       icon: "mdi-arrow-right-thick",
-      link: { name: "ResponsablePromotion" },
+      link: { name: "ResponsableFormationPromotion" },
     },
   }),
 
