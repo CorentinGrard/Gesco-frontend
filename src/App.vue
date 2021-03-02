@@ -24,6 +24,26 @@
 
       <v-list nav dense>
         <v-list-item-group>
+          <!-- <span v-for="page in pagesByRoles" :key="page.title">
+            <v-list-group v-if="page.subMenu" sub-group>
+              <template v-slot:activator>
+                <v-list-item-title>{{ page.title }}</v-list-item-title>
+              </template>
+              <v-list-item
+                v-for="subPage in page.subMenu"
+                :key="subPage.title"
+                link
+                :to="subPage.link"
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ subPage.icon }}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ subPage.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group> -->
           <v-list-item
             v-for="page in pagesByRoles"
             :key="page.title"
@@ -38,6 +58,7 @@
               <v-list-item-title>{{ page.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <!-- </span> -->
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
@@ -48,7 +69,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title> Logout </v-list-item-title>
+              <v-list-item-title> Déconnection </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -91,7 +112,12 @@ export default {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
-        meta: { etudiant: true, assistantPedagogique: true, admin: true },
+        meta: {
+          etudiant: true,
+          assistantPedagogique: true,
+          admin: true,
+          responsableFormation: true,
+        },
       },
       {
         title: "Notes",
@@ -104,12 +130,67 @@ export default {
         icon: "mdi-cog",
         link: { name: "AssistantPedagogique" },
         meta: { admin: true, assistantPedagogique: true },
+        subMenu: [
+          {
+            title: "Création de cours",
+            icon: "mdi-school",
+            link: { name: "CreationCours" },
+          },
+          {
+            title: "Gestion des absences",
+            icon: "mdi-account-off",
+          },
+          {
+            title: "Gestion des notes",
+            icon: "mdi-file-table",
+          },
+        ],
+      },
+      {
+        title: "Responsable Formation",
+        icon: "mdi-cog",
+        link: { name: "ResponsableFormation" },
+        meta: { admin: true, responsableFormation: true },
+        subMenu: [
+          {
+            title: "Matières",
+            icon: "mdi-book-open-variant",
+            link: { name: "ResponsableFormationMatieres" },
+          },
+          {
+            title: "Modules",
+            icon: "mdi-book-open-variant",
+            link: { name: "ResponsableFormationModule" },
+          },
+          {
+            title: "Semestres",
+            icon: "mdi-ballot-outline",
+            link: { name: "ResponsableFormationSemestres" },
+          },
+          {
+            title: "Elèves",
+            icon: "mdi-account-multiple-plus",
+            link: { name: "ResponsableFormationEleve" },
+          },
+          {
+            title: "Promotions",
+            icon: "mdi-account-multiple-plus",
+            link: { name: "ResponsableFormationPromotion" },
+          },
+        ],
       },
       {
         title: "Admin",
         icon: "mdi-cog",
         link: { name: "Admin" },
-        meta: { admin: true, responsableFormation: true },
+        meta: { admin: true },
+        subMenu: [
+          {
+            title: "Formations",
+            icon: "mdi-ballot-outline",
+            link: { name: "AdminFormations" },
+          },
+        ],
       },
     ],
   }),
@@ -152,3 +233,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.active {
+  color: inherit;
+}
+</style>

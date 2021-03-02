@@ -5,21 +5,28 @@ import roles from '@/roles'
 
 import Planning from '@/views/Planning.vue'
 import Notes from '@/views/etudiant/Notes.vue'
-import Admin from '@/views/Admin.vue'
-import AdminMatieres from '@/views/admin/Matieres.vue'
-import AdminModule from '@/views/admin/Modules.vue'
+import Admin from '@/views/admin/Index.vue'
 import AdminFormations from '@/views/admin/Formations.vue'
-import AdminSemestres from '@/views/admin/Semestres.vue'
 import CreationCours from '@/views/assistantPedagogique/CreationCours.vue'
 import NotFoundComponent from '@/views/error/404.vue'
-import AdminEleve from '@/views/admin/Eleves.vue'
-import AdminPromotion from '@/views/admin/Promotions.vue'
 import Index from '@/views/Index.vue'
-import AssistantPedagogique from '@/views/AssistantPedagogique.vue'
+import AssistantPedagogique from '@/views/assistantPedagogique/Index.vue'
+import ResponsableFormation from '@/views/responsableFormation/Index.vue'
+import ResponsableFormationMatieres from '@/views/responsableFormation/Matieres.vue'
+import ResponsableFormationModule from '@/views/responsableFormation/Modules.vue'
+import ResponsableFormationSemestres from '@/views/responsableFormation/Semestres.vue'
+import ResponsableFormationEleve from '@/views/responsableFormation/Eleves.vue'
+import ResponsableFormationPromotion from '@/views/responsableFormation/Promotions.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    name: 'Index',
+    component: Index,
+    meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
+  },
   {
     path: '/planning',
     name: 'Planning',
@@ -39,39 +46,51 @@ const routes = [
     meta: { assistantPedagogique: true, admin: true },
   },
   {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    meta: { admin: true },
+  },
+  {
+    path: '/responsableFormation',
+    name: 'ResponsableFormation',
+    component: ResponsableFormation,
+    meta: { admin: true, responsableFormation: true },
+  },
+  {
     path: '/assistantPedagogique/creationcours',
     name: 'CreationCours',
     component: CreationCours,
     meta: { assistantPedagogique: true, admin: true },
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin,
+    path: '/responsableFormation/matieres',
+    name: 'ResponsableFormationMatieres',
+    component: ResponsableFormationMatieres,
     meta: { admin: true, responsableFormation: true },
   },
   {
-    path: '/admin/matieres',
-    name: 'AdminMatieres',
-    component: AdminMatieres,
+    path: '/responsableFormation/modules',
+    name: 'ResponsableFormationModule',
+    component: ResponsableFormationModule,
     meta: { admin: true, responsableFormation: true },
   },
   {
-    path: '/admin/modules',
-    name: 'AdminModule',
-    component: AdminModule,
+    path: '/responsableFormation/eleve',
+    name: 'ResponsableFormationEleve',
+    component: ResponsableFormationEleve,
     meta: { admin: true, responsableFormation: true },
   },
   {
-    path: '/admin/eleve',
-    name: 'AdminEleve',
-    component: AdminEleve,
+    path: '/responsableFormation/promotion',
+    name: 'ResponsableFormationPromotion',
+    component: ResponsableFormationPromotion,
     meta: { admin: true, responsableFormation: true },
   },
   {
-    path: '/admin/promotion',
-    name: 'AdminPromotion',
-    component: AdminPromotion,
+    path: '/responsableFormation/semestres',
+    name: 'ResponsableFormationSemestres',
+    component: ResponsableFormationSemestres,
     meta: { admin: true, responsableFormation: true },
   },
   {
@@ -81,21 +100,9 @@ const routes = [
     meta: { admin: true },
   },
   {
-    path: '/admin/semestres',
-    name: 'AdminSemestres',
-    component: AdminSemestres,
-    meta: { admin: true, responsableFormation: true },
-  },
-  {
     path: '*',
     name: 'NotFound',
     component: NotFoundComponent,
-  },
-  {
-    path: '/',
-    name: 'Index',
-    component: Index,
-    meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
   },
 ]
 
