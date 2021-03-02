@@ -34,21 +34,18 @@
 
       <v-stepper-items>
         <v-stepper-content step="1">
-       <SelectPromo @updateSelectedPromotion="fetchMatieres;" />
+       <SelectPromo/>
 
-        <button @click="etape++">
+        <v-btn @click="etape++">
           Valider
-        </button>
+        </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <ListSemestres
-            @change-semestre="
-              (semestre) => {
-                selectedSemestre = semestre;
-                etape++;
-              }
-            "
-          />
+        <SelectSemestreByPromo/>
+
+         <v-btn @click="etape++">
+          Valider
+        </v-btn>
           <v-btn
             @click="
               () => {
@@ -107,20 +104,20 @@
 import SelectPromo from "../components/SelectPromo";
 import ListMatieres from "../components/ListMatieres";
 import ListElevesNotes from "../components/ListElevesNotes";
-import ListSemestres from "../components/ListSemestres";
+import SelectSemestreByPromo from "../components/SelectSemestreByPromo";
 
 export default {
   data: () => ({
     etape: 1,
-    selectedPromotion: {},
-    selectedSemestre: {},
+    selectedPromotion: -1,
+    selectedSemestre: -1,
     selectedMatiere: {},
   }),
   components: {
     SelectPromo,
     ListMatieres,
     ListElevesNotes,
-    ListSemestres,
+    SelectSemestreByPromo,
   },
 };
 </script>

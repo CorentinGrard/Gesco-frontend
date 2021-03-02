@@ -113,6 +113,7 @@ export default {
       {
         title: "Gestion des notes",
         icon: "mdi-file-table",
+        link: { name: "GestionDesNotes" },
         meta: { admin: true, assistantPedagogique: true },
       },
       {
@@ -121,11 +122,6 @@ export default {
         link: { name: "Admin" },
         meta: { admin: true },
       },
-      { title: "Notes", icon: "mdi-file-table", link: { name: "Notes" } },
-      { title: "Création de cours", icon: "mdi-school", link: { name: "CreationCours" }  },
-      { title: "Gestion des absences", icon: "mdi-account-off" },
-      { title: "Gestion des notes", icon: "mdi-file-table", link :{name: "GestionDesNotes"} },
-      { title: "Admin", icon: "mdi-cog", link: { name: "Admin" } },
     ],
   }),
   computed: {

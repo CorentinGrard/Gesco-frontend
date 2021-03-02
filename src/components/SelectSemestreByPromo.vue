@@ -1,12 +1,14 @@
 <template>
-  <v-autocomplete
+<div>
+    <v-select
     :items="semestres"
-    item-text="nomSemestre"
+    item-text="nom"
     item-value="id"
     label="Semestre"
     v-model="selectedSemestre"
     outlined
-  ></v-autocomplete>
+  ></v-select>
+</div>
 </template>
 
 <script>
@@ -17,6 +19,7 @@ export default {
     selectedSemestre: {
       get() {
         this.$emit("updateSelectedSemestre", this.$store.state.semestres.selectedSemestre)
+        console.log(this.$store.state.semestres.selectedSemestre)
         return this.$store.state.semestres.selectedSemestre;
       },
       set(selectedSemestre) {
@@ -28,11 +31,14 @@ export default {
     },
     ...mapState({
       semestres: (state) => state.semestres.semestres,
+      promotion: (state) => state.promotions.selectedPromotion
     }),
   },
-  created() {
-    this.$store.dispatch("semestres/fetchSemestres");
-  },
+  watch: {
+    promotion(newPromotion){
+      this.$store.dispatch("semestres/fetch", newPromotion);
+    }
+  }
 };
 </script>
 <style>
