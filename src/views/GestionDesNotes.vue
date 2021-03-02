@@ -59,14 +59,7 @@
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <ListMatieres
-            @change-matiere="
-              (matiere) => {
-                selectedMatiere = matiere;
-                etape++;
-              }
-            "
-          />
+          <SelectMatiereBySem/>
           <v-btn
             @click="
               () => {
@@ -102,7 +95,7 @@
 
 <script>
 import SelectPromo from "../components/SelectPromo";
-import ListMatieres from "../components/ListMatieres";
+import SelectMatiereBySem from "../components/SelectMatiereBySem";
 import ListElevesNotes from "../components/ListElevesNotes";
 import SelectSemestreByPromo from "../components/SelectSemestreByPromo";
 
@@ -115,7 +108,7 @@ export default {
   }),
   components: {
     SelectPromo,
-    ListMatieres,
+    SelectMatiereBySem,
     ListElevesNotes,
     SelectSemestreByPromo,
   },

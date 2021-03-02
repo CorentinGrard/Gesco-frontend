@@ -31,12 +31,12 @@ export default {
     },
     ...mapState({
       matieres: (state) => state.matieres.matieres,
-      promotion: (state) => state.promotions.selectedPromotion
+      promotion: (state) => state.promotions.selectedMatiere
     }),
   },
   watch: {
-    promotion(newPromotion){
-      this.$store.dispatch("matieres/fetch", newPromotion);
+    promotion(newMatiere){
+      this.$store.dispatch("matieres/fetch", newMatiere);
     }
   }
 };
