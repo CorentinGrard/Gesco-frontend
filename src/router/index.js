@@ -1,112 +1,159 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import store from '@/store'
-import roles from '@/roles'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "@/store";
+import roles from "@/roles";
 
-import Planning from '@/views/Planning.vue'
-import Notes from '@/views/Notes.vue'
-import Admin from '@/views/Admin.vue'
-import AdminMatieres from '@/views/admin/Matieres.vue'
-import AdminModule from '@/views/admin/Modules.vue'
-import AdminFormations from '@/views/admin/Formations.vue'
-import AdminSemestres from '@/views/admin/Semestres.vue'
-import CreationCours from '@/views/CreationCours.vue'
-import NotFoundComponent from '@/views/404.vue'
-import AdminEleve from '@/views/admin/Eleves.vue'
-import AdminPromotion from '@/views/admin/Promotions.vue'
+import Planning from "@/views/Planning.vue";
+import Notes from "@/views/Notes.vue";
+import Admin from "@/views/Admin.vue";
+import AdminMatieres from "@/views/admin/Matieres.vue";
+import AdminModule from "@/views/admin/Modules.vue";
+import AdminFormations from "@/views/admin/Formations.vue";
+import AdminSemestres from "@/views/admin/Semestres.vue";
+import CreationCours from "@/views/CreationCours.vue";
+import NotFoundComponent from "@/views/404.vue";
+import AdminEleve from "@/views/admin/Eleves.vue";
+import AdminPromotion from "@/views/admin/Promotions.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/planning',
-    name: 'Planning',
+    path: "/planning",
+    name: "Planning",
     component: Planning,
-    meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
+    meta: {
+      title: "Planning : Gesco",
+      etudiant: true,
+      assistantPedagogique: true,
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/notes',
-    name: 'Notes',
+    path: "/notes",
+    name: "Notes",
     component: Notes,
-    meta: { etudiant: true }
-  }, {
-    path: '/creationcours',
-    name: 'CreationCours',
+    meta: { title: "Notes : Gesco", etudiant: true },
+  },
+  {
+    path: "/creationcours",
+    name: "CreationCours",
     component: CreationCours,
-    meta: { assistantPedagogique: true, admin: true },
+    meta: {
+      title: "Création cours : Gesco",
+      assistantPedagogique: true,
+      admin: true,
+    },
   },
   {
-    path: '/admin',
-    name: 'Admin',
+    path: "/admin",
+    name: "Admin",
     component: Admin,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Admin : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/admin/matieres',
-    name: 'AdminMatieres',
+    path: "/admin/matieres",
+    name: "AdminMatieres",
     component: AdminMatieres,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Administration des matières : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/admin/modules',
-    name: 'AdminModule',
+    path: "/admin/modules",
+    name: "AdminModule",
     component: AdminModule,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Administration des modules : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/admin/eleve',
-    name: 'AdminEleve',
+    path: "/admin/eleve",
+    name: "AdminEleve",
     component: AdminEleve,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Administration des élèves : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/admin/promotion',
-    name: 'AdminPromotion',
+    path: "/admin/promotion",
+    name: "AdminPromotion",
     component: AdminPromotion,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Administration des promotions : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '/admin/formations',
-    name: 'AdminFormations',
+    path: "/admin/formations",
+    name: "AdminFormations",
     component: AdminFormations,
-    meta: { admin: true },
+    meta: { title: "Administration des formations : Gesco", admin: true },
   },
   {
-    path: '/admin/semestres',
-    name: 'AdminSemestres',
+    path: "/admin/semestres",
+    name: "AdminSemestres",
     component: AdminSemestres,
-    meta: { admin: true, responsableFormation: true },
+    meta: {
+      title: "Administration des semestres : Gesco",
+      admin: true,
+      responsableFormation: true,
+    },
   },
   {
-    path: '*',
-    name: 'NotFound',
+    path: "*",
+    name: "NotFound",
     component: NotFoundComponent,
   },
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.VUE_APP_BASE_URL,
-  routes
-})
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  if(nearestWithTitle) document.title = nearestWithTitle.meta.title;
+
   for (const id in roles) {
-    const role = roles[id]
-    if (to.matched.some(record => record.meta[role.name]) && store.getters[role.getter]) {
-      next()
-      return true
+    const role = roles[id];
+    if (
+      to.matched.some((record) => record.meta[role.name]) &&
+      store.getters[role.getter]
+    ) {
+      next();
+      return true;
     }
   }
 
-  if (to.matched.some(record => record.meta && Object.keys(record.meta).length === 0 && record.meta.constructor === Object)) {
-    next()
-    return true
+  if (
+    to.matched.some(
+      (record) =>
+        record.meta &&
+        Object.keys(record.meta).length === 0 &&
+        record.meta.constructor === Object
+    )
+  ) {
+    next();
+    return true;
   } else {
-    next("/")
-    return false
+    next("/");
+    return false;
   }
-})
+});
 
-
-export default router
+export default router;
