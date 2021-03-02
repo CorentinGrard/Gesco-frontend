@@ -4,16 +4,18 @@ import store from '@/store'
 import roles from '@/roles'
 
 import Planning from '@/views/Planning.vue'
-import Notes from '@/views/Notes.vue'
+import Notes from '@/views/etudiant/Notes.vue'
 import Admin from '@/views/Admin.vue'
 import AdminMatieres from '@/views/admin/Matieres.vue'
 import AdminModule from '@/views/admin/Modules.vue'
 import AdminFormations from '@/views/admin/Formations.vue'
 import AdminSemestres from '@/views/admin/Semestres.vue'
-import CreationCours from '@/views/CreationCours.vue'
-import NotFoundComponent from '@/views/404.vue'
+import CreationCours from '@/views/assistantPedagogique/CreationCours.vue'
+import NotFoundComponent from '@/views/error/404.vue'
 import AdminEleve from '@/views/admin/Eleves.vue'
 import AdminPromotion from '@/views/admin/Promotions.vue'
+import Index from '@/views/Index.vue'
+import AssistantPedagogique from '@/views/AssistantPedagogique.vue'
 
 Vue.use(VueRouter)
 
@@ -25,12 +27,19 @@ const routes = [
     meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
   },
   {
-    path: '/notes',
+    path: '/etudiant/notes',
     name: 'Notes',
     component: Notes,
     meta: { etudiant: true }
-  }, {
-    path: '/creationcours',
+  },
+  {
+    path: '/assistantPedagogique',
+    name: 'AssistantPedagogique',
+    component: AssistantPedagogique,
+    meta: { assistantPedagogique: true, admin: true },
+  },
+  {
+    path: '/assistantPedagogique/creationcours',
     name: 'CreationCours',
     component: CreationCours,
     meta: { assistantPedagogique: true, admin: true },
@@ -81,6 +90,12 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: NotFoundComponent,
+  },
+  {
+    path: '/',
+    name: 'Index',
+    component: Index,
+    meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
   },
 ]
 

@@ -100,19 +100,9 @@ export default {
         meta: { etudiant: true },
       },
       {
-        title: "Création de cours",
-        icon: "mdi-school",
-        link: { name: "CreationCours" },
-        meta: { admin: true, assistantPedagogique: true },
-      },
-      {
-        title: "Gestion des absences",
-        icon: "mdi-account-off",
-        meta: { admin: true, assistantPedagogique: true },
-      },
-      {
-        title: "Gestion des notes",
-        icon: "mdi-file-table",
+        title: "Assistant pédagogique",
+        icon: "mdi-cog",
+        link: { name: "AssistantPedagogique" },
         meta: { admin: true, assistantPedagogique: true },
       },
       {
