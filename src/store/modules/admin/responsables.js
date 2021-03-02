@@ -23,15 +23,15 @@ const getters = {
 // actions
 const actions = {
     initResponsables({ commit }) {
-        formation.getData_Responsable(responsables => {
-            commit('initResponsables', responsables)
+        formation.get_Responsables(responsables => {
+            commit('initLocalResponsables', responsables)
         })
     }
 }
 
 // mutations
 const mutations = {
-    initResponsables(state, responsables) {
+    initLocalResponsables(state, responsables) {
         state.data_responsables = responsables
     }
 }
