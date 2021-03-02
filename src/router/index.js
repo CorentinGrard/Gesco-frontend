@@ -22,7 +22,7 @@ const routes = [
     path: '/planning',
     name: 'Planning',
     component: Planning,
-    meta: { etudiant: true, assistantPedagogique: true, admin: true }
+    meta: { etudiant: true, assistantPedagogique: true, admin: true, responsableFormation: true }
   },
   {
     path: '/notes',
@@ -63,7 +63,7 @@ const routes = [
     path: '/admin/promotion',
     name: 'AdminPromotion',
     component: AdminPromotion,
-    meta: { admin: true },
+    meta: { admin: true, responsableFormation: true },
   },
   {
     path: '/admin/formations',
@@ -75,7 +75,7 @@ const routes = [
     path: '/admin/semestres',
     name: 'AdminSemestres',
     component: AdminSemestres,
-    meta: { admin: true },
+    meta: { admin: true, responsableFormation: true },
   },
   {
     path: '*',
