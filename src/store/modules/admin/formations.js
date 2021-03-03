@@ -33,8 +33,6 @@ const actions = {
     formation.idPersonne = formation.responsable.id;
     delete formation["responsable"];
     formation.isAlternance = true;
-    console.log("add formation");
-    console.log(formation);
     formationAPI.add_Formation(formation, (formation) => {
       commit("addLocalFormation", formation);
     });
@@ -43,17 +41,14 @@ const actions = {
     delete formation["name"];
     formation.idPersonne = formation.responsable.id;
     delete formation["responsable"];
-    console.log("edit formation");
-    console.log(formation);
     formationAPI.update_Formation(formation.id, formation, (formation) => {
       commit("updateLocalFormation", formation);
     });
   },
   removeFormation({ commit }, { id, index }) {
-    console.log("delete formation");
-    console.log(id);
-    formationAPI.delete_Formation(id);
-    commit("removeLocalFormation", index);
+    formationAPI.delete_Formation(id, () => {
+      commit("removeLocalFormation", index);
+    });
   },
 };
 
@@ -117,7 +112,7 @@ const mutations = {
     );
   },
 
-  removeFormation(state, index) {
+  removeLocalFormation(state, index) {
     state.data_formations.splice(index, 1);
   },
 };

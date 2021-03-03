@@ -2,7 +2,6 @@
   <v-container>
     <v-card>
       <SelectPromo />
-      {{ editedItem.id }}
       <v-data-table
         :headers="headers"
         :items="semestres"

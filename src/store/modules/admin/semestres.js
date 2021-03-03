@@ -28,8 +28,9 @@ const actions = {
     })
   },
   delete({ commit }, id) {
-    semestreAPI.delete(id)
-    commit('DELETE', id)
+    semestreAPI.delete(id, () => {
+      commit('DELETE', id)
+    })
   },
   setSelectedSemestre({ commit }, selectedSemestre) {
     commit('SET_SELECTED_SEMESTRE', selectedSemestre)
