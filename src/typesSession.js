@@ -1,0 +1,1 @@
+export default ["cours", "conference", "tp", "td", "examen", "autre"]

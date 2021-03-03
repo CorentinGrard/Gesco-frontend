@@ -8,7 +8,7 @@
         :items="semestres"
         hide-default-footer
         disable-pagination
-        v-if="selectedPromotion >= 0"
+        v-if="selectedPromotion !== null"
       >
         <!-- Les elements liés à la data table -->
         <template v-slot:top>
