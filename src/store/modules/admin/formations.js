@@ -31,7 +31,7 @@ const actions = {
     addFormation({ commit }, formation) {
         formation['nom'] = formation['name'];
         delete formation['name'];
-        formation.idResponsable = formation.responsable.id;
+        formation.idPersonne = formation.responsable.id;
         delete formation['responsable'];
         formation.isAlternance = true;
         console.log("add formation");
