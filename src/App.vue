@@ -24,20 +24,41 @@
 
       <v-list nav dense>
         <v-list-item-group>
+          <!-- <span v-for="page in pagesByRoles" :key="page.title">
+            <v-list-group v-if="page.subMenu" sub-group>
+              <template v-slot:activator>
+                <v-list-item-title>{{ page.title }}</v-list-item-title>
+              </template>
+              <v-list-item
+                v-for="subPage in page.subMenu"
+                :key="subPage.title"
+                link
+                :to="subPage.link"
+              >
+                <v-list-item-icon>
+                  <v-icon>{{ subPage.icon }}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ subPage.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group> -->
           <v-list-item
-            v-for="item in itemsByRoles"
-            :key="item.title"
+            v-for="page in pagesByRoles"
+            :key="page.title"
             link
-            :to="item.link"
+            :to="page.link"
           >
             <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon>{{ page.icon }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title>{{ page.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <!-- </span> -->
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
@@ -48,7 +69,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title> Logout </v-list-item-title>
+              <v-list-item-title> Déconnection </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -86,12 +107,17 @@ export default {
   name: "App",
 
   data: () => ({
-    items: [
+    pages: [
       {
         title: "Planning",
         icon: "mdi-calendar-check",
         link: { name: "Planning" },
-        meta: { etudiant: true, assistantPedagogique: true },
+        meta: {
+          etudiant: true,
+          assistantPedagogique: true,
+          admin: true,
+          responsableFormation: true,
+        },
       },
       {
         title: "Notes",
@@ -100,27 +126,73 @@ export default {
         meta: { etudiant: true },
       },
       {
-        title: "Création de cours",
-        icon: "mdi-school",
-        link: { name: "CreationCours" },
+        title: "Assistant pédagogique",
+        icon: "mdi-cog",
+        link: { name: "AssistantPedagogique" },
         meta: { admin: true, assistantPedagogique: true },
+        subMenu: [
+          {
+            title: "Création de cours",
+            icon: "mdi-school",
+            link: { name: "CreationCours" },
+          },
+          {
+            title: "Gestion des absences",
+            icon: "mdi-account-off",
+          },
+          {
+            title: "Gestion des notes",
+            icon: "mdi-file-table",
+            link: { name: "GestionDesNotes" },
+            meta: { admin: true, assistantPedagogique: true },
+          },
+        ],
       },
       {
-        title: "Gestion des absences",
-        icon: "mdi-account-off",
-        meta: { admin: true, assistantPedagogique: true },
-      },
-      {
-        title: "Gestion des notes",
-        icon: "mdi-file-table",
-        link: { name: "GestionDesNotes" },
-        meta: { admin: true, assistantPedagogique: true },
+        title: "Responsable Formation",
+        icon: "mdi-cog",
+        link: { name: "ResponsableFormation" },
+        meta: { admin: true, responsableFormation: true },
+        subMenu: [
+          {
+            title: "Matières",
+            icon: "mdi-book-open-variant",
+            link: { name: "ResponsableFormationMatieres" },
+          },
+          {
+            title: "Modules",
+            icon: "mdi-book-open-variant",
+            link: { name: "ResponsableFormationModule" },
+          },
+          {
+            title: "Semestres",
+            icon: "mdi-ballot-outline",
+            link: { name: "ResponsableFormationSemestres" },
+          },
+          {
+            title: "Elèves",
+            icon: "mdi-account-multiple-plus",
+            link: { name: "ResponsableFormationEleve" },
+          },
+          {
+            title: "Promotions",
+            icon: "mdi-account-multiple-plus",
+            link: { name: "ResponsableFormationPromotion" },
+          },
+        ],
       },
       {
         title: "Admin",
         icon: "mdi-cog",
         link: { name: "Admin" },
         meta: { admin: true },
+        subMenu: [
+          {
+            title: "Formations",
+            icon: "mdi-ballot-outline",
+            link: { name: "AdminFormations" },
+          },
+        ],
       },
     ],
   }),
@@ -139,16 +211,16 @@ export default {
       snackbarColor: (state) => state.snackbar.color,
       profile: (state) => state.user.profile,
     }),
-    itemsByRoles() {
-      let itemsByRoles = [];
+    pagesByRoles() {
+      let pagesByRoles = [];
       roles.forEach((role) => {
         if (this.$store.getters[role.getter]) {
-          itemsByRoles.push(this.items.filter((item) => item.meta[role.name]));
+          pagesByRoles.push(this.pages.filter((page) => page.meta[role.name]));
         }
       });
-      itemsByRoles = itemsByRoles.flat()
-      itemsByRoles = [...new Set([...itemsByRoles])];
-      return itemsByRoles;
+      pagesByRoles = pagesByRoles.flat();
+      pagesByRoles = [...new Set([...pagesByRoles])];
+      return pagesByRoles;
     },
   },
   watch: {
@@ -163,3 +235,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.active {
+  color: inherit;
+}
+</style>

@@ -14,21 +14,23 @@
             {{ $refs.calendar.title }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
+          <SelectPromo v-if="!isEtudiant" class="mt-5" />
+          <v-spacer></v-spacer>
           <v-menu bottom right>
             <template v-slot:activator="{ on, attrs }">
               <v-btn outlined v-bind="attrs" v-on="on">
-                <span>{{ typeToLabel[type] }}</span>
+                <span>{{ typeToLabel[typeCalendar] }}</span>
                 <v-icon right> mdi-menu-down </v-icon>
               </v-btn>
             </template>
             <v-list>
-              <v-list-item @click="type = 'day'">
+              <v-list-item @click="typeCalendar = 'day'">
                 <v-list-item-title>Jour</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'week'">
+              <v-list-item @click="typeCalendar = 'week'">
                 <v-list-item-title>Semaine</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="type = 'month'">
+              <v-list-item @click="typeCalendar = 'month'">
                 <v-list-item-title>Mois</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -42,22 +44,41 @@
           v-model="focus"
           color="primary"
           :events="events"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
+          :type="typeCalendar"
           :first-interval="7"
           :interval-minutes="60"
           :interval-count="13"
           :weekdays="weekdays"
+          @click:event="showEvent"
+          @click:more="viewDay"
+          @click:date="viewDay"
+          @change="saveInterval"
           @mousedown:event="startDrag"
           @mousedown:time="startTime"
           @mousemove:time="mouseMove"
           @mouseup:time="endDrag"
           @mouseleave.native="cancelDrag"
         >
-          <template v-slot:event="{ event, timed, eventSummary }">
-            <div class="v-event-draggable" v-html="eventSummary()"></div>
+          <template #event="{ event }">
+            <div class="v-event-draggable">
+              <h3>{{ event.matiere.nom }}</h3>
+              <div>Description : {{ event.detail }}</div>
+              <div>Type : {{ event.type }}</div>
+              <div>
+                Salles :
+                <span v-for="salle in event.sessionSalle" :key="salle.id">
+                  {{ salle.nomSalle }} ,
+                </span>
+              </div>
+              <div>
+                {{ event.dateDebut.getHours() }}:{{
+                  event.dateDebut.getMinutes()
+                }}
+                - {{ event.dateFin.getHours() }}:{{
+                  event.dateFin.getMinutes()
+                }}
+              </div>
+            </div>
             <div
               class="v-event-drag-bottom"
               @mousedown.stop="extendBottom(event)"
@@ -72,21 +93,45 @@
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
             <v-toolbar color="grey lighten-4">
-              <v-btn icon>
-                <v-icon @click="editFormOpen = !editFormOpen"
-                  >mdi-pencil</v-icon
-                >
+              <v-btn
+                v-if="!isEtudiant"
+                @click="editFormOpen = !editFormOpen"
+                icon
+              >
+                <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <v-toolbar-title
                 v-html="selectedSession.matiere.nom"
               ></v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon @click="deleteSession()">mdi-delete</v-icon>
+              <v-btn v-if="!isEtudiant" icon @click="deleteSession()">
+                <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedSession.detail"></span>
+              <div>Description : {{ selectedSession.detail }}</div>
+              <div> Type : {{ selectedSession.type }} </div>
+              <div>
+                Salles :
+                <ul>
+                  <li
+                    v-for="salle in selectedSession.sessionSalle"
+                    :key="salle.id"
+                  >
+                    {{ salle.nomSalle }}
+                  </li>
+                </ul>
+              </div>
+              <div>
+                Horaires : {{ new Date(selectedSession.dateDebut).getHours() }}:{{
+                  new Date(selectedSession.dateDebut).getMinutes()
+                }}
+                - {{ new Date(selectedSession.dateFin).getHours() }}:{{
+                  new Date(selectedSession.dateFin).getMinutes()
+                }}
+              </div>
+              <div v-if="selectedSession.obligatoire"> Obligatoire </div>
+              <div v-else> Non obligatoire </div>
             </v-card-text>
             <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
@@ -105,14 +150,20 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
+import SelectPromo from "@/components/SelectPromo";
 import EditSessionFormModal from "../components/EditSessionFormModal";
+
 export default {
-  props: ["selectedMatiere"],
+  components: {
+    SelectPromo,
+    EditSessionFormModal,
+  },
+  props: ["edition"],
   data: () => ({
     editFormOpen: false,
     focus: "",
     weekdays: [1, 2, 3, 4, 5],
-    type: "week",
+    typeCalendar: "week",
     typeToLabel: {
       month: "Mois",
       week: "Semaine",
@@ -125,24 +176,33 @@ export default {
     createEvent: null,
     createStart: null,
     extendOriginal: null,
+    start: "",
+    end: "",
   }),
   computed: {
     ...mapGetters({
       events: "planning/getEventsForPlanning",
       getSessionById: "planning/getSessionById",
+      isEtudiant: "user/isEtudiant",
+      duree: "planning/getDuree",
     }),
     ...mapState({
       selectedSession: (state) => state.planning.selectedSession,
+      selectedPromotion: (state) => state.promotions.selectedPromotion,
+      selectedMatiere: (state) => state.matieres.selectedMatiere,
+      details: (state) => state.planning.details,
+      obligatoire: (state) => state.planning.obligatoire,
+      type: (state) => state.planning.type,
     }),
   },
-  created() {
-    this.$store.dispatch("planning/getAllSessions");
+  watch: {
+    selectedPromotion: function () {
+      this.$store.dispatch("planning/clearSessions");
+      this.fetchSessions();
+    },
   },
   mounted() {
     this.$refs.calendar.checkChange();
-  },
-  components: {
-    EditSessionFormModal,
   },
   methods: {
     deleteSession() {
@@ -186,40 +246,48 @@ export default {
       } else {
         open();
       }
-
       nativeEvent.stopPropagation();
     },
     startDrag({ event, timed }) {
-      if (event && timed) {
+      if (!this.isEtudiant && this.edition==true && event && timed) {
         this.dragEvent = event;
         this.dragTime = null;
         this.extendOriginal = null;
       }
     },
     startTime(tms) {
-      const mouse = this.toTime(tms);
+      if (!this.isEtudiant && this.edition==true) {
+        const mouse = this.toTime(tms);
 
-      if (this.dragEvent && this.dragTime === null) {
-        const start = this.dragEvent.start;
+        if (this.dragEvent && this.dragTime === null) {
+          const start = this.dragEvent.start;
 
-        this.dragTime = mouse - start;
-      } else {
-        if (this.selectedMatiere !== null) {
-          this.createStart = this.roundTime(mouse);
-          this.createEvent = {
-            matiere: this.selectedMatiere,
-            detail: "TODO",
-            type: "TD",
-            obligatoire: true,
-            dateDebut: new Date(this.createStart),
-            dateFin: new Date(this.createStart),
-          };
-          this.$store.dispatch("planning/addSession", this.createEvent);
+          this.dragTime = mouse - start;
         } else {
-          this.$store.dispatch("snackbar/error", {
-            text:
-              "Erreur : Selectionner une matière pour pouvoir créer un cour",
-          });
+          if (this.selectedPromotion !== null) {
+            if (this.selectedMatiere !== null) {
+              this.createStart = this.roundTime(mouse);
+              this.createEvent = {
+                matiere: this.selectedMatiere,
+                detail: this.details,
+                type: this.type,
+                obligatoire: this.obligatoire,
+                dateDebut: new Date(this.createStart),
+                dateFin: new Date(this.createStart + this.duree),
+              };
+              this.$store.dispatch("planning/addSession", this.createEvent);
+            } else {
+              this.$store.dispatch("snackbar/error", {
+                text:
+                  "Erreur : Selectionner une matière pour pouvoir créer un cours",
+              });
+            }
+          } else {
+            this.$store.dispatch("snackbar/error", {
+              text:
+                "Erreur : Selectionner une promotion pour pouvoir créer un cours",
+            });
+          }
         }
       }
     },
@@ -229,53 +297,58 @@ export default {
       this.extendOriginal = event.end;
     },
     mouseMove(tms) {
-      const mouse = this.toTime(tms);
+      if (!this.isEtudiant && this.edition==true) {
+        const mouse = this.toTime(tms);
 
-      if (this.dragEvent && this.dragTime !== null) {
-        const start = this.dragEvent.start;
-        const end = this.dragEvent.end;
-        const duration = end - start;
-        const newStartTime = mouse - this.dragTime;
-        const newStart = this.roundTime(newStartTime);
-        const newEnd = newStart + duration;
+        if (this.dragEvent && this.dragTime !== null) {
+          const start = this.dragEvent.start;
+          const end = this.dragEvent.end;
+          const duration = end - start;
+          const newStartTime = mouse - this.dragTime;
+          const newStart = this.roundTime(newStartTime);
+          const newEnd = newStart + duration;
 
-        this.dragEvent.start = newStart;
-        this.dragEvent.end = newEnd;
-        this.$store.dispatch("planning/updateSessionByEvent", this.dragEvent);
-      } else if (this.createEvent && this.createStart !== null) {
-        const mouseRounded = this.roundTime(mouse, false);
-        const min = Math.min(mouseRounded, this.createStart);
-        const max = Math.max(mouseRounded, this.createStart);
+          this.dragEvent.start = newStart;
+          this.dragEvent.end = newEnd;
+          this.$store.dispatch("planning/updateTimeSession", this.dragEvent);
+        } else if (this.createEvent && this.createStart !== null) {
+          const mouseRounded = this.roundTime(mouse, false);
+          const min = Math.min(mouseRounded, this.createStart);
+          const max = Math.max(mouseRounded, this.createStart);
 
-        this.createEvent.start = min;
-        this.createEvent.end = max;
-        this.$store.dispatch("planning/updateSessionByEvent", this.createEvent);
+          this.createEvent.start = min;
+          this.createEvent.end = max;
+          this.$store.dispatch("planning/updateTimeSession", this.createEvent);
+        }
       }
     },
     endDrag() {
-      this.dragTime = null;
-      this.dragEvent = null;
-      this.createEvent = null;
-      this.createStart = null;
-      this.extendOriginal = null;
+      if (!this.isEtudiant && this.edition==true) {
+        this.dragTime = null;
+        this.dragEvent = null;
+        this.createEvent = null;
+        this.createStart = null;
+        this.extendOriginal = null;
+      }
     },
     cancelDrag() {
-      if (this.createEvent) {
-        if (this.extendOriginal) {
-          this.createEvent.end = this.extendOriginal;
-          this.$store.dispatch(
-            "planning/updateSessionByEvent",
-            this.createEvent
-          );
-        } else {
-          this.$store.dispatch("planning/deleteSession", this.createEvent);
+      if (!this.isEtudiant && this.edition==true) {
+        if (this.createEvent) {
+          if (this.extendOriginal) {
+            this.createEvent.end = this.extendOriginal;
+            this.$store.dispatch(
+              "planning/updateTimeSession",
+              this.createEvent
+            );
+          } else {
+            this.$store.dispatch("planning/deleteSession", this.createEvent);
+          }
         }
+        this.createEvent = null;
+        this.createStart = null;
+        this.dragTime = null;
+        this.dragEvent = null;
       }
-
-      this.createEvent = null;
-      this.createStart = null;
-      this.dragTime = null;
-      this.dragEvent = null;
     },
     roundTime(time, down = true) {
       const roundTo = 15; // minutes
@@ -293,6 +366,43 @@ export default {
         tms.hour,
         tms.minute
       ).getTime();
+    },
+    saveInterval({ start, end }) {
+      this.start = this.getDateFromEvent(start);
+      this.end = this.getDateFromEvent(end);
+      this.fetchSessions();
+    },
+    getDateFromEvent(event) {
+      Date.prototype.yyyymmdd = function () {
+        var mm = this.getMonth() + 1; // getMonth() is zero-based
+        var dd = this.getDate();
+
+        return [
+          this.getFullYear(),
+          (mm > 9 ? "" : "0") + mm,
+          (dd > 9 ? "" : "0") + dd,
+        ].join("");
+      };
+      let date = new Date(event.date);
+      return date.yyyymmdd();
+    },
+    fetchSessions() {
+      if (this.start !== "" && this.end !== "") {
+        if (this.isEtudiant) {
+          this.$store.dispatch("planning/fetchSessions", {
+            start: this.start,
+            end: this.end,
+          });
+        } else if (this.selectedPromotion !== null) {
+          {
+            this.$store.dispatch("planning/fetchSessionsByIdPromotion", {
+              id: this.selectedPromotion,
+              start: this.start,
+              end: this.end,
+            });
+          }
+        }
+      }
     },
   },
 };

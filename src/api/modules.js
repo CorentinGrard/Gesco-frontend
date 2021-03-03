@@ -1,26 +1,27 @@
 import backend from "../plugins/axios";
+
 export default {
   getByPromotions(promotion, cb) {
     backend
-      .get(`/promotions/${promotion}/matieres`)
+      .get(`/promotions/${promotion}/modules`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },
-  postMatiere(idModule, matiere, cb) {
+  putModule(module, cb) {
     backend
-      .post("/modules/" + idModule + "/matieres", JSON.stringify(matiere))
+      .put(`/module/${module.id}`, JSON.stringify(module))
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },
-  deleteMatiere(idMatiere, cb) {
+  deleteModule(moduleId, cb) {
     backend
-      .delete("/matieres/" + idMatiere)
+      .delete(`/modules/${moduleId}`)
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },
-  putMatiere(idMatiere, matiere, cb) {
+  postModule(semestreId,module, cb) {
     backend
-      .put("/matiere/" + idMatiere, JSON.stringify(matiere))
+      .post(`/semestres/${semestreId}/modules`,JSON.stringify(module))
       .then((response) => cb(response.data))
       .catch((error) => Promise.reject(error));
   },

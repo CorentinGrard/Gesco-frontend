@@ -27,29 +27,9 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Création et modification des matières",
-        icon: "mdi-book-open-variant",
-        link: { name: "AdminMatieres" },
-      },
-      {
-        title: "Création et modification des UE",
-        icon: "mdi-book-open-variant",
-        link: { name: "AdminUe" },
-      },
-      {
-        title: "Création et modification des semestres",
-        icon: "mdi-ballot-outline",
-        link: { name: "AdminSemestres" },
-      },
-      {
         title: "Création et modification d'une formation",
         icon: "mdi-ballot-outline",
         link: { name: "AdminFormations" },
-      },
-      {
-        title: "Gestion des promotions et assignation des élèves",
-        icon: "mdi-account-multiple-plus",
-        link: { name: "AdminEleve" },
       },
       { title: "Aller sur Darwin", icon: "mdi-account-group" },
     ],
