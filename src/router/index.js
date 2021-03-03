@@ -7,10 +7,11 @@ import Planning from '@/views/Planning.vue'
 import Notes from '@/views/etudiant/Notes.vue'
 import Admin from '@/views/admin/Index.vue'
 import AdminFormations from '@/views/admin/Formations.vue'
-import CreationCours from '@/views/assistantPedagogique/CreationCours.vue'
 import NotFoundComponent from '@/views/error/404.vue'
 import Index from '@/views/Index.vue'
 import AssistantPedagogique from '@/views/assistantPedagogique/Index.vue'
+import GestionDesNotes from '@/views/assistantPedagogique/GestionDesNotes.vue'
+import CreationCours from '@/views/assistantPedagogique/CreationCours.vue'
 import ResponsableFormation from '@/views/responsableFormation/Index.vue'
 import ResponsableFormationMatieres from '@/views/responsableFormation/Matieres.vue'
 import ResponsableFormationModule from '@/views/responsableFormation/Modules.vue'
@@ -43,23 +44,13 @@ const routes = [
     path: '/etudiant/notes',
     name: 'Notes',
     component: Notes,
-    meta: {  title: "Notes : Gesco", etudiant: true }
+    meta: { title: "Notes : Gesco", etudiant: true }
   },
   {
     path: '/assistantPedagogique',
     name: 'AssistantPedagogique',
     component: AssistantPedagogique,
     meta: { title: "Assistant Pedagogique : Gesco", assistantPedagogique: true, admin: true },
-  },
-  {
-    path: "/creationcours",
-    name: "CreationCours",
-    component: CreationCours,
-    meta: {
-      title: "Création cours : Gesco",
-      assistantPedagogique: true,
-      admin: true,
-    },
   },
   {
     path: "/admin",
@@ -80,6 +71,12 @@ const routes = [
     meta: { title: "Création cours : Gesco", assistantPedagogique: true, admin: true },
   },
   {
+    path: '/assistantPedagogique/notes/',
+    name: 'GestionDesNotes',
+    component: GestionDesNotes,
+    meta: { assistantPedagogique: true, admin: true },
+  },
+  {
     path: '/responsableFormation/matieres',
     name: 'ResponsableFormationMatieres',
     component: ResponsableFormationMatieres,
@@ -95,7 +92,7 @@ const routes = [
     path: '/responsableFormation/eleve',
     name: 'ResponsableFormationEleve',
     component: ResponsableFormationEleve,
-    meta: { title: "Administration des élèves : Gesco",admin: true, responsableFormation: true },
+    meta: { title: "Administration des élèves : Gesco", admin: true, responsableFormation: true },
   },
   {
     path: '/responsableFormation/promotion',
@@ -130,7 +127,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
-  if(nearestWithTitle) document.title = nearestWithTitle.meta.title;
+  if (nearestWithTitle) document.title = nearestWithTitle.meta.title;
 
   for (const id in roles) {
     const role = roles[id];

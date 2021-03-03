@@ -273,10 +273,8 @@
 
       save () {
         if (this.editedIndex > -1) {
-          console.log(this.editedItem)
           this.$store.dispatch("promotions/editPromotion", {editedIndex: this.editedIndex, editedItem: this.editedItem});
         } else {
-          console.log(this.editedItem)
           this.$store.dispatch("promotions/addPromotion", this.editedItem);
         }
         this.close()

@@ -91,7 +91,6 @@ export default {
       this.fetchMatieres();
     },
     selectedMatiere(idMatiere) {
-      console.log(idMatiere)
       this.$store.dispatch("matieres/setSelectedMatiere", idMatiere);
     },
   },
@@ -118,7 +117,7 @@ export default {
     },
     fetchMatieres: function () {
       if (this.selectedPromotion !== null) {
-        this.$store.dispatch("matieres/fetch", this.selectedPromotion);
+        this.$store.dispatch("matieres/fetchByPromotion", this.selectedPromotion);
       }
     },
   },

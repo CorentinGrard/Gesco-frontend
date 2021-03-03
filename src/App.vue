@@ -143,6 +143,8 @@ export default {
           {
             title: "Gestion des notes",
             icon: "mdi-file-table",
+            link: { name: "GestionDesNotes" },
+            meta: { admin: true, assistantPedagogique: true },
           },
         ],
       },

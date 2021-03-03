@@ -18,7 +18,6 @@ const getters = {
                 coeff: note.Matiere.coefficient
             })
         })
-        console.log(notes)
         return notes
     },
     getSemesters: state => {

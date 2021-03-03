@@ -64,14 +64,12 @@ const mutations = {
         state.data_formations = formations
     },
     addFormation(state, formation) {
-        console.log(formation);
         state.data_formations.push(formation)
     },
     editFormation(state, {editedIndex, editedItem}){
         Object.assign(state.data_formations[editedIndex], editedItem)
     },
     removeFormation(state, index) {
-        console.log("remove: " + index);
         state.data_formations.splice(index, 1)
     }
 }
