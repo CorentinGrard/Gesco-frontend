@@ -94,10 +94,10 @@
 </template>
 
 <script>
-import SelectPromo from "../components/SelectPromo";
-import SelectMatiereBySem from "../components/SelectMatiereBySem";
-import ListElevesNotes from "../components/ListElevesNotes";
-import SelectSemestreByPromo from "../components/SelectSemestreByPromo";
+import SelectPromo from "@/components/SelectPromo";
+import SelectMatiereBySem from "@/components/SelectMatiereBySem";
+import ListElevesNotes from "@/components/ListElevesNotes";
+import SelectSemestreByPromo from "@/components/SelectSemestreByPromo";
 
 export default {
   data: () => ({
