@@ -32,12 +32,14 @@ import { mapState } from "vuex";
 
 export default {
   computed: mapState({
-    eleves: (state) => state.eleves.eleves,
+    eleves: (state) => state.elevesAssistantPedagogique.eleves,
+    selectedMatiere: (state) => state.matieres.selectedMatiere,
   }),
-  data: () => ({}),
-  created() {
-    this.$store.dispatch("eleves/getAllEleves");
-  },
+  watch:{
+    selectedMatiere(){
+      this.$store.dispatch("elevesAssistantPedagogique/getAllEleves")
+    }
+  }
 };
 </script>
 

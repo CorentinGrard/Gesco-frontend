@@ -34,18 +34,14 @@
 
       <v-stepper-items>
         <v-stepper-content step="1">
-       <SelectPromo/>
+          <SelectPromo />
 
-        <v-btn @click="etape++">
-          Valider
-        </v-btn>
+          <v-btn @click="etape++"> Valider </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-        <SelectSemestreByPromo/>
+          <SelectSemestreByPromo />
 
-         <v-btn @click="etape++">
-          Valider
-        </v-btn>
+          <v-btn @click="etape++"> Valider </v-btn>
           <v-btn
             @click="
               () => {
@@ -59,7 +55,8 @@
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <SelectMatiereBySem/>
+          <SelectMatiereBySem />
+          <v-btn @click="etape++"> Valider </v-btn>
           <v-btn
             @click="
               () => {

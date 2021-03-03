@@ -53,16 +53,6 @@ const routes = [
     meta: { title: "Assistant Pedagogique : Gesco", assistantPedagogique: true, admin: true },
   },
   {
-    path: "/creationcours",
-    name: "CreationCours",
-    component: CreationCours,
-    meta: {
-      title: "Création cours : Gesco",
-      assistantPedagogique: true,
-      admin: true,
-    },
-  },
-  {
     path: "/admin",
     name: "Admin",
     component: Admin,

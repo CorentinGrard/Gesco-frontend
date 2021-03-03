@@ -38,6 +38,7 @@ export default {
       {
         title: "Gestion des notes",
         icon: "mdi-file-table",
+        link: { name: "GestionDesNotes" },
       },
     ],
   }),

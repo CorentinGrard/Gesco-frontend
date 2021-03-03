@@ -18,7 +18,6 @@ export default {
   computed: {
     selectedSemestre: {
       get() {
-        this.$emit("updateSelectedSemestre", this.$store.state.semestres.selectedSemestre)
         return this.$store.state.semestres.selectedSemestre;
       },
       set(selectedSemestre) {
