@@ -104,7 +104,7 @@ export default {
     etape: 1,
     selectedPromotion: -1,
     selectedSemestre: -1,
-    selectedMatiere: {},
+    selectedMatiere: -1,
   }),
   components: {
     SelectPromo,

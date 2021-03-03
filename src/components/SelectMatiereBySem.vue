@@ -31,12 +31,12 @@ export default {
     },
     ...mapState({
       matieres: (state) => state.matieres.matieres,
-      promotion: (state) => state.promotions.selectedMatiere
+      semestre: (state) => state.semestres.selectedSemestre
     }),
   },
   watch: {
-    promotion(newMatiere){
-      this.$store.dispatch("matieres/fetch", newMatiere);
+    semestre(newSemestre){
+      this.$store.dispatch("matieres/fetch", newSemestre);
     }
   }
 };
