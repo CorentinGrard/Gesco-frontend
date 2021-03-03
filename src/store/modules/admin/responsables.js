@@ -12,8 +12,7 @@ const getters = {
         state.data_responsables.forEach(responsable => {
             responsables_list.push({
                 id: responsable.id,
-                nom: responsable.nom,
-                prenom: responsable.prenom
+                nom: responsable.prenom + ' ' + responsable.nom
             })
         })
         return responsables_list

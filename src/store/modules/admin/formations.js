@@ -13,8 +13,9 @@ const getters = {
             formations_list.push({
                 id: formation.id,
                 name: formation.nom,
+                nom: formation.nom,
                 isAlternance: formation.isAlternance,
-                responsable: formation.responsable.Personne.prenom + ' ' + formation.responsable.Personne.nom
+                responsable: formation.responsable
             })
         })
         return formations_list
@@ -29,8 +30,6 @@ const actions = {
         })
     },
     addFormation({ commit }, formation) {
-        formation['nom'] = formation['name'];
-        delete formation['name'];
         formation.idPersonne = formation.responsable.id;
         delete formation['responsable'];
         formation.isAlternance = true;
@@ -41,19 +40,18 @@ const actions = {
         })
     },
     editFormation({ commit }, formation) {
-        let id = formation.id;
-        delete formation['id'];
-        formation['nom'] = formation['name'];
         delete formation['name'];
-        formation.idResponsable = formation.responsable.id;
-        //delete formation['responsable'];
+        formation.idPersonne = formation.responsable.id;
+        delete formation['responsable'];
         console.log("edit formation");
         console.log(formation);
-        formationAPI.update_Formation(id, formation, formation => {
+        formationAPI.update_Formation(formation.id, formation, formation => {
             commit('updateLocalFormation', formation)
         })
     },
     removeFormation({ commit }, {id, index}) {
+        console.log("delete formation");
+        console.log(id);
         formationAPI.delete_Formation(id)
         commit('removeLocalFormation', index)
     }
@@ -63,15 +61,44 @@ const actions = {
 // mutations
 const mutations = {
     initLocalFormations(state, formations) {
-        state.data_formations = formations
+        state.data_formations = []
+        formations.forEach(formation => {
+            state.data_formations.push({
+                id: formation.id,
+                isAlternance: formation.isAlternance,
+                nom: formation.nom,
+                responsable: {
+                    id: formation.responsable.Personne.id,
+                    nom: formation.responsable.Personne.prenom + ' ' + formation.responsable.Personne.nom
+                }
+            })
+        })
     },
     addLocalFormation(state, formation) {
-        state.data_formations.push(formation)
+        let new_formation = {
+            id: formation.id,
+            isAlternance: formation.isAlternance,
+            nom: formation.nom,
+            responsable: {
+                id: formation.responsable.Personne.id,
+                nom: formation.responsable.Personne.prenom + ' ' + formation.responsable.Personne.nom
+            }
+        }
+        state.data_formations.push(new_formation)
     },
-    updateLocalFormation(state, editedItem){
+    updateLocalFormation(state, formation){
         console.log("updateLocalFormation");
-        console.log(editedItem);
-        Object.assign(state.data_formations.find(formation => formation.id === editedItem.id), editedItem)
+        console.log(formation);
+        let new_formation = {
+            id: formation.id,
+            isAlternance: formation.isAlternance,
+            nom: formation.nom,
+            responsable: {
+                id: formation.responsable.Personne.id,
+                nom: formation.responsable.Personne.prenom + ' ' + formation.responsable.Personne.nom
+            }
+        }
+        Object.assign(state.data_formations.find(formation => formation.id === new_formation.id), new_formation)
     },
     removeLocalFormation(state, index) {
         state.data_formations.splice(index, 1)

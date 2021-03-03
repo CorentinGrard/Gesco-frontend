@@ -54,7 +54,7 @@
                         md="4"
                       >
                         <v-text-field
-                          v-model="editedItem.name"
+                          v-model="editedItem.nom"
                           label="Nom"
                         ></v-text-field>
                       </v-col>
@@ -66,7 +66,7 @@
                         <v-select
                           v-model="editedItem.responsable"
                           :items="responsables"
-                          :item-text="nomResponsable"
+                          item-text="nom"
                           return-object
                           label="Responsable"
                         ></v-select>
@@ -141,17 +141,17 @@
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'Nom', value: 'name', align: 'left'},
-        { text: 'Responsable', value: 'responsable', align: "left"},
+        { text: 'Nom', value: 'nom', align: 'left'},
+        { text: 'Responsable', value: 'responsable.nom', align: "left"},
         { text: 'Actions', value: 'actions', align: "right", sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
-        name: '',
+        nom: '',
         responsable: '',
       },
       defaultItem: {
-        name: '',
+        nom: '',
         responsable: '',
       },
     }),
@@ -182,10 +182,6 @@
     },
 
     methods: {
-      nomResponsable (item) {
-        return item.prenom + ' ' + item.nom
-      },
-
       editItem (item) {
         this.editedIndex = this.formations.indexOf(item)
         this.editedItem = Object.assign({}, item)
