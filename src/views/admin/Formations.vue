@@ -41,6 +41,10 @@
                 Ici, on définit le titre, le formulaire et les bouttons de validation et d'annulation du formulaire
               -->
               <v-card>
+                <v-form
+                ref="form"
+                v-model="valid"
+                >
                 <v-card-title>
                   <span class="headline">{{ formTitle }}</span>
                 </v-card-title>
@@ -56,6 +60,8 @@
                         <v-text-field
                           v-model="editedItem.nom"
                           label="Nom"
+                          :rules="[v => !!v || 'Champ obligatoire']"
+                          required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -69,6 +75,8 @@
                           item-text="nom"
                           return-object
                           label="Responsable"
+                          :rules="[v => !!v || 'Champ obligatoire']"
+                          required
                         ></v-select>
 
                       </v-col>
@@ -83,16 +91,18 @@
                     text
                     @click="close"
                   >
-                    Cancel
+                    Annuler
                   </v-btn>
                   <v-btn
                     color="blue darken-1"
                     text
                     @click="save"
+                    :disabled="!valid"
                   >
-                    Save
+                    Sauvegarder
                   </v-btn>
                 </v-card-actions>
+                </v-form>
               </v-card>
             </v-dialog>
             <!-- Le pop-up qui sert pour la supression d'items. -->
@@ -154,6 +164,7 @@
         nom: '',
         responsable: '',
       },
+      valid: true,
     }),
 
     computed: {
@@ -163,7 +174,7 @@
       }),
 
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Nouvelle formation' : 'Edition formation'
       },
     },
 
