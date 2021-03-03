@@ -1,83 +1,131 @@
-import formationAPI from '../../../api/admin/formation'
+import formationAPI from "../../../api/admin/formation";
 
 // initial state
 const state = () => ({
-    data_formations: []
-})
+  data_formations: [],
+});
 
 // getters
 const getters = {
-    getFormations: state => {
-        let formations_list = []
-        state.data_formations.forEach(formation => {
-            formations_list.push({
-                id: formation.id,
-                name: formation.nom,
-                isAlternance: formation.isAlternance,
-                responsable: formation.responsable.Personne.prenom + ' ' + formation.responsable.Personne.nom
-            })
-        })
-        return formations_list
-    }
-}
+  getFormations: (state) => {
+    let formations_list = [];
+    state.data_formations.forEach((formation) => {
+      formations_list.push({
+        id: formation.id,
+        name: formation.nom,
+        nom: formation.nom,
+        isAlternance: formation.isAlternance,
+        responsable: formation.responsable,
+      });
+    });
+    return formations_list;
+  },
+};
 
 // actions
 const actions = {
-    initFormations({ commit }) {
-        formationAPI.getData_Formation(formations => {
-            commit('initFormations', formations)
-        })
-    },
-    addFormation({ commit }, formation) {
-        formation['nameFormation'] = formation['name'];
-        delete formation['name'];
-        formation.idResponsable = formation.responsable.id;
-        delete formation['responsable'];
-        formation.isAlternant = true;
-        formationAPI.post_Formation(formation, formation => {
-            commit('addFormation', formation)
-        })
-    },
-    editFormation({ commit }, {editedIndex, editedItem}) {
-        formationAPI.put_Formation(editedItem.id, editedItem, semestre => {
-            commit('editFormation', {editedIndex, semestre})
-        })
-    }
-    /*
-    removeFormation({ commit }, index) {
-        commit('removeFormation', index)
-    },
-    removeEleve({ commit }, {editedIndex, editedItem}) {
-        APIeleves.delete_Eleve(
-            editedItem.eleve_id
-        )
-        commit('removeEleve', editedIndex)
-    },
-
-*/
-
-}
+  initFormations({ commit }) {
+    formationAPI.get_Formations((formations) => {
+      commit("initLocalFormations", formations);
+    });
+  },
+  addFormation({ commit }, formation) {
+    formation.idPersonne = formation.responsable.id;
+    delete formation["responsable"];
+    formation.isAlternance = true;
+    console.log("add formation");
+    console.log(formation);
+    formationAPI.add_Formation(formation, (formation) => {
+      commit("addLocalFormation", formation);
+    });
+  },
+  editFormation({ commit }, formation) {
+    delete formation["name"];
+    formation.idPersonne = formation.responsable.id;
+    delete formation["responsable"];
+    console.log("edit formation");
+    console.log(formation);
+    formationAPI.update_Formation(formation.id, formation, (formation) => {
+      commit("updateLocalFormation", formation);
+    });
+  },
+  removeFormation({ commit }, { id, index }) {
+    console.log("delete formation");
+    console.log(id);
+    formationAPI.delete_Formation(id);
+    commit("removeLocalFormation", index);
+  },
+};
 
 // mutations
 const mutations = {
-    initFormations(state, formations) {
-        state.data_formations = formations
-    },
-    addFormation(state, formation) {
-        state.data_formations.push(formation)
-    },
-    editFormation(state, {editedIndex, editedItem}){
-        Object.assign(state.data_formations[editedIndex], editedItem)
-    },
-    removeFormation(state, index) {
-        state.data_formations.splice(index, 1)
-    }
-}
+  initLocalFormations(state, formations) {
+    state.data_formations = [];
+    formations.forEach((formation) => {
+      state.data_formations.push({
+        id: formation.id,
+        isAlternance: formation.isAlternance,
+        nom: formation.nom,
+        responsable: {
+          id: formation.responsable.Personne.id,
+          nom:
+            formation.responsable.Personne.prenom +
+            " " +
+            formation.responsable.Personne.nom,
+        },
+      });
+    });
+  },
+  addLocalFormation(state, formation) {
+    let new_formation = {
+      id: formation.id,
+      isAlternance: formation.isAlternance,
+      nom: formation.nom,
+      responsable: {
+        id: formation.responsable.Personne.id,
+        nom:
+          formation.responsable.Personne.prenom +
+          " " +
+          formation.responsable.Personne.nom,
+      },
+    };
+    state.data_formations.push(new_formation);
+  },
+  addFormation(state, formation) {
+    state.data_formations.push(formation);
+  },
+  updateLocalFormation(state, formation) {
+    console.log("updateLocalFormation");
+    console.log(formation);
+    let new_formation = {
+      id: formation.id,
+      isAlternance: formation.isAlternance,
+      nom: formation.nom,
+      responsable: {
+        id: formation.responsable.Personne.id,
+        nom:
+          formation.responsable.Personne.prenom +
+          " " +
+          formation.responsable.Personne.nom,
+      },
+    };
+    Object.assign(
+      state.data_formations.find(
+        (formation) => formation.id === new_formation.id
+      ),
+      new_formation
+    );
+  },
+
+  removeFormation(state, index) {
+    state.data_formations.splice(index, 1);
+  },
+};
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
-}
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
+};

@@ -12,8 +12,7 @@ const getters = {
         state.data_responsables.forEach(responsable => {
             responsables_list.push({
                 id: responsable.id,
-                nom: responsable.nom,
-                prenom: responsable.prenom
+                nom: responsable.prenom + ' ' + responsable.nom
             })
         })
         return responsables_list
@@ -23,15 +22,15 @@ const getters = {
 // actions
 const actions = {
     initResponsables({ commit }) {
-        formation.getData_Responsable(responsables => {
-            commit('initResponsables', responsables)
+        formation.get_Responsables(responsables => {
+            commit('initLocalResponsables', responsables)
         })
     }
 }
 
 // mutations
 const mutations = {
-    initResponsables(state, responsables) {
+    initLocalResponsables(state, responsables) {
         state.data_responsables = responsables
     }
 }

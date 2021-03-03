@@ -46,17 +46,17 @@ export default {
 import backend from '@/plugins/axios';
 
 export default {
-    getData_Formation(cb) {
+    get_Formations(cb) {
         backend.get("/formations")
             .then((response) => cb(response.data))
             .catch((error) => Promise.reject(error))
     },
-    post_Formation(formation, cb) {
+    add_Formation(formation, cb) {
         backend.post("/formations", JSON.stringify(formation))
             .then((response) => cb(response.data))
             .catch((error) => Promise.reject(error))
     },
-    put_Formation(id_formation, formation, cb) {
+    update_Formation(id_formation, formation, cb) {
         backend.put("/formations/" + id_formation, JSON.stringify(formation))
             .then((response) => cb(response.data))
             .catch((error) => Promise.reject(error))
