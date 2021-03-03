@@ -140,7 +140,7 @@ export default {
         sortable: false,
         value: "nom",
       },
-      { text: "Module", value: "module.name" },
+      { text: "Module", value: "module.nom" },
       { text: "Coefficient", value: "coefficient" },
       { text: "Intervenant", value: "intervenant" },
       { text: "Nombre heure de cours", value: "nombreHeuresAPlacer" },
