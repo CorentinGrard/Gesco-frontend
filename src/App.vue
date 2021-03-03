@@ -85,12 +85,12 @@
         {{ snackbarText }}
         <template v-slot:action="{ attrs }">
           <v-btn
-            color="black"
+            color="white"
             text
             v-bind="attrs"
             @click="$store.dispatch('snackbar/close')"
           >
-            Close
+            Fermer
           </v-btn>
         </template>
       </v-snackbar>
