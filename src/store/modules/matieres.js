@@ -1,8 +1,9 @@
-import APIMatieres from '../../api/matieres'
+import APIMatieres from '@/api/matieres'
 
 // initial state
 const state = () => ({
   matieres: [],
+  matieresAjoutNote: [],
   selectedMatiere: null
 })
 
@@ -17,18 +18,23 @@ const getters = {
         tmpSemestre.matieres = tmpSemestre.matieres.concat(module.matieres)
       });
       return tmpSemestre
-    });
-  }
+    })
+  },
 }
 
 // actions
 const actions = {
-  fetch({ commit }, selectedPromotion) {
+  fetchByPromotion({ commit }, selectedPromotion) {
     APIMatieres.getByPromotions(selectedPromotion, matieres => {
       commit('SET_MATIERES', matieres)
     })
   },
-  setSelectedMatiere({commit}, matiere){
+  fetchBySemestre({ commit }, selectedSemestre) {
+    APIMatieres.getBySemestre(selectedSemestre, matieres => {
+      commit('SET_MATIERES_AJOUT_NOTES', matieres)
+    })
+  },
+  setSelectedMatiere({ commit }, matiere) {
     commit("SET_SELECTED_MATIERE", matiere)
   }
 }
@@ -38,9 +44,12 @@ const mutations = {
   SET_MATIERES(state, matieres) {
     state.matieres = matieres
   },
-  SET_SELECTED_MATIERE(state, matiere){
+  SET_SELECTED_MATIERE(state, matiere) {
     state.selectedMatiere = matiere
-  }
+  },
+  SET_MATIERES_AJOUT_NOTES(state, matieres) {
+    state.matieresAjoutNote = matieres
+  },
 }
 
 export default {
