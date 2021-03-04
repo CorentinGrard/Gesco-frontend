@@ -1,5 +1,8 @@
 # gesco-frontend
 
+
+## Prerequire
+Populate first your .env.local. You can use the example at .env.exemple
 ## Project setup
 ```
 npm install
@@ -20,5 +23,8 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Docker setup
+```
+docker-compose build
+docker-compose up
+```
