@@ -44,6 +44,7 @@
           v-model="focus"
           color="primary"
           :events="events"
+          :event-color="getEventColor"
           :type="typeCalendar"
           :first-interval="7"
           :interval-minutes="60"
@@ -151,7 +152,8 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import SelectPromo from "@/components/SelectPromo";
-import EditSessionFormModal from "../components/EditSessionFormModal";
+import EditSessionFormModal from "@/components/EditSessionFormModal";
+import typesSession from "@/typesSession";
 
 export default {
   components: {
@@ -160,6 +162,7 @@ export default {
   },
   props: ["edition"],
   data: () => ({
+    typeSession: typesSession,
     editFormOpen: false,
     focus: "",
     weekdays: [1, 2, 3, 4, 5],
@@ -217,7 +220,8 @@ export default {
       this.type = "day";
     },
     getEventColor(event) {
-      return event.color;
+      let type = typesSession.find(type => event.type == type.name)
+      return type.color
     },
     setToday() {
       this.focus = "";
@@ -403,7 +407,7 @@ export default {
           }
         }
       }
-    },
+    }
   },
 };
 </script>

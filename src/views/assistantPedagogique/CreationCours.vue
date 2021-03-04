@@ -40,6 +40,8 @@
               :value="type"
               @input="updateType"
               :items="typeSession"
+              item-text=name
+              item-value=name
               label="Type"
               outlined
             ></v-select>

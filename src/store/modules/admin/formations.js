@@ -90,8 +90,6 @@ const mutations = {
     state.data_formations.push(formation);
   },
   updateLocalFormation(state, formation) {
-    console.log("updateLocalFormation");
-    console.log(formation);
     let new_formation = {
       id: formation.id,
       isAlternance: formation.isAlternance,
