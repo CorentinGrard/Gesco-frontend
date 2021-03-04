@@ -21,7 +21,7 @@ backend.interceptors.response.use(function (response) {
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
-  store.dispatch("snackbar/error", { text: error })
+  store.dispatch("snackbar/error", { text: "Erreur : " + error.response.data })
   return Promise.reject(error);
 });
 

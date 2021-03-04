@@ -2,7 +2,8 @@ import semestreAPI from '@/api/admin/semestre'
 
 // initial state
 const state = () => ({
-  semestres: []
+  semestres: [],
+  selectedSemestre: {}
 })
 
 // getters
@@ -27,9 +28,13 @@ const actions = {
     })
   },
   delete({ commit }, id) {
-    semestreAPI.delete(id)
-    commit('DELETE', id)
+    semestreAPI.delete(id, () => {
+      commit('DELETE', id)
+    })
   },
+  setSelectedSemestre({ commit }, selectedSemestre) {
+    commit('SET_SELECTED_SEMESTRE', selectedSemestre)
+  }
 }
 
 // mutations
@@ -46,8 +51,10 @@ const mutations = {
   },
   UPDATE(state, { id, semestre }) {
     Object.assign(state.semestres.find(semestre => semestre.id === id), semestre)
-  }
-
+  },
+  SET_SELECTED_SEMESTRE(state, selectedSemestre) {
+    state.selectedSemestre = selectedSemestre
+  },
 }
 
 export default {

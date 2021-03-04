@@ -17,12 +17,13 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field
+                <v-select
+                  :items="typesSession"
                   label="Type"
                   v-model="type"
                   hint="Type de la session"
                   required
-                ></v-text-field>
+                ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
@@ -73,9 +74,12 @@
   </v-container>
 </template>
 <script>
+import typesSession from "@/typesSession"
+
 export default {
   data: () => ({
     editFormOpenLocal: false,
+    typesSession: typesSession,
   }),
   props: {
     editFormOpen: Boolean,

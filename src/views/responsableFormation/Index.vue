@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title> Admin </v-card-title>
+      <v-card-title> Responsable Formation </v-card-title>
       <v-list nav dense>
         <v-list-item
           v-for="item in items"
@@ -27,30 +27,30 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Création et modification des matières",
+        title: "Matières",
         icon: "mdi-book-open-variant",
-        link: { name: "AdminMatieres" },
+        link: { name: "ResponsableFormationMatieres" },
       },
       {
-        title: "Création et modification des modules",
+        title: "Modules",
         icon: "mdi-book-open-variant",
-        link: { name: "AdminModule" },
+        link: { name: "ResponsableFormationModule" },
       },
       {
-        title: "Création et modification des semestres",
+        title: "Semestres",
         icon: "mdi-ballot-outline",
-        link: { name: "AdminSemestres" },
+        link: { name: "ResponsableFormationSemestres" },
       },
       {
-        title: "Création et modification d'une formation",
-        icon: "mdi-ballot-outline",
-        link: { name: "AdminFormations" },
-      },
-      {
-        title: "Gestion des promotions et assignation des élèves",
+        title: "Elèves",
         icon: "mdi-account-multiple-plus",
+        link: { name: "ResponsableFormationEleve" },
       },
-      { title: "Aller sur Darwin", icon: "mdi-account-group" },
+      {
+        title: "Promotions",
+        icon: "mdi-account-multiple-plus",
+        link: { name: "ResponsableFormationPromotion" },
+      },
     ],
   }),
 };

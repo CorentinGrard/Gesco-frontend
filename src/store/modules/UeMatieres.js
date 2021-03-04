@@ -54,8 +54,8 @@ const actions = {
           id: matiere_response.id,
           nom: matiere_response.nom,
           module: {
-            id: matiere_response.moduleId,
-            name: matiere_response.moduleName,
+            id: matiere_response.module.id,
+            nom: matiere_response.module.nom,
           },
           coefficient: matiere_response.coefficient,
           nombreHeuresAPlacer: matiere_response.nombreHeuresAPlacer,
@@ -73,7 +73,6 @@ const actions = {
       nombreHeuresAPlacer: matiere.nombreHeuresAPlacer,
       module_id: matiere.module.id,
     };
-    matiere.module.name = matiere.module.nom;
     ApiMatieres.putMatiere(matiere.id, matiereApi, () => {
       commit("editMatiere", { matiereIndex, matiere });
     });
@@ -135,7 +134,7 @@ const mutations = {
           finalMatieres.push({
             id: item.idMatiere,
             nom: item.nomMatiere,
-            module: { id: moduleId, name: moduleName },
+            module: { id: moduleId, nom: moduleName },
             coefficient: item.coefficient,
             nombreHeuresAPlacer: item.nombreHeuresAPlacer,
             intervenant: "M.Robot",

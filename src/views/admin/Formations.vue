@@ -41,6 +41,10 @@
                 Ici, on définit le titre, le formulaire et les bouttons de validation et d'annulation du formulaire
               -->
               <v-card>
+                <v-form
+                ref="form"
+                v-model="valid"
+                >
                 <v-card-title>
                   <span class="headline">{{ formTitle }}</span>
                 </v-card-title>
@@ -54,8 +58,10 @@
                         md="4"
                       >
                         <v-text-field
-                          v-model="editedItem.name"
+                          v-model="editedItem.nom"
                           label="Nom"
+                          :rules="[v => !!v || 'Champ obligatoire']"
+                          required
                         ></v-text-field>
                       </v-col>
                       <v-col
@@ -66,9 +72,11 @@
                         <v-select
                           v-model="editedItem.responsable"
                           :items="responsables"
-                          :item-text="nomResponsable"
+                          item-text="nom"
                           return-object
                           label="Responsable"
+                          :rules="[v => !!v || 'Champ obligatoire']"
+                          required
                         ></v-select>
 
                       </v-col>
@@ -83,16 +91,18 @@
                     text
                     @click="close"
                   >
-                    Cancel
+                    Annuler
                   </v-btn>
                   <v-btn
                     color="blue darken-1"
                     text
                     @click="save"
+                    :disabled="!valid"
                   >
-                    Save
+                    Sauvegarder
                   </v-btn>
                 </v-card-actions>
+                </v-form>
               </v-card>
             </v-dialog>
             <!-- Le pop-up qui sert pour la supression d'items. -->
@@ -141,19 +151,20 @@
       dialog: false,
       dialogDelete: false,
       headers: [
-        { text: 'Nom', value: 'name', align: 'left'},
-        { text: 'Responsable', value: 'responsable', align: "left"},
+        { text: 'Nom', value: 'nom', align: 'left'},
+        { text: 'Responsable', value: 'responsable.nom', align: "left"},
         { text: 'Actions', value: 'actions', align: "right", sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
-        name: '',
+        nom: '',
         responsable: '',
       },
       defaultItem: {
-        name: '',
+        nom: '',
         responsable: '',
       },
+      valid: true,
     }),
 
     computed: {
@@ -163,7 +174,7 @@
       }),
 
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? 'Nouvelle formation' : 'Edition formation'
       },
     },
 
@@ -182,10 +193,6 @@
     },
 
     methods: {
-      nomResponsable (item) {
-        return item.prenom + ' ' + item.nom
-      },
-
       editItem (item) {
         this.editedIndex = this.formations.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -199,7 +206,7 @@
       },
 
       deleteItemConfirm () {
-        this.$store.dispatch("formations/removeFormation", this.editedIndex);
+        this.$store.dispatch("formations/removeFormation", {id:this.editedItem.id ,index:this.editedIndex});
         this.closeDelete()
       },
 
@@ -221,7 +228,7 @@
 
       save () {
         if (this.editedIndex > -1) {
-          this.$store.dispatch("formations/editFormation", {editedIndex: this.editedIndex, editedItem: this.editedItem});
+          this.$store.dispatch("formations/editFormation", this.editedItem);
         } else {
           this.$store.dispatch("formations/addFormation", this.editedItem);
         }

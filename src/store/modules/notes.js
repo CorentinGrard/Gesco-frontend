@@ -9,25 +9,21 @@ const state = () => ({
 const getters = {
     getNotesForDisplaying: state => {
         let notes = []
-        state.data_notes.forEach(semester => {
-            semester.UE.forEach(UE => {
-                UE.matieres.forEach(matiere => {
-                    notes.push({
-                        note: matiere.note,
-                        matiere: matiere.name,
-                        semester: semester.name,
-                        category: UE.name,
-                        coeff: matiere.coeff
-                    })
-                })
+        state.data_notes.forEach(note => {
+            notes.push({
+                note: note.note,
+                matiere: note.Matiere.nom,
+                semester: note.Matiere.module.semestre.nom,
+                category: note.Matiere.module.nom,
+                coeff: note.Matiere.coefficient
             })
         })
         return notes
     },
     getSemesters: state => {
         let semesters = []
-        state.data_notes.forEach(semester => {
-            semesters.push(semester.name)
+        state.data_notes.forEach(note => {
+            semesters.push(note.Matiere.module.semestre.nom)
         })
         return semesters
     }
@@ -45,7 +41,7 @@ const actions = {
 // mutations
 const mutations = {
     setNotes(state, notes) {
-        state.data_notes = notes
+        state.data_notes = notes.Notes
     },
 }
 

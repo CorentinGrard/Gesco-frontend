@@ -1,42 +1,24 @@
-/**
- * Mocking client-server processing
- */
-
-const data_formation = [
-    {
-        id: 1,
-        name: "INFRES",
-        responsable: 
-            {
-                id: 1,
-                nom: "INFRES",
-                prenom: "Respo"
-            }
-    },
-    {
-        id: 2,
-        name: "MKX",
-        responsable:
-            {
-                id: 2,
-                nom: "MKX",
-                prenom: "Respo"
-            }
-    },
-    {
-        id: 3,
-        name: "CMC",
-        responsable:
-            {
-                id: 3,
-                nom: "CMC",
-                prenom: "Respo"
-            }
-    }
-]
+import backend from '@/plugins/axios';
 
 export default {
-    getData_Formation(cb) {
-        setTimeout(() => cb(data_formation), 100)
-    },
+  get_Formations(cb) {
+    backend.get("/formations")
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  add_Formation(formation, cb) {
+    backend.post("/formations", JSON.stringify(formation))
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  update_Formation(id_formation, formation, cb) {
+    backend.put("/formations/" + id_formation, JSON.stringify(formation))
+      .then((response) => cb(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  delete_Formation(id_formation, cb) {
+    backend.delete("/formations/" + id_formation)
+      .then(() => cb())
+      .catch((error) => Promise.reject(error))
+  }
 }
