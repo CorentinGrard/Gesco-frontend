@@ -5,10 +5,9 @@ services:
     build: 
       context: .
       args:
-        - VUE_APP_KEYCLOAK_URL=http://matthieu.ga:2099/auth/
+        - VUE_APP_KEYCLOAK_URL=http://keycloak.gesco.ml/auth/
         - VUE_APP_KEYCLOAK_REALM=imt-mines-ales
         - VUE_APP_KEYCLOAK_CLIENT_ID=gesco
-        - VUE_APP_BASE_URL=/
         - VUE_APP_BACKEND_BASE_URL=http://localhost:8000
     ports:
       - "8080:80"
